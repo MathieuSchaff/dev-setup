@@ -86,12 +86,22 @@ PROMPT='%(?.%F{green}➜%f.%F{red}➜%f) %F{cyan}%~%f ${vcs_info_msg_0_}
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(fzf-tab git zsh-autosuggestions zsh-syntax-highlighting vi-mode zsh-history-substring-search)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode zsh-history-substring-search fzf-tab)
 source $ZSH/oh-my-zsh.sh
 
 # history-substring-search keybindings (after oh-my-zsh load)
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
+
+# fzf-tab configuration
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:*' switch-group '<' '>'
+# open completion in tmux popup when inside tmux
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 # User configuration
 
@@ -139,11 +149,18 @@ alias tree='eza --tree --icons'
 alias lh='ls -lah'
 # bat / lazygit
 alias cat='batcat'
-alias lg='lazygit'
+# lazygit — smart exit (le terminal suit le dossier courant de lazygit)
+lg() {
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+    lazygit "$@"
+    if [ -f "$LAZYGIT_NEW_DIR_FILE" ]; then
+        cd "$(cat "$LAZYGIT_NEW_DIR_FILE")"
+        rm -f "$LAZYGIT_NEW_DIR_FILE" > /dev/null
+    fi
+}
 alias update-lazygit='LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po "\"tag_name\": \"v\K[^\"]*") && curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" && tar xf /tmp/lazygit.tar.gz -C /tmp lazygit && sudo install /tmp/lazygit /usr/local/bin'
 # delta installé via cargo — update: cargo install git-delta
 # tmux aliases
-alias t='tmux'
 # Créer une session nommée en arrière-plan (évite le nesting)
 tn(){ 
   tmux new -d -s "$1"
@@ -152,6 +169,19 @@ tn(){
 
 # Bonus : Créer et rejoindre immédiatement (si tu es HORS de tmux)
 alias tnew='tmux new -s'
+
+# Lancer tmux : crée session doc au premier démarrage, sinon attach
+t() {
+  if tmux list-sessions &>/dev/null; then
+    # Sessions existantes — attach simplement
+    tmux attach
+  else
+    # Premier démarrage — créer session doc + session main
+    tmux new-session -d -s doc -c ~/dev-setup/cheatsheet "nvim -c 'e README.md'"
+    tmux new-session -d -s main
+    tmux attach -t main
+  fi
+}
 # fdfind alias
 alias fd="fdfind"
 alias update-zsh-plugins='for d in ~/.oh-my-zsh/custom/plugins/*/; do echo "Updating $(basename $d)..." && git -C "$d" pull; done'
@@ -222,8 +252,7 @@ alias zdf='selected_dir=$(fd -t d | fzf) && [ -n "$selected_dir" ] && z "$select
 #export TERM="xterm-256color"
 export PATH=$PATH:/usr/local/go/bin
 # export PATH=$PATH:~/go/bin
-#export PATH="$HOME/neovim/bin:$PATH"
-export PATH="$HOME/neovim/build/bin:$PATH"
+export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Ceci charge nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Ceci charge la complétion de commande nvm (facultatif)
