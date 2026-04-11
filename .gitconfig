@@ -1,0 +1,7 @@
+[user]
+	name = schaff
+	email = schaff.mathieu93@gmail.com
+[init]
+	defaultBranch = main
+[core]
+	editor = nvim
