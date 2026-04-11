@@ -1,13 +1,16 @@
--- Customize Treesitter
+-- Treesitter configuration via AstroCore (v6 — nvim-treesitter is now parser-only)
 
 ---@type LazySpec
 return {
-  "nvim-treesitter/nvim-treesitter",
+  "AstroNvim/astrocore",
+  ---@type AstroCoreOpts
   opts = {
-    ensure_installed = {
-      "lua",
-      "vim",
-      -- add more arguments for adding more treesitter parsers
+    treesitter = {
+      ensure_installed = {
+        "lua",
+        "vim",
+      },
+      highlight = true,
     },
   },
 }

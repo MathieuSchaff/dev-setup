@@ -40,8 +40,7 @@ return {
   { import = "astrocommunity.motion.harpoon" },
 
   -- Modern completion and fast
-  -- { import = "astrocommunity.completion.blink-cmp" },
-  { import = "astrocommunity.completion.nvim-cmp" },
+  { import = "astrocommunity.completion.blink-cmp" },
 
   { import = "astrocommunity.completion.supermaven-nvim" },
   -- { import = "astrocommunity.lsp.ts-error-translator-nvim" },
