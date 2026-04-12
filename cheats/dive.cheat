@@ -1,0 +1,71 @@
+; Dive — explorateur d'images Docker / Podman
+; Doc complète : ~/dev-setup/cheatsheet/dive.md
+; Config : ~/.dive.yaml
+
+% dive, docker, images
+
+# Analyser une image Docker locale
+dive <image>
+
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+
+# Analyser une image par ID
+dive <image_id>
+
+$ image_id: docker images --format '{{.ID}} {{.Repository}}:{{.Tag}}' --- --column 1
+
+# Build + analyse en une passe (wrapper docker build)
+dive build -t <name>:<tag> .
+
+# Build avec Dockerfile spécifique
+dive build -t <name>:<tag> -f <dockerfile> .
+
+# Ignorer les erreurs de parsing et analyser quand même
+dive --ignore-errors <image>
+
+% dive, podman
+
+# Analyser une image via podman
+dive --source podman <image>
+
+% dive, archive
+
+# Analyser un tar exporté (sans daemon docker)
+dive --source docker-archive <archive.tar>
+
+# Export + analyse en une ligne
+docker save <image> -o /tmp/img.tar && dive --source docker-archive /tmp/img.tar
+
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+
+% dive, ci
+
+# Mode CI — échec si l'image dépasse les seuils
+CI=true dive <image>
+
+# CI avec fichier de règles
+CI=true dive <image> --ci-config .dive-ci
+
+# CI avec seuils inline
+dive <image> --ci --lowestEfficiency 0.95 --highestWastedBytes 20MB
+
+# Export JSON de l'analyse (skip TUI)
+dive <image> -j dive-report.json
+
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+
+% dive, config
+
+# Ouvrir la config dans nvim
+nvim ~/.dive.yaml
+
+# Utiliser un fichier de config ponctuel
+dive --config <path_to_yaml> <image>
+
+% dive, version
+
+# Version de dive installée
+dive --version
+
+# Aide
+dive --help

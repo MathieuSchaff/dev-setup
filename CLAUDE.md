@@ -18,7 +18,10 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/cheatsheet/vi-mode.md`      | Vi-mode dans le terminal                     |
 | `~/dev-setup/cheatsheet/navi.md`         | Navi — bindings, config, syntax cheat files  |
 | `~/dev-setup/cheatsheet/zed.md`          | Zed — keymaps vim, LSP TS/Biome/vtsls, Ollama |
-| `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, linux, ssh, bun, npm, curl, navi |
+| `~/dev-setup/cheatsheet/dive.md`         | Dive — TUI d'exploration d'images Docker, config, mode CI |
+| `~/dev-setup/cheatsheet/update-tools.md` | Script `update-tools` — updater des CLI hors apt/cargo |
+| `~/dev-setup/scripts/update-tools.sh`    | Script d'update des outils hors package manager (dive, lazygit, ctop, ...) |
+| `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, dive, linux, ssh, bun, npm, curl, navi |
 | `~/dev-setup/.gitconfig`                 | Config git de référence (à copier dans `~/.gitconfig`) |
 | `~/dev-setup/.zshrc`                     | Zshrc de référence                           |
 | `~/dev-setup/.tmux.conf`                 | Tmux de référence                            |
@@ -26,6 +29,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/.config/navi/config.yaml`   | Config navi (cheats path, couleurs, shell)   |
 | `~/dev-setup/.config/zed/settings.json`  | Config Zed (thème, LSP, Biome, Ollama)       |
 | `~/dev-setup/.config/zed/keymap.json`    | Keymaps Zed (vim normal/visual/insert)       |
+| `~/dev-setup/.dive.yaml`                 | Config dive de référence (copie de `~/.dive.yaml`) |
 
 > Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc.  
 > Les fichiers Zed actifs sont dans `C:\Users\schaf\AppData\Roaming\Zed\` (Windows).  

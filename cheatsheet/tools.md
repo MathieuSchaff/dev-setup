@@ -147,9 +147,8 @@ Config : `~/.config/glow/glow.yml` (style dark, pager, width 90, mouse).
 
 | Commande            | Effet                                                       |
 |---------------------|-------------------------------------------------------------|
-| `cs`                | TUI glow sur `~/dev-setup/cheatsheet/`                      |
+| `cs`                | fzf sur `cheatsheet/` + preview glow, `q` pour revenir à la liste |
 | `gl <fichier>`      | Glow avec pager sur un fichier                              |
-| `cheat`             | fzf sur `cheatsheet/` avec preview glow                     |
 | `glow <file>`       | Rendre un fichier (ou stdin avec `-`)                       |
 | `glow github.com/<user>/<repo>` | Fetch et rendre un README distant               |
 

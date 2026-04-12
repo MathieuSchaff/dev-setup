@@ -160,6 +160,10 @@ lg() {
     fi
 }
 alias update-lazygit='LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po "\"tag_name\": \"v\K[^\"]*") && curl -Lo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" && tar xf /tmp/lazygit.tar.gz -C /tmp lazygit && sudo install /tmp/lazygit /usr/local/bin'
+# lazydocker — TUI Docker / Compose
+alias lzd='lazydocker'
+# Updater global (dive, lazygit, lazydocker, ctop, neovim, fzf) — voir ~/dev-setup/cheatsheet/update-tools.md
+alias update-tools='~/dev-setup/scripts/update-tools.sh'
 # delta installé via cargo — update: cargo install git-delta
 # tmux aliases
 # Créer une session nommée en arrière-plan (évite le nesting)
@@ -264,12 +268,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Ceci charge la complétion de commande nvm (facultatif)
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 # Cheatsheet — glow partout
-alias cs='glow ~/dev-setup/cheatsheet'          # TUI glow sur le dossier cheatsheet
 alias gl='glow -p'                               # glow pager sur un fichier donné
-cheat() {
+cs() {                                           # fzf sur cheatsheet/ + preview glow, loop browse/read
   local file
-  file=$(fd . ~/dev-setup/cheatsheet -e md | fzf --preview "glow -s dark -w 80 {}")
-  [[ -n "$file" ]] && glow -p "$file"
+  while file=$(fd . ~/dev-setup/cheatsheet -e md | fzf --preview "glow -s dark -w 80 {}") && [[ -n "$file" ]]; do
+    glow -p "$file"
+  done
 }
 # alias pgadmin4='/usr/pgadmin4/bin/pgadmin4'
 # Add PostgreSQL binaries to PATH

@@ -10,9 +10,8 @@ La table des fichiers est dans [`~/dev-setup/CLAUDE.md`](../CLAUDE.md) ; ce doss
 | navi widget | `Ctrl+N`          | Sélection interactive, insère dans le shell  |
 | navi tmux   | `prefix + Ctrl+g` | Fonctionne dans vim, psql, SSH...            |
 | navi direct | `navi`            | Interface complète                           |
-| glow TUI    | `cs`              | Browser multi-fichiers sur ce dossier        |
+| fzf + glow  | `cs`              | fzf sur les cheatsheets + preview glow (loop)  |
 | glow pager  | `gl <fichier>`    | Rend un `.md` dans le pager                  |
-| fzf + glow  | `cheat`           | fzf sur les cheatsheets, preview glow        |
 
 ## Conventions de ce cheatsheet
 

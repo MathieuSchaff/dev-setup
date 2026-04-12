@@ -1,0 +1,16 @@
+# Config dive — ~/.dive.yaml
+# Doc : https://github.com/wagoodman/dive#cli
+
+container-engine: docker  # ou podman
+
+filetree:
+  collapse-dir: false       # dossiers ouverts par défaut
+  pane-width: 0.5           # largeur du panel filetree (0-1)
+  show-attributes: true     # affiche permissions / taille
+
+layer:
+  show-aggregated-changes: false  # false = changements de la layer courante uniquement
+
+diff:
+  hide:                     # cacher certains types de fichiers
+    - unmodified            # focus sur ce qui a changé

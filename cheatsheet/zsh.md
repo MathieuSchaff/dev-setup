@@ -29,15 +29,23 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 | `cat`  | `batcat` (syntax highlighting) |
 | `c`    | `clear`                        |
 
+## Aliases Docker
+
+| Alias | Commande      | Cheatsheet                          |
+|-------|---------------|-------------------------------------|
+| `lzd` | `lazydocker`  | [lazydocker.md](./lazydocker.md)    |
+
+> `ctop` et `dive` sont lancés par leur binaire direct — pas d'alias.
+> Voir [ctop.md](./ctop.md) et [dive.md](./dive.md).
+
 ## Navigation
 
 | Commande       | Effet                                         |
 |----------------|-----------------------------------------------|
 | `z <nom>`      | Sauter vers un dossier visité (zoxide)        |
 | `zdf`          | Fuzzy find + jump via fzf + zoxide            |
-| `cs`           | TUI glow sur `~/dev-setup/cheatsheet/`        |
+| `cs`           | fzf sur `cheatsheet/` + preview glow (loop, `q` pour revenir) |
 | `gl <fichier>` | Rendre un `.md` avec glow (pager)             |
-| `cheat`        | fzf sur cheatsheet/ avec preview glow         |
 | `Ctrl+N`       | navi — cheatsheet interactif (widget shell)   |
 
 > Les raccourcis `Ctrl+T` / `Ctrl+R` / `Alt+C` / `Tab` (fzf et fzf-tab) sont dans
