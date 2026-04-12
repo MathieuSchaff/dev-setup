@@ -74,6 +74,7 @@ update-bun     # Bun
 | `.config/lazygit/`       | Lazygit : delta comme pager, nvim comme éditeur                |
 | `.config/nvim/`          | Neovim : config AstroNvim + syntax `.cheat`                    |
 | `.config/navi/`          | Navi : cheats path, couleurs, shell zsh                        |
+| `.config/starship.toml`  | Starship : prompt Catppuccin macchiato, texte coloré sans bg   |
 
 ---
 
@@ -89,6 +90,7 @@ update-bun     # Bun
 | eza | latest | cargo |
 | bat | latest | cargo |
 | navi | latest | cargo |
+| starship | latest | cargo |
 | glow | latest | `sudo snap install glow` ou `go install` |
 | fzf | latest | git |
 | Node | v24 | nvm |

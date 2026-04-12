@@ -30,13 +30,14 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/.config/zed/settings.json`  | Config Zed (thème, LSP, Biome, Ollama)       |
 | `~/dev-setup/.config/zed/keymap.json`    | Keymaps Zed (vim normal/visual/insert)       |
 | `~/dev-setup/.dive.yaml`                 | Config dive de référence (copie de `~/.dive.yaml`) |
+| `~/dev-setup/.config/starship.toml`      | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
 
 > Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc.  
 > Les fichiers Zed actifs sont dans `C:\Users\schaf\AppData\Roaming\Zed\` (Windows).  
 > `~/dev-setup/` sert de backup/référence versionné.
 
 ## Outils installés (résumé)
-- **Shell** : zsh + Oh My Zsh, thème custom (`vcs_info`), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`
+- **Shell** : zsh + Oh My Zsh, prompt Starship (Catppuccin macchiato, texte coloré sans bg), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`
 - **Terminal multiplexer** : tmux + TPM, thème Catppuccin macchiato
 - **Éditeur** : Neovim v0.12.1 (pre-built, `/opt/nvim-linux-x86_64/bin/nvim`), config AstroNvim dans `~/.config/nvim/`
 - **Git TUI** : lazygit (`/usr/local/bin/lazygit`), alias `lg`, popup tmux via `Ctrl+g`

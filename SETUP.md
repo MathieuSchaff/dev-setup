@@ -134,7 +134,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 
 # Outils CLI installés via cargo
-cargo install bat delta eza tree-sitter-cli navi
+cargo install bat delta eza tree-sitter-cli navi starship
 ```
 
 | Outil | Commande | Description |
@@ -144,6 +144,7 @@ cargo install bat delta eza tree-sitter-cli navi
 | eza | `l`, `ll`, `tree` (alias) | ls moderne |
 | tree-sitter | `tree-sitter` | parser (utilisé par neovim) |
 | navi | `navi`, `Ctrl+N` | cheatsheet interactif — `~/dev-setup/cheats/` |
+| starship | `starship` | prompt cross-shell — config `~/.config/starship.toml` |
 
 ### Glow — lecteur markdown (`cs`, `gl`, `cheat`)
 
@@ -322,7 +323,7 @@ sudo apt install bottom   # ou : cargo install bottom
 - [ ] `sudo apt update && apt upgrade`
 - [ ] Zsh + Oh My Zsh installés
 - [ ] Plugins custom zsh clonés (autosuggestions, syntax-highlighting, history-substring-search, fzf-tab)
-- [ ] Rust + cargo installés (`bat`, `delta`, `eza`)
+- [ ] Rust + cargo installés (`bat`, `delta`, `eza`, `starship`)
 - [ ] nvm + Node installés
 - [ ] Bun installé
 - [ ] fzf installé (`~/.fzf/`)

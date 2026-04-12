@@ -68,6 +68,8 @@ backup_and_copy "$DOTFILES_DIR/.config/bat"         "$HOME/.config/bat"
 backup_and_copy "$DOTFILES_DIR/.config/eza"         "$HOME/.config/eza"
 backup_and_copy "$DOTFILES_DIR/.config/navi"        "$HOME/.config/navi"
 backup_and_copy "$DOTFILES_DIR/.config/glow"        "$HOME/.config/glow"
+[ -f "$DOTFILES_DIR/.config/starship.toml" ] && \
+backup_and_copy "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 
 # ── Zed (WSL only — config lives on Windows side) ────────────────────────────
 # Auto-detect the Windows Zed directory by scanning /mnt/c/Users/*/AppData/Roaming/Zed.

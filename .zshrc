@@ -9,14 +9,16 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME=""
-# Custom prompt
-autoload -Uz vcs_info
-precmd() { vcs_info }
-zstyle ':vcs_info:git:*' formats '%F{yellow}(%b)%f'
-setopt PROMPT_SUBST
-PROMPT='%(?.%F{green}➜%f.%F{red}➜%f) %F{cyan}%~%f ${vcs_info_msg_0_}
-%F{green}❯%f '
-# PROMPT='%F{200}'%n@%m %c' %1~>%f'
+# Prompt géré par Starship — config dans ~/.config/starship.toml
+# (ancien prompt custom vcs_info retiré le 2026-04-12)
+# Pour revenir temporairement à l'ancien prompt, commenter la ligne `eval starship` plus bas
+# et décommenter ce bloc :
+# autoload -Uz vcs_info
+# precmd() { vcs_info }
+# zstyle ':vcs_info:git:*' formats '%F{yellow}(%b)%f'
+# setopt PROMPT_SUBST
+# PROMPT='%(?.%F{green}➜%f.%F{red}➜%f) %F{cyan}%~%f ${vcs_info_msg_0_}
+# %F{green}❯%f '
 
 # SHOW LAST THREE FOLDERS
 #PROMPT='%{$fg[cyan]%}%3~ %{$fg[red]%}%(!.#.») %{$reset_color%}'
@@ -340,3 +342,6 @@ unset __conda_setup
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+
+# Starship prompt — config dans ~/.config/starship.toml
+eval "$(starship init zsh)"

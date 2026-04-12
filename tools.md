@@ -48,6 +48,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 | [bat](https://github.com/sharkdp/bat) | `bat` | `cat` avec coloration syntaxique (prioritaire sur apt) |
 | [delta](https://github.com/dandavison/delta) | `delta` | Diff amélioré pour git |
 | [eza](https://github.com/eza-community/eza) | `eza` | Alternative moderne à `ls` |
+| [starship](https://starship.rs/) | `starship` | Prompt cross-shell — config `~/.config/starship.toml` |
 | [tree-sitter](https://github.com/tree-sitter/tree-sitter) | `tree-sitter` | Parser de code (utilisé par les éditeurs) |
 | [rust-analyzer](https://rust-analyzer.github.io/) | `rust-analyzer` | LSP pour Rust |
 | rustup | `rustup` | Gestionnaire de versions Rust |
@@ -122,7 +123,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 
 > Chemin config : `~/.zshrc`  
 > Framework : [Oh My Zsh](https://ohmyz.sh/)  
-> Thème : aucun (prompt custom avec `vcs_info`)
+> Prompt : [Starship](https://starship.rs/) — config `~/.config/starship.toml`, palette Catppuccin macchiato, texte coloré sans background
 
 ### Mise à jour des plugins
 
