@@ -1,0 +1,146 @@
+; Bun 1.3+ — runtime, package manager, bundler, test runner
+; https://bun.sh/docs
+
+% bun, init
+
+# Initialiser un nouveau projet (interactif)
+bun init
+
+# Initialiser avec les valeurs par défaut (pas de prompts)
+bun init -y
+
+# Créer un projet depuis un template officiel
+bun create <template> <project_name>
+
+$ template: echo -e "react\nnext\nnext-app\nvite\nvite-react\nelysia\nhono" | fzf
+
+% bun, install, add, remove
+
+# Installer les deps (depuis package.json)
+bun install
+
+# Alias court
+bun i
+
+# Installer en respectant strictement le lockfile (CI)
+bun install --frozen-lockfile
+
+# Ajouter une dépendance
+bun add <package>
+
+# Ajouter en dev dependency
+bun add -d <package>
+
+# Ajouter en peer dependency
+bun add --peer <package>
+
+# Ajouter une version exacte (sans caret)
+bun add --exact <package>
+
+# Ajouter globalement
+bun add -g <package>
+
+# Supprimer une dépendance
+bun remove <package>
+
+# Mettre à jour les deps
+bun update
+
+# Mettre à jour une dep spécifique
+bun update <package>
+
+% bun, run, scripts
+
+# Lancer un script npm du package.json
+bun run <script>
+
+$ script: node -e 'const s=require("./package.json").scripts||{};for(const k in s)console.log(k+" — "+s[k])' 2>/dev/null | fzf --delimiter=' — ' | cut -d' ' -f1
+
+# Raccourci : les scripts sont aussi appelables directement
+bun <script>
+
+# Exécuter un fichier TS/JS (hot reload)
+bun --hot <file>
+
+# Exécuter avec watch mode
+bun --watch <file>
+
+# Exécuter une commande comme npx (télécharge si besoin)
+bunx <package> <args>
+
+# Exécuter avec le runtime bun (remplace node)
+bun --bun <command>
+
+% bun, test
+
+# Lancer tous les tests
+bun test
+
+# Lancer les tests d'un fichier/pattern
+bun test <pattern>
+
+# Mode watch
+bun test --watch
+
+# Tests avec coverage
+bun test --coverage
+
+# Tests avec un timeout custom (ms)
+bun test --timeout <ms>
+
+# Mettre à jour les snapshots
+bun test --update-snapshots
+
+# Filtrer par nom de test (regex)
+bun test -t "<pattern>"
+
+% bun, build, bundler
+
+# Builder un entrypoint vers un dossier
+bun build <entry> --outdir <dist>
+
+# Build pour le navigateur (target browser)
+bun build <entry> --outdir <dist> --target browser
+
+# Build pour Node.js (target node)
+bun build <entry> --outdir <dist> --target node
+
+# Minifier le bundle
+bun build <entry> --outdir <dist> --minify
+
+# Build avec sourcemaps
+bun build <entry> --outdir <dist> --sourcemap
+
+# Compiler un binaire standalone
+bun build <entry> --compile --outfile <binary>
+
+% bun, pm, cache
+
+# Lister les packages installés (arbre)
+bun pm ls
+
+# Lister en mode plat
+bun pm ls --all
+
+# Afficher le chemin du cache
+bun pm cache
+
+# Vider le cache
+bun pm cache rm
+
+# Voir les hashes/lockfile
+bun pm hash
+
+% bun, upgrade, version
+
+# Mettre à jour bun lui-même
+bun upgrade
+
+# Passer en canary (beta)
+bun upgrade --canary
+
+# Revenir en stable
+bun upgrade --stable
+
+# Voir la version installée
+bun --version

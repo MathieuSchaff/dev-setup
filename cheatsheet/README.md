@@ -1,39 +1,31 @@
 # Cheatsheet CLI
 
 Référence rapide pour l'environnement terminal.
-
-## Fichiers
-
-| Fichier         | Contenu                                     |
-|-----------------|---------------------------------------------|
-| `zsh.md`        | Aliases git, navigation, tmux               |
-| `vi-mode.md`    | Raccourcis vi-mode dans le terminal         |
-| `tools.md`      | lazygit, eza, bat, fzf, zoxide, delta       |
+La table des fichiers est dans [`~/dev-setup/CLAUDE.md`](../CLAUDE.md) ; ce dossier contient les détails par outil.
 
 ## Accès rapide
 
-Ajoute cet alias dans `~/.zshrc` pour ouvrir ce dossier directement :
+| Méthode     | Commande          | Description                                  |
+|-------------|-------------------|----------------------------------------------|
+| navi widget | `Ctrl+N`          | Sélection interactive, insère dans le shell  |
+| navi tmux   | `prefix + Ctrl+g` | Fonctionne dans vim, psql, SSH...            |
+| navi direct | `navi`            | Interface complète                           |
+| glow TUI    | `cs`              | Browser multi-fichiers sur ce dossier        |
+| glow pager  | `gl <fichier>`    | Rend un `.md` dans le pager                  |
+| fzf + glow  | `cheat`           | fzf sur les cheatsheets, preview glow        |
 
-```zsh
-alias cheatsheet='cat ~/cheatsheet/README.md'
-alias cs='cd ~/cheatsheet && ls'
-```
+## Conventions de ce cheatsheet
 
-Ou pour chercher dans tous les fichiers :
-```zsh
-alias csf='grep -r "" ~/cheatsheet/ | fzf'
-```
+- `>` — note neutre
+- `### Piège` — gotcha à éviter
+- `### Astuce` — tip pratique
+- Tables `| col | col |` — la colonne de gauche est toujours la touche / commande / option
+- Cross-link entre fichiers via `[texte](./autre.md)`
 
-## Plugins installés
+## Plugins zsh installés
 
 - `zsh-autosuggestions` — suggestions grises basées sur l'historique, `→` pour accepter
 - `zsh-syntax-highlighting` — commandes valides en vert, invalides en rouge
 - `vi-mode` — navigation vim dans le terminal (`Esc` pour basculer)
 - `fzf-tab` — complétion `Tab` fuzzy interactive
 - `zsh-history-substring-search` — `↑/↓` filtrent l'historique par ce qui est tapé
-
-## Outils à installer (si pas encore fait)
-
-```zsh
-sudo apt install eza bat lazygit git-delta
-```

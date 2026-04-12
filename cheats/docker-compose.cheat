@@ -1,0 +1,86 @@
+; Consolidé depuis denisidoro/navi-tldr-pages (docker-compose.md)
+; Docker Compose v2 (plugin, commande `docker compose`)
+
+% docker-compose, up
+
+# Démarrer tous les services en arrière-plan
+docker compose up -d
+
+# Démarrer en rebuildant si nécessaire
+docker compose up --build
+
+# Démarrer avec un fichier compose alternatif
+docker compose -f <path_to_compose.yml> up -d
+
+# Démarrer avec un nom de projet custom
+docker compose -p <project_name> -f <path_to_compose.yml> up -d
+
+# Démarrer un service spécifique uniquement
+docker compose up -d <service>
+
+% docker-compose, down, stop
+
+# Stopper tous les services (sans supprimer)
+docker compose stop
+
+# Stopper et supprimer containers + networks
+docker compose down
+
+# Down complet : containers + networks + volumes + images
+docker compose down --rmi all --volumes
+
+# Redémarrer tous les services
+docker compose restart
+
+# Redémarrer un service
+docker compose restart <service>
+
+% docker-compose, logs
+
+# Logs de tous les services
+docker compose logs
+
+# Suivre les logs de tous les services
+docker compose logs -f
+
+# Suivre les logs d'un service spécifique
+docker compose logs -f <service>
+
+# N dernières lignes par service
+docker compose logs --tail=<n>
+
+% docker-compose, ps, exec
+
+# Lister les conteneurs du projet compose
+docker compose ps
+
+# Exécuter une commande dans un service
+docker compose exec <service> <command>
+
+# Ouvrir un shell dans un service
+docker compose exec <service> sh
+
+# Lancer une commande one-off (nouveau conteneur)
+docker compose run --rm <service> <command>
+
+% docker-compose, build, pull
+
+# Builder tous les services
+docker compose build
+
+# Builder un service sans cache
+docker compose build --no-cache <service>
+
+# Pull toutes les images définies
+docker compose pull
+
+% lazydocker
+
+# Ouvrir Lazydocker (TUI pour Docker)
+lazydocker
+
+# Ouvrir avec un docker-compose alternatif
+lazydocker -f <path_to_compose.yml>
+
+# Voir la config par défaut
+lazydocker --config

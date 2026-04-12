@@ -1,36 +1,96 @@
-# Dotfiles 2026
+# dev-setup
 
-Ma configuration Linux actuelle.
+Configuration Linux / macOS (environnement actuel : WSL2 Ubuntu x86_64).
 
-## Update
+---
 
-Si tu ajoutes/modifies des configs :
+## Comment ça marche
+
+Ce repo contient deux choses distinctes :
+
+1. **Les dotfiles** — copies des fichiers de config actifs (`~/.zshrc`, `~/.gitconfig`, etc.)
+2. **La documentation** — guide d'install, inventaire des outils, cheatsheet
+
+Le hook `pre-commit` copie automatiquement les fichiers actifs depuis `~/` dans ce repo à chaque commit. Le repo est donc toujours en sync avec la machine.
+
+---
+
+## Nouvelle machine
+
+Voir **[SETUP.md](./SETUP.md)** pour la séquence complète d'installation.
+
+Une fois les outils installés, déployer les configs en une commande :
+
 ```bash
-cd ~/dotfiles-new
-cp ~/.zshrc .
-cp ~/.bashrc .
-cp ~/.tmux.conf .
-cp ~/.vimrc .
-cp ~/.gitconfig .
-cp -r ~/.config/nvim .config/
-cp -r ~/.config/lazygit .config/
-git add .
-git commit -m "Update configs"
+git clone https://github.com/MathieuSchaff/dotfiles-2026 ~/dev-setup
+chmod +x ~/dev-setup/install.sh
+~/dev-setup/install.sh
+exec zsh
+```
+
+### Ce que fait `install.sh`
+
+- Copie chaque dotfile à son emplacement (`~/.zshrc`, `~/.gitconfig`, `~/.tmux.conf`...)
+- Si un fichier existe déjà et est **différent** → backup horodaté dans `~/.dotfiles-backup/` avant d'écraser
+- Si un fichier est déjà **identique** → ignoré
+- Affiche un résumé de ce qui a changé
+
+---
+
+## Mettre à jour depuis une machine existante
+
+Le hook `pre-commit` se charge de tout — il suffit de committer :
+
+```bash
+cd ~/dev-setup
+git commit -m "update"
 git push
 ```
 
-Ou tout en une ligne :
+Pour mettre à jour les outils eux-mêmes :
+
 ```bash
-cd ~/dotfiles-new && cp ~/.zshrc ~/.bashrc ~/.tmux.conf ~/.vimrc ~/.gitconfig . && cp -r ~/.config/{nvim,lazygit} .config/ && git add . && git commit -m "Update" && git push
+update-all     # apt, omz, plugins zsh, rust/cargo, uv, lazygit, fzf
+update-nvim    # Neovim (pre-built → /opt/nvim-linux-x86_64/)
+update-node    # Node via nvm
+update-bun     # Bun
 ```
 
-## Restore
+---
 
-Pour restaurer sur une nouvelle machine :
-```bash
-git clone git@github.com:MathieuSchaff/dotfiles-2026.git
-cd dotfiles-2026
-cp .zshrc ~/.zshrc
-cp .bashrc ~/.bashrc
-# ... etc
-```
+## Contenu
+
+| Fichier / Dossier        | Contenu                                                        |
+|--------------------------|----------------------------------------------------------------|
+| `SETUP.md`               | Guide d'installation complet — nouvelle machine                |
+| `install.sh`             | Script de déploiement des dotfiles (avec backup automatique)   |
+| `CLAUDE.md`              | Contexte pour Claude Code — outils, config, chemins            |
+| `tools.md`               | Inventaire complet des outils installés, chemins, versions     |
+| `cheatsheet/`            | Référence rapide lisible : zsh, lazygit, vi-mode, delta, fzf   |
+| `cheats/`                | Cheatsheets navi (`.cheat`) — git, tools, docker, linux, ssh, bun, npm, curl, navi |
+| `.zshrc`                 | Shell : aliases, fonctions, plugins Oh My Zsh                  |
+| `.gitconfig`             | Git : delta comme pager, side-by-side, nvim comme éditeur      |
+| `.tmux.conf`             | Tmux : Catppuccin macchiato, `Ctrl+g` lazygit, `prefix+Ctrl+g` navi |
+| `.config/lazygit/`       | Lazygit : delta comme pager, nvim comme éditeur                |
+| `.config/nvim/`          | Neovim : config AstroNvim + syntax `.cheat`                    |
+| `.config/navi/`          | Navi : cheats path, couleurs, shell zsh                        |
+
+---
+
+## Stack
+
+| Outil | Version | Installé via |
+|-------|---------|-------------|
+| zsh + Oh My Zsh | — | apt |
+| tmux | — | apt |
+| Neovim | v0.12.1 | pre-built → `/opt/nvim-linux-x86_64/` |
+| lazygit | latest | curl GitHub releases |
+| delta | 0.19.2 | cargo |
+| eza | latest | cargo |
+| bat | latest | cargo |
+| navi | latest | cargo |
+| glow | latest | `sudo snap install glow` ou `go install` |
+| fzf | latest | git |
+| Node | v24 | nvm |
+| Bun | 1.3 | curl |
+| Rust | 1.94 | rustup |

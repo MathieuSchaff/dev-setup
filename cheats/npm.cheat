@@ -1,0 +1,118 @@
+; npm — Node Package Manager
+; Complète pnpm/bun pour les projets legacy ou les outils globaux
+
+% npm, init, install
+
+# Initialiser un package.json (interactif)
+npm init
+
+# Initialiser avec les valeurs par défaut
+npm init -y
+
+# Installer les deps du package.json
+npm install
+
+# Alias court
+npm i
+
+# Installation CI — exige un lockfile à jour, plus rapide
+npm ci
+
+# Installer en mode production (skip devDeps)
+npm install --omit=dev
+
+% npm, add, remove
+
+# Ajouter une dépendance
+npm install <package>
+
+# Ajouter en devDependency
+npm install -D <package>
+
+# Ajouter en version exacte (pas de caret)
+npm install --save-exact <package>
+
+# Ajouter globalement
+npm install -g <package>
+
+# Installer une version précise
+npm install <package>@<version>
+
+# Installer la dernière version
+npm install <package>@latest
+
+# Supprimer une dépendance
+npm uninstall <package>
+
+# Supprimer un paquet global
+npm uninstall -g <package>
+
+% npm, run, scripts
+
+# Lister les scripts disponibles
+npm run
+
+# Lancer un script
+npm run <script>
+
+$ script: node -e 'const s=require("./package.json").scripts||{};for(const k in s)console.log(k+" — "+s[k])' 2>/dev/null | fzf --delimiter=' — ' | cut -d' ' -f1
+
+# Lancer les tests
+npm test
+
+# Lancer le start
+npm start
+
+# Exécuter un binaire d'un package sans l'installer
+npx <package> <args>
+
+% npm, info, search
+
+# Voir les infos d'un package (version, deps, repo)
+npm view <package>
+
+# Voir la dernière version publiée
+npm view <package> version
+
+# Voir toutes les versions publiées
+npm view <package> versions
+
+# Voir l'arbre des deps installées
+npm ls
+
+# Arbre complet (toutes profondeurs)
+npm ls --all
+
+# Vérifier une dep installée en particulier
+npm ls <package>
+
+% npm, outdated, update, audit
+
+# Lister les deps dépassées
+npm outdated
+
+# Mettre à jour dans les limites du semver (package.json)
+npm update
+
+# Audit de sécurité
+npm audit
+
+# Fix automatique des vulnérabilités
+npm audit fix
+
+# Fix avec bump de version majeure
+npm audit fix --force
+
+% npm, cache, clean
+
+# Vider le cache
+npm cache clean --force
+
+# Vérifier l'intégrité du cache
+npm cache verify
+
+# Afficher la racine des node_modules globaux
+npm root -g
+
+# Afficher la config effective
+npm config list

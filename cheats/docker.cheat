@@ -1,0 +1,269 @@
+; Consolidé depuis denisidoro/navi-tldr-pages (docker-*.md)
+; Curation : commandes utiles pour dev frontend/fullstack
+
+% docker, basics
+
+# Lister les conteneurs en cours
+docker ps
+
+# Lister tous les conteneurs (running + stopped)
+docker ps -a
+
+# Lister les conteneurs filtrés par nom
+docker ps --filter "name=<name>"
+
+# Lister les conteneurs par statut (running, exited, paused...)
+docker ps --filter "status=<status>"
+
+# Voir le dernier conteneur créé
+docker ps --latest
+
+% docker, run
+
+# Lancer un conteneur en interactif + TTY puis le supprimer à la sortie
+docker run --rm -it <image> <command>
+
+# Lancer un conteneur en arrière-plan avec un nom
+docker run -d --name <container_name> <image>
+
+# Lancer un conteneur avec un port publié host:container
+docker run -p <host_port>:<container_port> <image>
+
+# Lancer un conteneur avec un bind mount (host:container)
+docker run -v <host_path>:<container_path> <image>
+
+# Lancer un conteneur avec des variables d'environnement
+docker run -e <KEY>=<value> <image>
+
+# Lancer un conteneur sur un network donné
+docker run --network <network> <image>
+
+# Lancer un conteneur en écrasant l'entrypoint
+docker run --entrypoint <command> <image>
+
+% docker, exec, shell
+
+# Ouvrir un shell interactif dans un conteneur en cours
+docker exec -it <container> sh
+
+# Ouvrir bash dans un conteneur en cours
+docker exec -it <container> bash
+
+$ container: docker ps --format '{{.Names}}'
+
+# Exécuter une commande en tant qu'utilisateur spécifique
+docker exec -u <user> <container> <command>
+
+# Exécuter une commande en détaché
+docker exec -d <container> <command>
+
+# Exécuter une commande avec un workdir spécifique
+docker exec -it -w <path> <container> <command>
+
+% docker, logs
+
+# Afficher les logs d'un conteneur
+docker logs <container>
+
+# Suivre les logs en temps réel
+docker logs -f <container>
+
+# Afficher les N dernières lignes
+docker logs --tail <n> <container>
+
+# Afficher les logs avec timestamps
+docker logs -t <container>
+
+# Suivre les logs + timestamps + N dernières lignes
+docker logs -f -t --tail <n> <container>
+
+$ container: docker ps -a --format '{{.Names}}'
+
+% docker, build
+
+# Build depuis le Dockerfile du dossier courant
+docker build .
+
+# Build avec un tag
+docker build -t <name>:<tag> .
+
+# Build sans cache
+docker build --no-cache -t <name>:<tag> .
+
+# Build avec un Dockerfile spécifique
+docker build -f <path_to_dockerfile> -t <name>:<tag> .
+
+# Build avec des build-args
+docker build --build-arg <KEY>=<value> -t <name>:<tag> .
+
+% docker, images
+
+# Lister les images locales
+docker images
+
+# Lister les images avec IDs uniquement
+docker images -q
+
+# Lister les images dangling (non utilisées)
+docker images --filter dangling=true
+
+# Trier les images par taille
+docker images --format "{{.ID}}\t{{.Size}}\t{{.Repository}}:{{.Tag}}" | sort -k2 -h
+
+# Supprimer les images dangling
+docker image prune
+
+# Supprimer TOUTES les images inutilisées
+docker image prune --all
+
+# Voir l'historique des couches d'une image
+docker image history <image>
+
+% docker, pull, tag, rmi
+
+# Pull une image avec tag
+docker pull <image>:<tag>
+
+# Pull pour une plateforme spécifique (ex: linux/amd64)
+docker pull --platform <linux/amd64> <image>:<tag>
+
+# Re-tagger une image
+docker tag <image>:<current_tag> <image>:<new_tag>
+
+# Supprimer une image
+docker rmi <image>
+
+# Forcer la suppression d'une image
+docker rmi -f <image>
+
+% docker, lifecycle
+
+# Démarrer un conteneur stoppé
+docker start <container>
+
+# Stopper un conteneur
+docker stop <container>
+
+# Redémarrer un conteneur
+docker restart <container>
+
+# Kill un conteneur (SIGKILL)
+docker kill <container>
+
+# Supprimer un conteneur
+docker rm <container>
+
+# Forcer la suppression (même running)
+docker rm -f <container>
+
+# Supprimer un conteneur et ses volumes
+docker rm -v <container>
+
+$ container: docker ps -a --format '{{.Names}}'
+
+% docker, inspect
+
+# Inspecter un conteneur / image / volume
+docker inspect <target>
+
+# Obtenir l'IP d'un conteneur
+docker inspect --format '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container>
+
+# Obtenir le chemin du log file
+docker inspect --format '{{.LogPath}}' <container>
+
+# Obtenir le nom de l'image du conteneur
+docker inspect --format '{{.Config.Image}}' <container>
+
+# Afficher tous les port bindings
+docker inspect --format '{{range $p, $conf := .NetworkSettings.Ports}}{{$p}} -> {{(index $conf 0).HostPort}} {{end}}' <container>
+
+% docker, cp
+
+# Copier un fichier depuis le host vers un conteneur
+docker cp <host_path> <container>:<container_path>
+
+# Copier un fichier depuis un conteneur vers le host
+docker cp <container>:<container_path> <host_path>
+
+% docker, network
+
+# Lister les networks
+docker network ls
+
+# Inspecter un network
+docker network inspect <network>
+
+# Créer un network user-defined
+docker network create --driver <bridge> <network_name>
+
+# Connecter un conteneur à un network
+docker network connect <network> <container>
+
+# Déconnecter un conteneur d'un network
+docker network disconnect <network> <container>
+
+# Supprimer les networks inutilisés
+docker network prune
+
+% docker, volume
+
+# Lister les volumes
+docker volume ls
+
+# Créer un volume nommé
+docker volume create <volume_name>
+
+# Inspecter un volume
+docker volume inspect <volume_name>
+
+# Supprimer un volume
+docker volume rm <volume_name>
+
+# Supprimer tous les volumes inutilisés
+docker volume prune
+
+% docker, stats, monitor
+
+# Stats live de tous les conteneurs running
+docker stats
+
+# Stats d'un ou plusieurs conteneurs
+docker stats <container>
+
+# Snapshot unique (non-streaming)
+docker stats --no-stream
+
+# Stats formatées (nom + CPU%)
+docker stats --format "{{.Name}}\t{{.CPUPerc}}"
+
+% docker, system, cleanup
+
+# Voir l'utilisation disque de Docker
+docker system df
+
+# Détails de l'usage disque
+docker system df -v
+
+# Nettoyer les données inutilisées (containers, networks, images dangling)
+docker system prune
+
+# Nettoyer TOUT, y compris les volumes
+docker system prune -a --volumes
+
+# Events Docker en temps réel
+docker system events
+
+# Infos système Docker
+docker system info
+
+% docker, commit
+
+# Créer une image depuis l'état d'un conteneur
+docker commit <container> <image>:<tag>
+
+# Commit avec un message
+docker commit -m "<message>" <container> <image>:<tag>
+
+# Commit en appliquant une instruction Dockerfile (CMD, ENV, etc.)
+docker commit --change "CMD <command>" <container> <image>:<tag>

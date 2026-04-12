@@ -1,0 +1,8 @@
+# Syntax highlighting theme (matches delta + tmux Catppuccin Macchiato)
+--theme="Catppuccin Macchiato"
+
+# Show line numbers, git changes, file header
+--style="numbers,changes,header"
+
+# Never page for small output
+--paging=never

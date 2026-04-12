@@ -1,0 +1,208 @@
+; Linux basics — processes, ports, disk, files, systemd, archives
+; Contexte : WSL2 Ubuntu
+
+% linux, processes
+
+# Lister tous les processus (mode BSD)
+ps aux
+
+# Chercher un processus par nom
+pgrep -a <name>
+
+# Chercher un processus + parent
+pgrep -af <name>
+
+# Kill par nom (SIGTERM)
+pkill <name>
+
+# Kill par nom (SIGKILL, brutal)
+pkill -9 <name>
+
+# Kill par PID
+kill <pid>
+
+$ pid: ps -eo pid,pcpu,pmem,comm --sort=-pcpu | head -30 | tail -n +2 | fzf | awk '{print $1}'
+
+# Voir l'arbre des processus
+pstree -p
+
+# Top interactif moderne
+btm
+
+# htop classique
+htop
+
+% linux, ports, network
+
+# Ports en écoute (ss moderne)
+ss -tulpn
+
+# Ports en écoute filtrés par port
+ss -tulpn | grep <port>
+
+# Connexions établies
+ss -tp
+
+# Ports en écoute (lsof)
+sudo lsof -i -P -n | grep LISTEN
+
+# Qui utilise un port spécifique
+sudo lsof -i :<port>
+
+# Tester qu'un port est ouvert sur un host
+nc -zv <host> <port>
+
+# Résolution DNS
+dig <domain>
+
+# Résolution courte
+dig +short <domain>
+
+# IP publique
+curl -sS ifconfig.me
+
+% linux, disk, files
+
+# Espace disque global
+df -h
+
+# Taille d'un dossier
+du -sh <path>
+
+# Top 10 des plus gros items d'un dossier
+du -h --max-depth=1 <path> | sort -hr | head
+
+# Navigateur disque interactif (si installé)
+ncdu <path>
+
+# Chercher les plus gros fichiers (> 100M) dans un dossier
+fd -t f -S +100m . <path>
+
+# Chercher par nom (fd, alias de fdfind)
+fd <pattern>
+
+# Trouver les fichiers modifiés dans les X dernières minutes
+fd --changed-within <30m> . <path>
+
+% linux, permissions
+
+# Rendre un fichier exécutable
+chmod +x <file>
+
+# Permissions numériques (rwx pour owner, r pour autres)
+chmod 755 <file>
+
+# Changer le owner
+sudo chown <user>:<group> <file>
+
+# Récursif
+sudo chown -R <user>:<group> <path>
+
+# Voir les permissions détaillées
+stat <file>
+
+% linux, archives
+
+# Créer un tar.gz
+tar czf <archive.tar.gz> <path>
+
+# Extraire un tar.gz
+tar xzf <archive.tar.gz>
+
+# Extraire dans un dossier spécifique
+tar xzf <archive.tar.gz> -C <dest_dir>
+
+# Lister le contenu d'un tar sans extraire
+tar tzf <archive.tar.gz>
+
+# Zip récursif
+zip -r <archive.zip> <path>
+
+# Unzip
+unzip <archive.zip>
+
+# Unzip dans un dossier spécifique
+unzip <archive.zip> -d <dest_dir>
+
+% linux, systemctl, services
+
+# Statut d'un service
+systemctl status <service>
+
+# Démarrer un service
+sudo systemctl start <service>
+
+# Arrêter un service
+sudo systemctl stop <service>
+
+# Redémarrer un service
+sudo systemctl restart <service>
+
+# Activer au boot
+sudo systemctl enable <service>
+
+# Désactiver au boot
+sudo systemctl disable <service>
+
+# Lister tous les services actifs
+systemctl list-units --type=service --state=running
+
+% linux, journalctl, logs
+
+# Logs système (dernières lignes)
+journalctl -xe
+
+# Suivre les logs en temps réel
+journalctl -f
+
+# Logs d'un service spécifique
+journalctl -u <service>
+
+# Logs d'un service en live
+journalctl -fu <service>
+
+# Logs depuis N minutes
+journalctl --since "<10 min ago>"
+
+% linux, env, path
+
+# Lister toutes les variables d'env
+env
+
+# Chercher une variable d'env
+env | grep <name>
+
+# Afficher le PATH lisiblement
+echo $PATH | tr ':' '\n'
+
+# Trouver où est un exécutable
+which <command>
+
+# Version détaillée (alias, fonction, builtin, path...)
+type <command>
+
+# Pareil, POSIX
+command -v <command>
+
+% linux, history, apt
+
+# Chercher dans l'historique
+history | grep <pattern>
+
+# Rerun la dernière commande
+!!
+
+# Rerun avec sudo
+sudo !!
+
+# Update du système (Ubuntu/Debian)
+sudo apt update && sudo apt upgrade -y
+
+# Installer un paquet
+sudo apt install <package>
+
+# Chercher un paquet
+apt search <pattern>
+
+# Voir les infos d'un paquet
+apt show <package>

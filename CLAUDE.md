@@ -10,16 +10,25 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 |------------------------------------------|----------------------------------------------|
 | `~/dev-setup/tools.md`                   | Inventaire complet de tous les outils installés, chemins, versions |
 | `~/dev-setup/cheatsheet/README.md`       | Index du cheatsheet                          |
+| `~/dev-setup/cheatsheet/git.md`          | Git — config delta, workflows, zdiff3, conventions |
 | `~/dev-setup/cheatsheet/lazygit.md`      | Lazygit — panels, raccourcis, config, patterns |
-| `~/dev-setup/cheatsheet/tools.md`        | delta, eza, bat, fzf, zoxide, rg, fd         |
-| `~/dev-setup/cheatsheet/zsh.md`          | Aliases, navigation, tmux                    |
+| `~/dev-setup/cheatsheet/tmux.md`         | Tmux — sessions, splits, copy-mode, TPM, popup |
+| `~/dev-setup/cheatsheet/tools.md`        | delta, eza, bat, glow, fzf, zoxide, rg, fd   |
+| `~/dev-setup/cheatsheet/zsh.md`          | Aliases, navigation, updates                 |
 | `~/dev-setup/cheatsheet/vi-mode.md`      | Vi-mode dans le terminal                     |
+| `~/dev-setup/cheatsheet/navi.md`         | Navi — bindings, config, syntax cheat files  |
+| `~/dev-setup/cheatsheet/zed.md`          | Zed — keymaps vim, LSP TS/Biome/vtsls, Ollama |
+| `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, linux, ssh, bun, npm, curl, navi |
 | `~/dev-setup/.gitconfig`                 | Config git de référence (à copier dans `~/.gitconfig`) |
 | `~/dev-setup/.zshrc`                     | Zshrc de référence                           |
 | `~/dev-setup/.tmux.conf`                 | Tmux de référence                            |
 | `~/dev-setup/.config/lazygit/config.yml` | Config lazygit de référence                  |
+| `~/dev-setup/.config/navi/config.yaml`   | Config navi (cheats path, couleurs, shell)   |
+| `~/dev-setup/.config/zed/settings.json`  | Config Zed (thème, LSP, Biome, Ollama)       |
+| `~/dev-setup/.config/zed/keymap.json`    | Keymaps Zed (vim normal/visual/insert)       |
 
 > Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc.  
+> Les fichiers Zed actifs sont dans `C:\Users\schaf\AppData\Roaming\Zed\` (Windows).  
 > `~/dev-setup/` sert de backup/référence versionné.
 
 ## Outils installés (résumé)
@@ -35,6 +44,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 - **Runtimes** : Node v24 (nvm), Bun 1.3, Python (miniconda), Go 1.25, Rust 1.94
 - **Package managers** : cargo, npm, pnpm, bun, uv, conda
 - **AI CLIs** : claude (`~/.local/bin/claude`), gemini (npm global), kimi
+- **Éditeur Windows** : Zed (config `C:\Users\schaf\AppData\Roaming\Zed\`), vim_mode + Biome + vtsls, backup dans `~/dev-setup/.config/zed/`
 
 ## Config lazygit (ce qu'on a fait)
 - `~/.config/lazygit/config.yml` : pager = delta (`--dark --paging=never`), éditeur = nvim

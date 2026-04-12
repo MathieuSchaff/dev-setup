@@ -1,0 +1,185 @@
+% eza, ls
+
+# Liste longue avec icônes et statut git
+eza -l --icons --git
+
+# Liste longue avec fichiers cachés
+eza -la --icons --git
+
+# Arborescence limitée à N niveaux
+eza --tree --icons -L <depth>
+
+# Trier par date de modification
+eza -l --icons --sort=modified
+
+# Taille récursive des dossiers uniquement
+eza -l --total-size -D
+
+# Vue longue + git, sans les ignorés
+eza -l --git --git-ignore
+
+# Timestamps relatifs
+eza -l --time-style=relative
+
+# Dossiers d'abord dans la liste
+eza -l --icons --group-directories-first
+
+# Dossiers uniquement
+eza -l -D
+
+# Fichiers uniquement (pas de dossiers)
+eza -l -f
+
+# Afficher le numéro d'inode
+eza -l --inode
+
+# Vue longue avec taille en octets bruts
+eza -l --bytes
+
+# Attributs étendus et tailles
+eza -l --extended
+
+% bat, cat
+
+# Afficher un fichier avec syntax highlighting
+bat <file>
+
+# Afficher sans décorations (plain)
+bat --plain <file>
+
+# Afficher avec numéros de ligne
+bat -n <file>
+
+# Lister les thèmes disponibles
+bat --list-themes
+
+$ file: fd -t f --- --preview 'bat --color=always {}' --preview-window 'right:60%'
+
+% ripgrep, rg, search
+
+# Chercher récursivement
+rg <pattern>
+
+# Chercher dans un type de fichier
+rg <pattern> -t <type>
+
+$ type: echo -e "js\nts\npy\ngo\nrs\nmd\njson\nyaml\ntoml" | fzf
+
+# Chercher avec N lignes de contexte
+rg <pattern> -C <context>
+
+# Afficher uniquement les noms de fichiers
+rg <pattern> -l
+
+# Chercher sans respecter la casse
+rg <pattern> -i
+
+# Chercher dans les fichiers cachés
+rg <pattern> --hidden
+
+% fd, find
+
+# Chercher par nom
+fd <pattern>
+
+# Chercher fichiers uniquement
+fd -t f <pattern>
+
+# Chercher dossiers uniquement
+fd -t d <pattern>
+
+# Chercher par extension
+fd -e <ext>
+
+$ ext: echo -e "ts\njs\npy\ngo\nrs\nmd\njson\ntoml\nyaml" | fzf
+
+# Chercher dans les fichiers cachés
+fd --hidden <pattern>
+
+% zoxide, z, navigation
+
+# Sauter vers un dossier fréquent
+z <dir>
+
+$ dir: zoxide query -l --- --preview 'eza --tree -L 2 {}' --preview-window 'right:50%'
+
+# Mode interactif (sélection via fzf)
+zi
+
+# Voir tous les dossiers enregistrés avec score
+zoxide query -l -s
+
+% tmux
+
+# Créer une nouvelle session nommée
+tmux new -s <session_name>
+
+# Rejoindre une session existante
+tmux attach -t <session>
+
+$ session: tmux ls --- --column 1 --delimiter ':' --preview 'tmux list-windows -t {1}'
+
+# Lister les sessions
+tmux ls
+
+# Tuer une session
+tmux kill-session -t <session>
+
+% updates
+
+# Tout mettre à jour (apt, omz, plugins, rust, uv, lazygit, fzf)
+update-all
+
+# Mettre à jour Node via nvm
+update-node
+
+# Mettre à jour bun
+update-bun
+
+# Mettre à jour neovim (pre-built)
+update-nvim
+
+# Mettre à jour lazygit
+update-lazygit
+
+# Mettre à jour conda
+update-conda
+
+# Mettre à jour les plugins Oh My Zsh custom
+update-zsh-plugins
+
+% delta, git, diff
+
+# Diff git stylé (delta actif automatiquement via gitconfig)
+git diff
+
+# Diff git sans delta (sortie brute)
+git diff --no-pager
+
+# Diff git sans delta via variable d'env
+GIT_PAGER=cat git diff
+
+# Contenu complet d'un commit formaté par delta
+git show <hash>
+
+$ hash: git log --oneline --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
+
+# Historique avec diff inline (delta)
+git log --patch --oneline
+
+% bottom, btm, system, monitor
+
+# Lancer le moniteur système
+btm
+
+# Moniteur basique (pas d'arbres de processus)
+btm -b
+
+# Rafraîchir toutes les N millisecondes
+btm -r <ms>
+
+# Activer le mode process tree par défaut
+btm -T
+
+# Préfixer par defaut avec un regex de process
+btm --default_widget_type proc

@@ -10,5 +10,15 @@
 	diffFilter = delta --color-only
 [delta]
 	navigate = true
-	light = false
+	dark = true
 	side-by-side = true
+	line-numbers = true
+	hyperlinks = true
+	true-color = always
+	syntax-theme = Catppuccin Macchiato
+
+[merge]
+	conflictStyle = zdiff3
+
+[diff]
+	colorMoved = default

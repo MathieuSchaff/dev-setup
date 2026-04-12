@@ -1,0 +1,27 @@
+cheats:
+  paths:
+    - ~/dev-setup/cheats
+
+# Couleurs — cohérent avec le prompt (cyan/yellow/green)
+style:
+  tag:
+    color: cyan
+    width_percentage: 20
+    min_width: 20
+  comment:
+    color: yellow
+    width_percentage: 42
+    min_width: 30
+  snippet:
+    color: green
+    width_percentage: 38
+    min_width: 30
+
+finder:
+  command: fzf
+  overrides_var: "--height 50% --layout=reverse --border"
+
+# Shell pour exécuter les commandes de variables ($branch: git branch...)
+shell:
+  command: zsh
+  finder_command: zsh

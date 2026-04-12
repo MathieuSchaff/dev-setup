@@ -148,6 +148,7 @@ alias ll='eza -la --icons --git'
 alias tree='eza --tree --icons'
 alias lh='ls -lah'
 # bat / lazygit
+export COLORTERM=truecolor
 alias cat='batcat'
 # lazygit — smart exit (le terminal suit le dossier courant de lazygit)
 lg() {
@@ -170,16 +171,21 @@ tn(){
 # Bonus : Créer et rejoindre immédiatement (si tu es HORS de tmux)
 alias tnew='tmux new -s'
 
-# Lancer tmux : crée session doc au premier démarrage, sinon attach
+# Lancer tmux : crée les 3 sessions au premier démarrage, sinon attach
 t() {
   if tmux list-sessions &>/dev/null; then
-    # Sessions existantes — attach simplement
+    # Sessions existantes — créer les manquantes si besoin
+    tmux has-session -t doc   2>/dev/null || { tmux new-session -d -s doc -c ~/dev-setup/cheatsheet; tmux send-keys -t doc 'cs' Enter; }
+    tmux has-session -t dev   2>/dev/null || tmux new-session -d -s dev
+    tmux has-session -t tests 2>/dev/null || tmux new-session -d -s tests
     tmux attach
   else
-    # Premier démarrage — créer session doc + session main
-    tmux new-session -d -s doc -c ~/dev-setup/cheatsheet "nvim -c 'e README.md'"
-    tmux new-session -d -s main
-    tmux attach -t main
+    # Premier démarrage — créer les 3 sessions
+    tmux new-session -d -s doc -c ~/dev-setup/cheatsheet
+    tmux send-keys -t doc 'cs' Enter
+    tmux new-session -d -s dev
+    tmux new-session -d -s tests
+    tmux attach -t dev
   fi
 }
 # fdfind alias
@@ -257,7 +263,14 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Ceci charge nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Ceci charge la complétion de commande nvm (facultatif)
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-alias cheat='cd ~/dev-setup/cheatsheet && ls'
+# Cheatsheet — glow partout
+alias cs='glow ~/dev-setup/cheatsheet'          # TUI glow sur le dossier cheatsheet
+alias gl='glow -p'                               # glow pager sur un fichier donné
+cheat() {
+  local file
+  file=$(fd . ~/dev-setup/cheatsheet -e md | fzf --preview "glow -s dark -w 80 {}")
+  [[ -n "$file" ]] && glow -p "$file"
+}
 # alias pgadmin4='/usr/pgadmin4/bin/pgadmin4'
 # Add PostgreSQL binaries to PATH
 # alias psql='/usr/bin/psql'
@@ -268,8 +281,12 @@ alias cheat='cd ~/dev-setup/cheatsheet && ls'
 # alias studio='/usr/local/android-studio/bin/studio.sh'
 #. "$HOME/.cargo/env"
 # fzf — preview avec bat, layout amélioré
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --preview "batcat --color=always {}"'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+
+# navi — widget shell sur Ctrl+N (Ctrl+G pris par lazygit tmux)
+eval "$(navi widget zsh)"
+bindkey '^N' _navi_widget
 
 # historique plus long, sans doublons
 HISTSIZE=50000

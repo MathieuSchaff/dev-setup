@@ -110,8 +110,9 @@ Documentation des outils et CLI disponibles sur ce WSL.
 | Outil | Commande | Chemin | Description |
 |-------|----------|--------|-------------|
 | [lazygit](https://github.com/jesseduffield/lazygit) | `lg` | `/usr/local/bin/lazygit` | TUI git (installé via script curl) |
-| [neovim](https://neovim.io/) | `nvim` | `~/neovim/build/bin/nvim` | Éditeur (compilé depuis les sources) |
+| [neovim](https://neovim.io/) | `nvim` | `/opt/nvim-linux-x86_64/bin/nvim` | Éditeur (pre-built officiel) |
 | [fzf](https://github.com/junegunn/fzf) | `fzf` | `~/.fzf/` | Fuzzy finder interactif |
+| [navi](https://github.com/denisidoro/navi) | `navi` | `~/.cargo/bin/navi` | Cheatsheet interactif — commandes avec variables fzf |
 | [miniconda](https://docs.conda.io/en/latest/miniconda.html) | `conda` | `~/miniconda3/bin/conda` | Gestionnaire d'environnements Python |
 | [pnpm](https://pnpm.io/) | `pnpm` | `~/.local/share/pnpm/` | Gestionnaire de paquets Node alternatif |
 
@@ -166,15 +167,26 @@ alias update-zsh-plugins='for d in ~/.oh-my-zsh/custom/plugins/*/; do echo "Upda
 | `gcb` | `git checkout -b` | |
 | `gbr` | `git branch` | |
 | `config` | `git --git-dir=~/.dotfiles/ --work-tree=~` | Gestion des dotfiles (bare repo) |
-| `cheat` | `cd ~/cheatsheet && ls` | Accès au dossier cheatsheet |
+| `cheat` | `cd ~/dev-setup/cheatsheet && ls` | Accès au dossier cheatsheet |
 | `zdf` | `fd -t d \| fzf \| z` | Navigation fuzzy dans les dossiers |
 
 ### Config FZF
 
 ```sh
-FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --preview "batcat --color=always {}"'
+FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 ```
+
+### navi — Cheatsheet interactif
+
+Config : `~/.config/navi/config.yaml`  
+Cheats : `~/dev-setup/cheats/` (versionnés dans ce repo)
+
+| Raccourci | Contexte | Effet |
+|-----------|----------|-------|
+| `Ctrl+N` | Shell zsh | Widget — insère la commande choisie dans le buffer |
+| `prefix + Ctrl+g` | Tmux (partout) | Split temporaire — colle dans le pane précédent |
+| `navi` | Terminal | Lance l'interface complète |
 
 ### Historique
 
@@ -207,7 +219,7 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 ~/.local/bin                          # claude, uv, uvx, cursor-agent, kimi
 ~/miniconda3/bin                      # conda, python
 ~/.bun/bin                            # bun, bunx
-~/neovim/build/bin                    # nvim
+/opt/nvim-linux-x86_64/bin            # nvim
 ~/.local/share/pnpm                   # pnpm
 ~/.nvm/versions/node/v24.14.0/bin     # node, npm, gemini
 ~/.cargo/bin                          # rustc, cargo, bat, delta, eza...
@@ -228,13 +240,23 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 | GitHub CLI | `/mnt/c/Program Files/GitHub CLI/gh.exe` |
 | VS Code | `/mnt/c/Users/schaf/.../Microsoft VS Code/bin/code` |
 | Cursor | `/mnt/c/Users/schaf/.../cursor/resources/app/bin/cursor` |
-| Zed | `/mnt/c/Users/schaf/.../Zed/bin/zed` |
+| Zed | `/mnt/c/Users/schaf/AppData/Local/Programs/Zed/bin/zed` |
 | Warp | `/mnt/c/Users/schaf/.../Warp/bin/warp` |
 | Ollama | `/mnt/c/Users/schaf/.../Ollama/ollama.exe` |
 | Docker Desktop | `/mnt/c/Program Files/Docker/Docker/resources/bin/` |
 | Node.js (Windows) | `/mnt/c/Program Files/nodejs/node.exe` |
 
 > Ces binaires sont accessibles depuis le terminal WSL mais tournent côté Windows.
+
+---
+
+## Zed — Éditeur (Windows)
+
+> Cheatsheet complet (keymaps, LSP, Biome, Ollama, pièges) → **[cheatsheet/zed.md](./cheatsheet/zed.md)**
+
+- **Config source :** `C:\Users\schaf\AppData\Roaming\Zed\`
+- **Backup versionné :** `~/dev-setup/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `install.sh` avec auto-détection WSL)
+- **Stack :** vim_mode + base_keymap VSCode, Catppuccin Mocha, vtsls + Biome pour TS/TSX/JS/JSX, format_on_save, Ollama (Qwen Coder 7B)
 
 ---
 
@@ -259,29 +281,25 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 ## Dotfiles
 
-> Dépôt : `~/dotfiles-new/` → github.com/MathieuSchaff/dotfiles-2026  
-> Méthode : copie manuelle (pas de bare repo actif)  
-> Note : les fichiers sont cachés (`.zshrc`, `.tmux.conf`...) — utiliser `ls -la` pour les voir
+> Dépôt : `~/dev-setup/` → github.com/MathieuSchaff/dotfiles-2026  
+> Méthode : hook `pre-commit` — copie automatique des fichiers actifs à chaque commit
 
 ### Fichiers trackés
 
-| Fichier | Dernier push |
-|---------|-------------|
-| `~/dotfiles-new/.zshrc` | 21 jan 2026 |
-| `~/dotfiles-new/.bashrc` | 21 jan 2026 |
-| `~/dotfiles-new/.tmux.conf` | 21 jan 2026 |
-| `~/dotfiles-new/.vimrc` | 21 jan 2026 |
-| `~/dotfiles-new/.gitconfig` | 21 jan 2026 |
-| `~/dotfiles-new/.config/nvim/` | 21 jan 2026 |
-| `~/dotfiles-new/.config/lazygit/` | 21 jan 2026 |
+| Fichier actif | Copié dans le repo |
+|---------------|--------------------|
+| `~/.zshrc` | `~/dev-setup/.zshrc` |
+| `~/.gitconfig` | `~/dev-setup/.gitconfig` |
+| `~/.tmux.conf` | `~/dev-setup/.tmux.conf` |
+| `~/.config/lazygit/config.yml` | `~/dev-setup/.config/lazygit/config.yml` |
+| `~/.config/nvim/` | `~/dev-setup/.config/nvim/` |
 
 ### Workflow de mise à jour
 
 ```bash
-cd ~/dotfiles-new
-cp ~/.zshrc ~/.bashrc ~/.tmux.conf ~/.vimrc ~/.gitconfig .
-cp -r ~/.config/{nvim,lazygit} .config/
-git add . && git commit -m "Update" && git push
+cd ~/dev-setup
+git commit -m "update"   # le hook pre-commit copie tout automatiquement
+git push
 ```
 
 ---
@@ -313,6 +331,13 @@ Barre de statut affiche : `répertoire · user · session`
 | `tmux-plugins/tmux-sensible` | Defaults sensibles |
 | `tmux-plugins/tmux-yank` | Copie dans le clipboard système |
 | `catppuccin/tmux` | Thème Catppuccin |
+
+### Bindings personnalisés
+
+| Raccourci | Effet |
+|-----------|-------|
+| `Ctrl+g` | Ouvrir lazygit en popup flottant (sans préfixe) |
+| `prefix + Ctrl+g` | Ouvrir navi dans un split temporaire |
 
 ### Copy mode (vi)
 

@@ -1,0 +1,118 @@
+; curl — HTTP client
+; Focus API REST + téléchargement
+
+% curl, get
+
+# GET simple
+curl <url>
+
+# GET avec suivi des redirections
+curl -L <url>
+
+# GET silencieux mais affiche les erreurs
+curl -sS <url>
+
+# GET avec headers custom
+curl -H "Authorization: Bearer <token>" <url>
+
+# GET avec plusieurs headers
+curl -H "Accept: application/json" -H "X-Custom: <value>" <url>
+
+# GET et pretty-print JSON (nécessite jq)
+curl -sS <url> | jq .
+
+# GET avec paramètres query (URL-encodés)
+curl -G <url> --data-urlencode "<key>=<value>"
+
+% curl, post, put, delete
+
+# POST JSON
+curl -X POST <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
+
+# POST JSON depuis un fichier
+curl -X POST <url> -H "Content-Type: application/json" -d @<path_to_json_file>
+
+# POST form-urlencoded
+curl -X POST <url> -d "<key>=<value>&<key2>=<value2>"
+
+# POST multipart (upload fichier)
+curl -X POST <url> -F "file=@<path_to_file>" -F "<field>=<value>"
+
+# PUT JSON
+curl -X PUT <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
+
+# DELETE
+curl -X DELETE <url>
+
+# PATCH JSON
+curl -X PATCH <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
+
+% curl, auth
+
+# Basic auth
+curl -u <user>:<password> <url>
+
+# Bearer token
+curl -H "Authorization: Bearer <token>" <url>
+
+# API key dans un header
+curl -H "X-API-Key: <key>" <url>
+
+# Avec un .netrc
+curl --netrc <url>
+
+% curl, debug, verbose
+
+# Mode verbose (request + response headers)
+curl -v <url>
+
+# Afficher uniquement les headers de réponse
+curl -I <url>
+
+# Afficher headers + body
+curl -i <url>
+
+# Mesurer le temps total
+curl -o /dev/null -s -w "Total: %{time_total}s\n" <url>
+
+# Détails timings (DNS, connect, TTFB, total)
+curl -o /dev/null -s -w "DNS: %{time_namelookup}s\nConnect: %{time_connect}s\nTTFB: %{time_starttransfer}s\nTotal: %{time_total}s\n" <url>
+
+% curl, download
+
+# Télécharger en gardant le nom du fichier distant
+curl -LO <url>
+
+# Télécharger avec un nom local custom
+curl -L -o <local_file> <url>
+
+# Reprendre un téléchargement interrompu
+curl -C - -LO <url>
+
+# Télécharger avec une barre de progression classique
+curl -# -LO <url>
+
+# Suivre les redirections + limiter la vitesse
+curl -L --limit-rate <1M> -O <url>
+
+% curl, timeout, retry
+
+# Timeout total (s)
+curl --max-time <seconds> <url>
+
+# Timeout de connexion uniquement
+curl --connect-timeout <seconds> <url>
+
+# Retries automatiques sur erreur
+curl --retry <n> --retry-delay <seconds> <url>
+
+% curl, cookies
+
+# Sauver les cookies reçus
+curl -c <cookies.txt> <url>
+
+# Envoyer les cookies sauvegardés
+curl -b <cookies.txt> <url>
+
+# Sauver ET réutiliser (session)
+curl -c <cookies.txt> -b <cookies.txt> <url>

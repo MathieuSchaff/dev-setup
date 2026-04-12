@@ -1,0 +1,121 @@
+; SSH, SCP, rsync, ssh-keygen
+; Hosts du ~/.ssh/config sont utilisés comme fuzzy selector
+
+% ssh, connect
+
+# Se connecter à un host (config ou host complet)
+ssh <host>
+
+$ host: (awk '/^Host /{for(i=2;i<=NF;i++)print $i}' ~/.ssh/config 2>/dev/null | grep -v '\*') | sort -u
+
+# Se connecter avec un utilisateur spécifique
+ssh <user>@<host>
+
+# Se connecter avec une clé privée spécifique
+ssh -i <path_to_key> <user>@<host>
+
+# Se connecter sur un port non-standard
+ssh -p <port> <user>@<host>
+
+# Verbose (debug connexion)
+ssh -v <host>
+
+# Forcer IPv4 / IPv6
+ssh -4 <host>
+ssh -6 <host>
+
+% ssh, exec
+
+# Exécuter une commande distante et quitter
+ssh <host> <command>
+
+# Exécuter une commande en gardant le TTY (top, htop...)
+ssh -t <host> <command>
+
+# Rejoindre une session tmux existante (ou en créer une)
+ssh -t <host> "tmux attach -t main || tmux new -s main"
+
+% ssh, tunnel, forward
+
+# Port forwarding LOCAL : localhost:8080 -> host:80
+ssh -L <8080>:<localhost>:<80> <host>
+
+# Port forwarding REMOTE : host:9090 -> localhost:3000
+ssh -R <9090>:<localhost>:<3000> <host>
+
+# Proxy SOCKS dynamique (browser via ssh)
+ssh -D <1080> <host>
+
+# Tunnel en background sans shell
+ssh -fN -L <8080>:<localhost>:<80> <host>
+
+# Tunnel via un bastion/jump host
+ssh -J <jump_host> <target_host>
+
+% ssh, keygen
+
+# Générer une clé ed25519 (recommandé)
+ssh-keygen -t ed25519 -C "<email>"
+
+# Générer une clé ed25519 avec un chemin custom
+ssh-keygen -t ed25519 -C "<email>" -f <path_to_key>
+
+# Ajouter une passphrase à une clé existante
+ssh-keygen -p -f <path_to_key>
+
+# Afficher la fingerprint d'une clé
+ssh-keygen -lf <path_to_public_key>
+
+# Copier sa clé publique sur un serveur
+ssh-copy-id <user>@<host>
+
+# Copier une clé spécifique
+ssh-copy-id -i <path_to_public_key> <user>@<host>
+
+% ssh, agent
+
+# Démarrer ssh-agent et charger les clés
+eval "$(ssh-agent -s)" && ssh-add
+
+# Ajouter une clé spécifique à l'agent
+ssh-add <path_to_key>
+
+# Lister les clés dans l'agent
+ssh-add -l
+
+# Supprimer toutes les clés de l'agent
+ssh-add -D
+
+% scp, rsync, transfer
+
+# Copier un fichier local -> distant
+scp <local_file> <user>@<host>:<remote_path>
+
+# Copier un dossier local -> distant (récursif)
+scp -r <local_dir> <user>@<host>:<remote_path>
+
+# Copier distant -> local
+scp <user>@<host>:<remote_path> <local_path>
+
+# Rsync synchronisation (archive, progress, compress)
+rsync -avzP <local_path> <user>@<host>:<remote_path>
+
+# Rsync avec exclusion
+rsync -avzP --exclude='<node_modules>' --exclude='<.git>' <local_path> <user>@<host>:<remote_path>
+
+# Rsync dry-run (simule sans copier)
+rsync -avzPn <local_path> <user>@<host>:<remote_path>
+
+# Rsync avec suppression des fichiers disparus côté source
+rsync -avzP --delete <local_path> <user>@<host>:<remote_path>
+
+% ssh, config
+
+# Ouvrir le config ssh
+$EDITOR ~/.ssh/config
+
+# Tester la config pour un host (résolution)
+ssh -G <host>
+
+# Tester la connexion sans lancer de shell
+ssh -o BatchMode=yes -o ConnectTimeout=5 <host> true && echo OK

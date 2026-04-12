@@ -1,0 +1,46 @@
+% navi
+
+# Lancer l'interface complète
+navi
+
+# Filtrer directement sur un terme
+navi --query "<term>"
+
+# Imprimer la commande au lieu de l'exécuter (pour pipe)
+navi --print
+
+# Filtrer + imprimer (utile pour binder dans un script)
+navi --query "<term>" --print
+
+# Ouvrir navi dans le tag d'une section précise
+navi --tag-rules "<tag>"
+
+$ tag: navi info cheats-path && grep -h '^%' ~/dev-setup/cheats/*.cheat | sed 's/%\s*//' | tr ',' '\n' | awk '{$1=$1}1' | sort -u | fzf
+
+# Afficher le chemin des cheats configurés
+navi info cheats-path
+
+# Afficher le chemin du fichier de config
+navi info config-path
+
+# Exemple de config à écrire dans config.yaml
+navi info cheats-example
+
+# Lancer une fonction intégrée (démo)
+navi fn welcome
+
+# Répéter la dernière commande navi
+navi fn last
+
+% navi, widget
+
+# Widget zsh — insère la commande dans le buffer (mappé sur Ctrl+N)
+# (c'est un binding, pas une commande shell — rappel seulement)
+# Voir ~/.zshrc : source <(navi widget zsh)
+navi widget zsh
+
+# Widget bash
+navi widget bash
+
+# Widget fish
+navi widget fish

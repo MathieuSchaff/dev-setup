@@ -1,0 +1,224 @@
+% git, branch
+
+# Créer une nouvelle branche et basculer dessus
+git checkout -b <branch_new>
+
+# Basculer sur une branche existante
+git checkout <branch>
+
+$ branch: git branch | awk '{print $NF}' --- --preview 'git log --oneline -15 {}'
+
+# Supprimer une branche locale
+git branch -d <branch>
+
+# Supprimer une branche distante
+git push origin --delete <branch_remote>
+
+$ branch_remote: git branch -r | sed 's/origin\///' | awk '{print $1}' --- --preview 'git log --oneline -10 origin/{}'
+
+# Rebase la branche courante sur une autre
+git rebase <branch>
+
+# Merger une branche dans la branche courante
+git merge <branch>
+
+% git, commit
+
+# Commit avec message inline
+git commit -m "<message>"
+
+# Amend du dernier commit (sans changer le message)
+git commit --amend --no-edit
+
+# Amend du dernier commit (changer le message)
+git commit --amend -m "<message>"
+
+# Voir le contenu d'un commit
+git show <hash>
+
+$ hash: git log --oneline --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
+
+# Voir uniquement les fichiers modifiés d'un commit (stat)
+git show --stat <hash>
+
+# Cherry-pick un commit
+git cherry-pick <hash>
+
+% git, diff
+
+# Diff des fichiers non stagés
+git diff
+
+# Diff de ce qui est stagé (avant commit)
+git diff --staged
+
+# Diff sans pager (sortie brute)
+git diff --no-pager
+
+# Diff d'un fichier précis
+git diff -- <file>
+
+$ file: git diff --name-only --- --preview 'git diff -- {}' --preview-window 'right:70%'
+
+# Diff entre deux commits
+git diff <hash_a>..<hash_b>
+
+$ hash_a: git log --oneline --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
+$ hash_b: git log --oneline --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
+
+% git, log
+
+# Historique condensé avec graphe
+git log --oneline --graph --decorate
+
+# Historique condensé avec graphe (toutes les branches)
+git log --oneline --graph --decorate --all
+
+# Historique avec diffs inline
+git log --patch --oneline
+
+# Historique d'un fichier
+git log --oneline -- <tracked_file>
+
+$ tracked_file: git ls-files --- --preview 'bat --color=always {}' --preview-window 'right:60%'
+
+% git, stash
+
+# Stasher les changements en cours
+git stash push -m "<message>"
+
+# Lister les stashs
+git stash list
+
+# Appliquer un stash (sans supprimer)
+git stash apply <stash>
+
+# Pop un stash (appliquer + supprimer)
+git stash pop <stash>
+
+$ stash: git stash list --- --column 1 --delimiter ':' --preview 'git stash show -p {1}' --preview-window 'right:60%'
+
+% git, reset
+
+# Reset soft — garde les changements stagés
+git reset --soft HEAD~<n>
+
+# Reset mixed — garde les changements non stagés
+git reset HEAD~<n>
+
+# Voir le reflog (pour récupérer après une erreur)
+git reflog
+
+% git, remote
+
+# Voir les remotes
+git remote -v
+
+# Fetch toutes les branches distantes
+git fetch --all --prune
+
+# Push une branche et la tracker
+git push -u origin <branch>
+
+% git, bisect
+
+# Démarrer un bisect (trouver le commit qui a introduit un bug)
+git bisect start
+
+# Marquer le commit courant comme buggé
+git bisect bad
+
+# Marquer le commit courant comme bon
+git bisect good
+
+# Marquer un commit précis comme bon
+git bisect good <hash>
+
+# Terminer le bisect et revenir à HEAD
+git bisect reset
+
+% git, reflog
+
+# Voir toutes les opérations récentes (y compris commits perdus)
+git reflog
+
+# Récupérer un commit perdu via son hash reflog
+git checkout <reflog_hash>
+
+$ reflog_hash: git reflog --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
+
+% git, switch, restore
+
+# Switch — équivalent moderne de checkout pour les branches
+git switch <branch>
+
+$ branch: git branch | awk '{print $NF}' --- --preview 'git log --oneline -15 {}'
+
+# Créer et switch sur une nouvelle branche
+git switch -c <branch_new>
+
+# Switch en créant depuis une branche distante
+git switch -c <branch_new> origin/<branch_remote>
+
+$ branch_remote: git branch -r | sed 's/origin\///' | awk '{print $1}' --- --preview 'git log --oneline -10 origin/{}'
+
+# Revenir sur la branche précédente
+git switch -
+
+# Restore — annuler les changements non stagés d'un fichier (retour au HEAD)
+git restore <file>
+
+$ file: git diff --name-only --- --preview 'git diff -- {}' --preview-window 'right:70%'
+
+# Restore — unstage un fichier (le sort de l'index)
+git restore --staged <file>
+
+# Restore — fichier depuis un commit précis
+git restore --source=<hash> <file>
+
+% git, rebase, interactive
+
+# Rebase interactif sur les N derniers commits (squash, reword, drop...)
+git rebase -i HEAD~<n>
+
+# Rebase interactif depuis la branche de base
+git rebase -i <base_branch>
+
+# Continuer un rebase après résolution de conflits
+git rebase --continue
+
+# Abandonner un rebase en cours
+git rebase --abort
+
+# Skip un commit pendant un rebase
+git rebase --skip
+
+% git, push, force
+
+# Force push sécurisé — échoue si quelqu'un a pushé entre-temps
+git push --force-with-lease
+
+# Force push sécurisé sur une branche spécifique
+git push --force-with-lease origin <branch>
+
+# Push avec upstream tracking et force sécurisé
+git push -u --force-with-lease origin <branch>
+
+% git, worktree
+
+# Lister les worktrees existants
+git worktree list
+
+# Créer un worktree pour une branche existante
+git worktree add <path> <branch>
+
+# Créer un worktree ET une nouvelle branche
+git worktree add -b <branch_new> <path>
+
+# Supprimer un worktree (la branche reste)
+git worktree remove <path>
+
+$ path: git worktree list --porcelain | awk '/^worktree /{print $2}' | fzf
+
+# Nettoyer les worktrees orphelins
+git worktree prune
