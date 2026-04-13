@@ -57,8 +57,8 @@ alias fd="fdfind"
 # lazydocker — TUI Docker / Compose
 alias lzd='lazydocker'
 # Updater global
-alias update-tools='~/dev-setup/scripts/update-tools.sh'
-alias update='~/dev-setup/scripts/update.sh'
+update-tools() { ~/dev-setup/scripts/update-tools.sh "$@"; }
+update() { ~/dev-setup/scripts/update.sh "$@"; }
 
 # completions update / update-tools
 _update() {
@@ -121,10 +121,9 @@ cs() {
   done
 }
 
-# fzf — thème Catppuccin Macchiato, preview, popup tmux
+# fzf — thème Catppuccin Macchiato, preview
 export FZF_DEFAULT_OPTS='
   --height 40% --layout=reverse --border
-  --popup bottom,40%
   --bind "ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up,ctrl-/:change-preview-window(hidden|)"
   --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796
   --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6

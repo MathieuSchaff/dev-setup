@@ -59,12 +59,14 @@ v_omz()        { [[ -d ~/.oh-my-zsh ]] && ( cd ~/.oh-my-zsh && git describe --ta
 # ---------- updaters ----------
 
 update_git() {
-  local latest cur
-  latest=$(gh_latest git/git)
-  cur=$(v_git || true)
-  if [[ "$cur" == "$latest" ]]; then skip "git $cur up-to-date"; return; fi
-  info "git ${cur:-<none>} → $latest"
-  [[ $CHECK -eq 1 ]] && return
+  # git/git has no GitHub releases (tags only) — use apt PPA instead
+  local cur; cur=$(v_git || true)
+  if [[ $CHECK -eq 1 ]]; then
+    info "git ${cur:-<none>} — checking via apt-cache"
+    apt-cache policy git 2>/dev/null | grep -E 'Installed|Candidate' | sed 's/^/    /'
+    return
+  fi
+  info "git ${cur:-<none>} — updating via PPA apt"
   # Requires PPA git-core/ppa — install once with:
   #   sudo add-apt-repository -y ppa:git-core/ppa && sudo apt update
   if ! grep -q 'git-core' /etc/apt/sources.list.d/*.list 2>/dev/null \
