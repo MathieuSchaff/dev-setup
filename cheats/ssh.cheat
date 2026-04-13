@@ -1,121 +1,74 @@
 ; SSH, SCP, rsync, ssh-keygen
 ; Hosts du ~/.ssh/config sont utilisés comme fuzzy selector
 
-% ssh, connect
+% ssh, connect, se connecter, remote, config, accès
 
-# Se connecter à un host (config ou host complet)
-ssh <host>
+# Se connecter à un host / serveur distant (config ou host complet)
+ssh <host_name>
 
-$ host: (awk '/^Host /{for(i=2;i<=NF;i++)print $i}' ~/.ssh/config 2>/dev/null | grep -v '\*') | sort -u
+# Se connecter avec un utilisateur spécifique / user
+ssh <user_name>@<host_name>
 
-# Se connecter avec un utilisateur spécifique
-ssh <user>@<host>
+$ host_name: (awk '/^Host /{for(i=2;i<=NF;i++)print $i}' ~/.ssh/config 2>/dev/null | grep -v '\*') | sort -u --- --preview 'ssh -G {1}'
+$ user_name: whoami --- --preview 'whoami'
 
-# Se connecter avec une clé privée spécifique
+# Se connecter avec une clé privée / identité / certificat spécifique
 ssh -i <path_to_key> <user>@<host>
 
-# Se connecter sur un port non-standard
+# Se connecter sur un port non-standard / SSH port
 ssh -p <port> <user>@<host>
 
-# Verbose (debug connexion)
-ssh -v <host>
+% ssh, tunnel, forward, redirection, bridge
 
-# Forcer IPv4 / IPv6
-ssh -4 <host>
-ssh -6 <host>
-
-% ssh, exec
-
-# Exécuter une commande distante et quitter
-ssh <host> <command>
-
-# Exécuter une commande en gardant le TTY (top, htop...)
-ssh -t <host> <command>
-
-# Rejoindre une session tmux existante (ou en créer une)
-ssh -t <host> "tmux attach -t main || tmux new -s main"
-
-% ssh, tunnel, forward
-
-# Port forwarding LOCAL : localhost:8080 -> host:80
+# Port forwarding LOCAL : localhost:8080 -> host:80 (tunnel local)
 ssh -L <8080>:<localhost>:<80> <host>
 
-# Port forwarding REMOTE : host:9090 -> localhost:3000
+# Port forwarding REMOTE : host:9090 -> localhost:3000 (tunnel distant)
 ssh -R <9090>:<localhost>:<3000> <host>
 
-# Proxy SOCKS dynamique (browser via ssh)
+# Proxy SOCKS dynamique / navigation web sécurisée via ssh (tunnel)
 ssh -D <1080> <host>
 
-# Tunnel en background sans shell
+# Tunnel en background / arrière-plan sans shell (fN)
 ssh -fN -L <8080>:<localhost>:<80> <host>
 
-# Tunnel via un bastion/jump host
-ssh -J <jump_host> <target_host>
+% ssh, keygen, clés, security, fingerprint
 
-% ssh, keygen
-
-# Générer une clé ed25519 (recommandé)
+# Générer une clé ed25519 (recommandé, moderne, secure)
 ssh-keygen -t ed25519 -C "<email>"
 
-# Générer une clé ed25519 avec un chemin custom
-ssh-keygen -t ed25519 -C "<email>" -f <path_to_key>
-
-# Ajouter une passphrase à une clé existante
-ssh-keygen -p -f <path_to_key>
-
-# Afficher la fingerprint d'une clé
+# Afficher la fingerprint / empreinte d'une clé (security check)
 ssh-keygen -lf <path_to_public_key>
 
-# Copier sa clé publique sur un serveur
+# Copier sa clé publique sur un serveur / autoriser accès (ssh-copy-id)
 ssh-copy-id <user>@<host>
 
-# Copier une clé spécifique
-ssh-copy-id -i <path_to_public_key> <user>@<host>
+% ssh, agent, keys, security
 
-% ssh, agent
-
-# Démarrer ssh-agent et charger les clés
+# Démarrer ssh-agent et charger les clés en mémoire
 eval "$(ssh-agent -s)" && ssh-add
 
-# Ajouter une clé spécifique à l'agent
-ssh-add <path_to_key>
-
-# Lister les clés dans l'agent
+# Lister les clés actuellement chargées dans l'agent
 ssh-add -l
 
-# Supprimer toutes les clés de l'agent
-ssh-add -D
+% ssh, scp, rsync, transfer, copier, sync, synchroniser
 
-% scp, rsync, transfer
-
-# Copier un fichier local -> distant
+# Copier un fichier local -> distant (transfert simple scp)
 scp <local_file> <user>@<host>:<remote_path>
 
-# Copier un dossier local -> distant (récursif)
-scp -r <local_dir> <user>@<host>:<remote_path>
-
-# Copier distant -> local
-scp <user>@<host>:<remote_path> <local_path>
-
-# Rsync synchronisation (archive, progress, compress)
+# Rsync synchronisation complète (archive, progress, compress, delta)
 rsync -avzP <local_path> <user>@<host>:<remote_path>
 
-# Rsync avec exclusion
+# Rsync avec exclusion de dossier (exclude node_modules, .git)
 rsync -avzP --exclude='<node_modules>' --exclude='<.git>' <local_path> <user>@<host>:<remote_path>
 
-# Rsync dry-run (simule sans copier)
-rsync -avzPn <local_path> <user>@<host>:<remote_path>
-
-# Rsync avec suppression des fichiers disparus côté source
+# Rsync avec suppression des fichiers disparus / mirroir (delete)
 rsync -avzP --delete <local_path> <user>@<host>:<remote_path>
 
-% ssh, config
+% ssh, config, aide
 
-# Ouvrir le config ssh
+# Ouvrir / Éditer le config ssh local
 $EDITOR ~/.ssh/config
 
-# Tester la config pour un host (résolution)
+# Tester la configuration pour un host (résolution/debug)
 ssh -G <host>
-
-# Tester la connexion sans lancer de shell
-ssh -o BatchMode=yes -o ConnectTimeout=5 <host> true && echo OK

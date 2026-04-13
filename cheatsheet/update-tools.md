@@ -30,13 +30,16 @@ Met à jour les outils installés **manuellement** (téléchargement de binaire,
 
 ## Utilisation
 
-| Commande                       | Effet                                             |
-|--------------------------------|---------------------------------------------------|
-| `update-tools`                 | Update tous les outils connus                     |
+> Usage courant : `update tools` (via la commande unifiée — voir [zsh.md](./zsh.md#updates)).  
+> Les options avancées ci-dessous sont accessibles via l'alias direct `update-tools`.
+
+| Commande                       | Effet                                                   |
+|--------------------------------|---------------------------------------------------------|
+| `update tools`                 | Update tous les outils connus (via commande unifiée)    |
 | `update-tools --check`         | Dry-run — affiche ce qui est outdated, rien n'est écrit |
-| `update-tools dive lazygit`    | Update sélectif                                   |
-| `update-tools --list`          | Liste les outils supportés                        |
-| `update-tools --help`          | Affiche l'usage                                   |
+| `update-tools dive lazygit`    | Update sélectif                                         |
+| `update-tools --list`          | Liste les outils supportés                              |
+| `update-tools --help`          | Affiche l'usage                                         |
 
 ## Conventions de sortie
 

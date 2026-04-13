@@ -26,7 +26,7 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 | `ll`   | `eza -la --icons --git`        |
 | `tree` | `eza --tree --icons`           |
 | `lh`   | `ls -lah`                      |
-| `cat`  | `batcat` (syntax highlighting) |
+| `cat`  | `bat` (syntax highlighting)    |
 | `c`    | `clear`                        |
 
 ## Aliases Docker
@@ -40,13 +40,29 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 
 ## Navigation
 
-| Commande       | Effet                                         |
-|----------------|-----------------------------------------------|
-| `z <nom>`      | Sauter vers un dossier visité (zoxide)        |
-| `zdf`          | Fuzzy find + jump via fzf + zoxide            |
-| `cs`           | fzf sur `cheatsheet/` + preview glow (loop, `q` pour revenir) |
-| `gl <fichier>` | Rendre un `.md` avec glow (pager)             |
-| `Ctrl+N`       | navi — cheatsheet interactif (widget shell)   |
+### Dossiers (zoxide)
+
+| Commande  | Effet                                                             |
+|-----------|-------------------------------------------------------------------|
+| `z <nom>` | Sauter vers un dossier visité (zoxide — apprend l'historique)     |
+| `zdf` / `Ctrl+F` | Fuzzy cd avec preview arborescence (fd + fzf + eza tree + zoxide) |
+
+### Cheatsheets (glow)
+
+| Commande            | Effet                                                                   |
+|---------------------|-------------------------------------------------------------------------|
+| `Ctrl+E`            | Parcourir `cheatsheet/` en fzf + preview glow (accès direct)           |
+| `cs`                | Parcourir `cheatsheet/` en fzf + preview glow (loop, `q` pour quitter) |
+| `mdp <fichier.md>`  | Ouvrir n'importe quel `.md` dans glow en mode pager                     |
+
+> `mdp` = `glow -p` — uniquement pour fichiers Markdown. Pas lié à git.
+
+### Navi
+
+| Commande | Effet                                       |
+|----------|---------------------------------------------|
+| `Ctrl+N` | navi — cheatsheet interactif (widget shell) |
+| `Ctrl+E` | parcourir cheatsheets markdown (fzf + glow) |
 
 > Les raccourcis `Ctrl+T` / `Ctrl+R` / `Alt+C` / `Tab` (fzf et fzf-tab) sont dans
 > [tools.md](./tools.md#fzf--fuzzy-finder).
@@ -60,18 +76,40 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 |------------------------|--------------------------------------------------|
 | `t`                    | Lancer tmux (crée sessions `doc`/`dev`/`tests`)  |
 | `tn <nom>`             | Créer session en arrière-plan                    |
-| `tnew <nom>`           | Créer et rejoindre session                       |
+| `tnew <nom>`           | Créer une session nommée (`tmux new -s`)         |
 | `tmux attach -t <nom>` | Rejoindre une session existante                  |
 | `Ctrl+g`               | Ouvrir lazygit en popup flottant (sans préfixe)  |
+| `Alt+N`                | Ouvrir navi en popup flottant (sans préfixe)     |
 
 ## Updates
 
+Une seule commande : `update`. Tab-completion activée (flags + catégories).
+
 | Commande             | Effet                                                  |
 |----------------------|--------------------------------------------------------|
-| `update-all`         | apt, omz, plugins zsh, rust, uv, lazygit, fzf          |
-| `update-node`        | Node (nvm) + packages npm globaux                      |
-| `update-bun`         | bun                                                    |
-| `update-conda`       | conda                                                  |
-| `update-nvim`        | neovim (pre-built)                                     |
-| `update-zsh-plugins` | plugins Oh My Zsh custom                               |
-| `update-lazygit`     | lazygit                                                |
+| `update`             | Tout safe : apt, omz, zsh-plugins, rust, cargo, go, uv, tools |
+| `update --all`       | Tout (safe + runtime : node, bun, pnpm, conda)        |
+| `update rust go`     | Sélectif — une ou plusieurs catégories                 |
+| `update --list`      | Affiche toutes les catégories disponibles              |
+
+**Catégories safe** (incluses dans `update` sans argument) :
+
+| Catégorie      | Ce que ça met à jour                                    |
+|----------------|---------------------------------------------------------|
+| `apt`          | `sudo apt update && sudo apt upgrade`                   |
+| `omz`          | Oh My Zsh                                               |
+| `zsh-plugins`  | Plugins custom (git pull sur chaque)                    |
+| `rust`         | `rustup update` (toolchain + rustc)                     |
+| `cargo`        | Outils cargo : bat, delta, eza, tree-sitter-cli         |
+| `go`           | Go (tarball depuis go.dev, comparaison de version)      |
+| `uv`           | `uv self update`                                        |
+| `tools`        | Binaires manuels via `update-tools.sh` (dive, lazygit, lazydocker, ctop, nvim, fzf) |
+
+**Catégories runtime** (sélectif uniquement — risque de casser des projets) :
+
+| Catégorie | Ce que ça met à jour                                      |
+|-----------|-----------------------------------------------------------|
+| `node`    | Node (nvm) + npm packages globaux                         |
+| `bun`     | `bun upgrade`                                             |
+| `pnpm`    | `corepack prepare pnpm@latest --activate`                 |
+| `conda`   | `conda update -n base -c defaults conda`                  |

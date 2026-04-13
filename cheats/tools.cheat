@@ -1,185 +1,147 @@
-% eza, ls
+% eza, ls, lister, voir, fichiers, folders
 
-# Liste longue avec icônes et statut git
+# Lister les fichiers (vue longue, icônes, statut git) / list files
 eza -l --icons --git
 
-# Liste longue avec fichiers cachés
+# Lister tous les fichiers (incluant les cachés / dotfiles) / list all
 eza -la --icons --git
 
-# Arborescence limitée à N niveaux
+# Arborescence / Arbre / Tree (limité à N niveaux de profondeur)
 eza --tree --icons -L <depth>
 
-# Trier par date de modification
+# Trier les fichiers par date de modification / trier par date
 eza -l --icons --sort=modified
 
-# Taille récursive des dossiers uniquement
-eza -l --total-size -D
-
-# Vue longue + git, sans les ignorés
-eza -l --git --git-ignore
-
-# Timestamps relatifs
-eza -l --time-style=relative
-
-# Dossiers d'abord dans la liste
-eza -l --icons --group-directories-first
-
-# Dossiers uniquement
+# Dossiers uniquement / Lister répertoires
 eza -l -D
 
-# Fichiers uniquement (pas de dossiers)
-eza -l -f
+% bat, cat, afficher, lire, voir, syntax, highlighter
 
-# Afficher le numéro d'inode
-eza -l --inode
+# Afficher un fichier avec coloration / syntax highlighting (batcat)
+batcat <file>
 
-# Vue longue avec taille en octets bruts
-eza -l --bytes
+# Afficher un fichier sans décorations / texte brut (plain)
+batcat --plain <file>
 
-# Attributs étendus et tailles
-eza -l --extended
+# Lister les thèmes de coloration disponibles pour bat
+batcat --list-themes
 
-% bat, cat
+$ file: fdfind -t f --- --preview 'batcat --color=always {}' --preview-window 'right:60%'
 
-# Afficher un fichier avec syntax highlighting
-bat <file>
+% ripgrep, rg, search, chercher, trouver, texte, grep
 
-# Afficher sans décorations (plain)
-bat --plain <file>
+# Chercher / Trouver du texte dans les fichiers (récursif / search text)
+rg "<pattern>"
 
-# Afficher avec numéros de ligne
-bat -n <file>
-
-# Lister les thèmes disponibles
-bat --list-themes
-
-$ file: fd -t f --- --preview 'bat --color=always {}' --preview-window 'right:60%'
-
-% ripgrep, rg, search
-
-# Chercher récursivement
-rg <pattern>
-
-# Chercher dans un type de fichier
-rg <pattern> -t <type>
+# Chercher / Trouver du texte uniquement dans un type de fichier (js, py, md...)
+rg "<pattern>" -t <type>
 
 $ type: echo -e "js\nts\npy\ngo\nrs\nmd\njson\nyaml\ntoml" | fzf
 
-# Chercher avec N lignes de contexte
-rg <pattern> -C <context>
+# Chercher / Trouver uniquement les noms de fichiers contenant un texte
+rg "<pattern>" -l
 
-# Afficher uniquement les noms de fichiers
-rg <pattern> -l
+% fdfind, find, chercher, trouver, fichiers, folders, path
 
-# Chercher sans respecter la casse
-rg <pattern> -i
+# Chercher / Trouver un fichier par son nom (fdfind / find file)
+fdfind <pattern>
 
-# Chercher dans les fichiers cachés
-rg <pattern> --hidden
+# Chercher / Trouver uniquement les fichiers (pas de dossiers)
+fdfind -t f <pattern>
 
-% fd, find
-
-# Chercher par nom
-fd <pattern>
-
-# Chercher fichiers uniquement
-fd -t f <pattern>
-
-# Chercher dossiers uniquement
-fd -t d <pattern>
-
-# Chercher par extension
-fd -e <ext>
+# Chercher / Trouver par extension de fichier (ex: js, ts, md)
+fdfind -e <ext>
 
 $ ext: echo -e "ts\njs\npy\ngo\nrs\nmd\njson\ntoml\nyaml" | fzf
 
-# Chercher dans les fichiers cachés
-fd --hidden <pattern>
+% zoxide, z, navigation, sauter, sauter vers, jump, cd
 
-% zoxide, z, navigation
-
-# Sauter vers un dossier fréquent
+# Sauter vers / Naviguer vers un dossier fréquent ou récent (zoxide)
 z <dir>
 
 $ dir: zoxide query -l --- --preview 'eza --tree -L 2 {}' --preview-window 'right:50%'
 
-# Mode interactif (sélection via fzf)
+# Mode interactif pour sauter vers un dossier (zi / fzf)
 zi
 
-# Voir tous les dossiers enregistrés avec score
-zoxide query -l -s
+% tmux, sessions, multiplexer, background, terminal
 
-% tmux
-
-# Créer une nouvelle session nommée
+# Créer / Lancer une nouvelle session nommée tmux
 tmux new -s <session_name>
 
-# Rejoindre une session existante
+# Rejoindre / Attacher une session existante (attach session)
 tmux attach -t <session>
 
 $ session: tmux ls --- --column 1 --delimiter ':' --preview 'tmux list-windows -t {1}'
 
-# Lister les sessions
+# Lister les sessions tmux en cours
 tmux ls
 
-# Tuer une session
-tmux kill-session -t <session>
+% update, upgrade, maintenance, system, mettre à jour, tout mettre à jour
 
-% updates
+# Update all safe (apt, omz, rust, cargo, go, uv, tools) / Tout mettre à jour
+~/dev-setup/scripts/update.sh
 
-# Tout mettre à jour (apt, omz, plugins, rust, uv, lazygit, fzf)
-update-all
+# Update everything including runtimes (node, bun, pnpm, conda) / Full update complet
+~/dev-setup/scripts/update.sh --all
 
-# Mettre à jour Node via nvm
-update-node
+# Update a specific category / Mettre à jour une catégorie (apt, cargo, node, bun...)
+~/dev-setup/scripts/update.sh <category>
 
-# Mettre à jour bun
-update-bun
+# List available update categories / Voir les catégories disponibles
+~/dev-setup/scripts/update.sh --list
 
-# Mettre à jour neovim (pre-built)
-update-nvim
+$ category: echo -e "apt\nomz\nzsh-plugins\nrust\ncargo\ngo\nuv\ntools\nnode\nbun\npnpm\nconda" | fzf
 
-# Mettre à jour lazygit
-update-lazygit
+% update-tools, cli, binaries, binaires, dive, lazygit, lazydocker, ctop, neovim, fzf, outdated
 
-# Mettre à jour conda
-update-conda
+# Update all manually installed CLIs (dive, lazygit, lazydocker, ctop, neovim, fzf)
+~/dev-setup/scripts/update-tools.sh
 
-# Mettre à jour les plugins Oh My Zsh custom
-update-zsh-plugins
+# Update a specific tool / Mettre à jour un outil précis
+~/dev-setup/scripts/update-tools.sh <tool>
 
-% delta, git, diff
+# Check what's outdated without changing anything / Vérifier ce qui est obsolète
+~/dev-setup/scripts/update-tools.sh --check
 
-# Diff git stylé (delta actif automatiquement via gitconfig)
+# List tools managed by update-tools / Lister les outils gérés
+~/dev-setup/scripts/update-tools.sh --list
+
+$ tool: echo -e "dive\nlazygit\nlazydocker\nctop\nneovim\nfzf" | fzf
+
+% setup, bootstrap, install, deploy, déployer, new machine, nouvelle machine, dotfiles, configs, symlinks
+
+# Bootstrap: install all tools on a fresh machine (apt, rust, node, bun, fzf, neovim...)
+~/dev-setup/bootstrap.sh
+
+# Bootstrap all tools without prompts (includes optional: go, uv, miniconda)
+~/dev-setup/bootstrap.sh --all
+
+# Deploy configs only (symlinks: .zshrc, .gitconfig, .tmux.conf, nvim, lazygit...)
+~/dev-setup/install.sh
+
+# Full setup: install tools + deploy configs / Setup complet nouvelle machine
+~/dev-setup/setup.sh
+
+# Full setup without prompts (all tools + configs, no questions asked)
+~/dev-setup/setup.sh --all
+
+% glow, markdown, doc, guide, help, aide, notes, lire, afficher, cheatsheet
+
+# Parcourir les cheatsheets markdown (aussi via Ctrl+E)
+glow -p ~/dev-setup/cheatsheet/<file_name>
+
+$ file_name: fdfind -e md --base-directory ~/dev-setup/cheatsheet --- --preview 'glow -s dark -w 80 ~/dev-setup/cheatsheet/{}'
+
+# Afficher un fichier Markdown dans le terminal (sans pager / sans défilement)
+glow <file>
+
+% delta, git, diff, color, compare
+
+# Voir le diff git avec coloration delta (compare changes)
 git diff
 
-# Diff git sans delta (sortie brute)
-git diff --no-pager
+% bottom, btm, system, monitor, cpu, ram, ressources
 
-# Diff git sans delta via variable d'env
-GIT_PAGER=cat git diff
-
-# Contenu complet d'un commit formaté par delta
-git show <hash>
-
-$ hash: git log --oneline --- --column 1 --preview 'git show --stat {1}' --preview-window 'right:60%'
-
-# Historique avec diff inline (delta)
-git log --patch --oneline
-
-% bottom, btm, system, monitor
-
-# Lancer le moniteur système
+# Lancer le moniteur système interactif (top/htop moderne)
 btm
-
-# Moniteur basique (pas d'arbres de processus)
-btm -b
-
-# Rafraîchir toutes les N millisecondes
-btm -r <ms>
-
-# Activer le mode process tree par défaut
-btm -T
-
-# Préfixer par defaut avec un regex de process
-btm --default_widget_type proc

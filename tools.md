@@ -10,10 +10,8 @@ Documentation des outils et CLI disponibles sur ce WSL.
 
 | Outil | Commande | Chemin | Description |
 |-------|----------|--------|-------------|
-| [bottom](https://github.com/ClementTsang/bottom) | `btm` | `/usr/bin/btm` | Moniteur système (CPU, RAM, processus) |
 | [fd](https://github.com/sharkdp/fd) | `fdfind` | `/usr/bin/fdfind` | Alternative rapide à `find` |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | `rg` | `/usr/bin/rg` | Alternative rapide à `grep` |
-| [The Silver Searcher](https://github.com/ggreer/the_silver_searcher) | `ag` | `/usr/bin/ag` | Recherche dans le code (comme `grep`) |
 | [zoxide](https://github.com/ajeetdsouza/zoxide) | `z` | `/usr/bin/zoxide` | Navigation rapide dans les dossiers (`cd` intelligent) |
 | [tmux](https://github.com/tmux/tmux) | `tmux` | `/usr/bin/tmux` | Multiplexeur de terminal |
 | [tree](https://linux.die.net/man/1/tree) | `tree` | `/usr/bin/tree` | Affiche l'arborescence des dossiers |
@@ -29,7 +27,6 @@ Documentation des outils et CLI disponibles sur ce WSL.
 | [git](https://git-scm.com/) | `git` | `/usr/bin/git` | Contrôle de version |
 | [curl](https://curl.se/) | `curl` | `/usr/bin/curl` | Requêtes HTTP en ligne de commande |
 | [cmake](https://cmake.org/) | `cmake` | `/usr/bin/cmake` | Système de build C/C++ |
-| [ffmpeg](https://ffmpeg.org/) | `ffmpeg` | `/usr/bin/ffmpeg` | Traitement audio/vidéo |
 | [sqlite3](https://sqlite.org/) | `sqlite3` | `/usr/bin/sqlite3` | Base de données SQLite en CLI |
 | [postgresql-client](https://www.postgresql.org/) | `psql` | `/usr/bin/psql` | Client PostgreSQL |
 | [python3](https://www.python.org/) | `python3` | `/usr/bin/python3` | Python 3 |
@@ -50,18 +47,15 @@ Documentation des outils et CLI disponibles sur ce WSL.
 | [eza](https://github.com/eza-community/eza) | `eza` | Alternative moderne à `ls` |
 | [starship](https://starship.rs/) | `starship` | Prompt cross-shell — config `~/.config/starship.toml` |
 | [tree-sitter](https://github.com/tree-sitter/tree-sitter) | `tree-sitter` | Parser de code (utilisé par les éditeurs) |
-| [rust-analyzer](https://rust-analyzer.github.io/) | `rust-analyzer` | LSP pour Rust |
 | rustup | `rustup` | Gestionnaire de versions Rust |
 | cargo | `cargo` | Gestionnaire de paquets Rust |
-
-**Versions Rust :** `rustc 1.94.1`
 
 ---
 
 ## Installés via `nvm` (Node.js)
 
-> Chemin : `~/.nvm/versions/node/v24.14.0/bin/`  
-> Version active : **Node v24.14.0**
+> Chemin : `~/.nvm/versions/node/<version>/bin/`  
+> Géré par : nvm (`nvm install node` pour la dernière version)
 
 | Outil | Commande | Description |
 |-------|----------|-------------|
@@ -74,7 +68,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 ## Installés via `bun`
 
 > Chemin : `~/.bun/bin/`  
-> Version : **bun 1.3.11**
+> Géré par : `bun upgrade`
 
 | Outil | Commande | Description |
 |-------|----------|-------------|
@@ -97,12 +91,12 @@ Documentation des outils et CLI disponibles sur ce WSL.
 
 ## Langages installés globalement
 
-| Langage | Commande | Chemin | Version |
-|---------|----------|--------|---------|
-| Go | `go` | `/usr/local/go/bin/go` | 1.25.6 |
-| Rust | `rustc` | `~/.cargo/bin/rustc` | 1.94.1 |
-| Node.js | `node` | `~/.nvm/versions/node/v24.14.0/bin/node` | v24.14.0 |
-| Python 3 | `python3` | `/usr/bin/python3` | (apt) |
+| Langage | Commande | Chemin | Géré par |
+|---------|----------|--------|----------|
+| Go | `go` | `/usr/local/go/bin/go` | `bootstrap.sh` / `update` (latest depuis go.dev) |
+| Rust | `rustc` | `~/.cargo/bin/rustc` | rustup |
+| Node.js | `node` | `~/.nvm/versions/node/` | nvm |
+| Python 3 | `python3` | `/usr/bin/python3` | apt |
 
 ---
 
@@ -111,7 +105,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 | Outil | Commande | Chemin | Description |
 |-------|----------|--------|-------------|
 | [lazygit](https://github.com/jesseduffield/lazygit) | `lg` | `/usr/local/bin/lazygit` | TUI git (installé via script curl) |
-| [neovim](https://neovim.io/) | `nvim` | `/opt/nvim-linux-x86_64/bin/nvim` | Éditeur (pre-built officiel) |
+| [neovim](https://neovim.io/) | `nvim` | `/opt/nvim/bin/nvim` | Éditeur (pre-built officiel) |
 | [fzf](https://github.com/junegunn/fzf) | `fzf` | `~/.fzf/` | Fuzzy finder interactif |
 | [navi](https://github.com/denisidoro/navi) | `navi` | `~/.cargo/bin/navi` | Cheatsheet interactif — commandes avec variables fzf |
 | [miniconda](https://docs.conda.io/en/latest/miniconda.html) | `conda` | `~/miniconda3/bin/conda` | Gestionnaire d'environnements Python |
@@ -130,7 +124,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 Oh My Zsh s'update automatiquement tous les 13 jours. Les plugins custom (`~/.oh-my-zsh/custom/plugins/`) sont des repos git clonés manuellement — ils ne se mettent **pas** à jour automatiquement.
 
 ```bash
-alias update-zsh-plugins='for d in ~/.oh-my-zsh/custom/plugins/*/; do echo "Updating $(basename $d)..." && git -C "$d" pull; done'
+update zsh-plugins   # git pull sur chaque plugin custom
 ```
 
 ### Plugins Oh My Zsh actifs
@@ -149,15 +143,19 @@ alias update-zsh-plugins='for d in ~/.oh-my-zsh/custom/plugins/*/; do echo "Upda
 | Alias | Commande | Description |
 |-------|----------|-------------|
 | `c` | `clear` | Vider le terminal |
-| `cat` | `batcat` | Remplace cat par bat |
+| `cat` | `bat` | Remplace cat par bat |
 | `l` | `eza -l --icons --git` | Liste avec icons et statut git |
 | `ll` | `eza -la --icons --git` | Liste longue + fichiers cachés |
 | `tree` | `eza --tree --icons` | Arborescence avec icons |
 | `lh` | `ls -lah` | Liste human-readable |
 | `fd` | `fdfind` | Alias pour fd (conflit apt) |
-| `lg` | `lazygit` | TUI git |
-| `t` | `tmux` | Raccourci tmux |
-| `tnew` | `tmux new -s` | Nouvelle session tmux nommée |
+| `lg` | lazygit (smart exit — terminal suit le dossier) | TUI git |
+| `lzd` | `lazydocker` | TUI Docker / Compose |
+| `t` | fonction | Crée sessions doc/dev/tests au démarrage, sinon attach |
+| `tn <nom>` | fonction | Crée une session tmux en arrière-plan |
+| `tnew` | `tmux new -s` | Crée une session nommée |
+| `gl <fichier>` | `glow -p` | Render Markdown avec glow (pager) |
+| `cs` | fonction | fzf sur `cheatsheet/` + preview glow (loop, `q` pour revenir) |
 | `g` | `git` | Raccourci git |
 | `gs` | `git status` | |
 | `ga` | `git add` | |
@@ -167,8 +165,7 @@ alias update-zsh-plugins='for d in ~/.oh-my-zsh/custom/plugins/*/; do echo "Upda
 | `gco` | `git checkout` | |
 | `gcb` | `git checkout -b` | |
 | `gbr` | `git branch` | |
-| `config` | `git --git-dir=~/.dotfiles/ --work-tree=~` | Gestion des dotfiles (bare repo) |
-| `cheat` | `cd ~/dev-setup/cheatsheet && ls` | Accès au dossier cheatsheet |
+| `config` | `git --git-dir=$HOME/dotfiles/ --work-tree=$HOME` | Gestion des dotfiles (bare repo) |
 | `zdf` | `fd -t d \| fzf \| z` | Navigation fuzzy dans les dossiers |
 
 ### Config FZF
@@ -220,9 +217,9 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 ~/.local/bin                          # claude, uv, uvx, cursor-agent, kimi
 ~/miniconda3/bin                      # conda, python
 ~/.bun/bin                            # bun, bunx
-/opt/nvim-linux-x86_64/bin            # nvim
+/opt/nvim/bin                          # nvim
 ~/.local/share/pnpm                   # pnpm
-~/.nvm/versions/node/v24.14.0/bin     # node, npm, gemini
+~/.nvm/versions/node/<version>/bin    # node, npm, gemini
 ~/.cargo/bin                          # rustc, cargo, bat, delta, eza...
 /usr/local/bin + /usr/bin + /bin      # outils système apt
 /usr/local/go/bin                     # go, gofmt
@@ -256,7 +253,7 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 > Cheatsheet complet (keymaps, LSP, Biome, Ollama, pièges) → **[cheatsheet/zed.md](./cheatsheet/zed.md)**
 
 - **Config source :** `C:\Users\schaf\AppData\Roaming\Zed\`
-- **Backup versionné :** `~/dev-setup/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `install.sh` avec auto-détection WSL)
+- **Backup versionné :** `~/dev-setup/config/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `install.sh` avec auto-détection WSL)
 - **Stack :** vim_mode + base_keymap VSCode, Catppuccin Mocha, vtsls + Biome pour TS/TSX/JS/JSX, format_on_save, Ollama (Qwen Coder 7B)
 
 ---
@@ -283,24 +280,34 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 ## Dotfiles
 
 > Dépôt : `~/dev-setup/` → github.com/MathieuSchaff/dotfiles-2026  
-> Méthode : hook `pre-commit` — copie automatique des fichiers actifs à chaque commit
+> Méthode : `install.sh` crée des **symlinks** — les fichiers actifs pointent directement vers le repo
 
-### Fichiers trackés
+### Fichiers symlinkés
 
-| Fichier actif | Copié dans le repo |
-|---------------|--------------------|
-| `~/.zshrc` | `~/dev-setup/.zshrc` |
-| `~/.gitconfig` | `~/dev-setup/.gitconfig` |
-| `~/.tmux.conf` | `~/dev-setup/.tmux.conf` |
-| `~/.config/lazygit/config.yml` | `~/dev-setup/.config/lazygit/config.yml` |
-| `~/.config/nvim/` | `~/dev-setup/.config/nvim/` |
+| Symlink | Pointe vers |
+|---------|-------------|
+| `~/.zshrc` | `~/dev-setup/config/.zshrc` |
+| `~/.bashrc` | `~/dev-setup/config/.bashrc` |
+| `~/.gitconfig` | `~/dev-setup/config/.gitconfig` |
+| `~/.tmux.conf` | `~/dev-setup/config/.tmux.conf` |
+| `~/.vimrc` | `~/dev-setup/config/.vimrc` |
+| `~/.dive.yaml` | `~/dev-setup/config/.dive.yaml` |
+| `~/.config/lazygit/` | `~/dev-setup/config/.config/lazygit/` |
+| `~/.config/nvim/` | `~/dev-setup/config/.config/nvim/` |
+| `~/.config/bat/` | `~/dev-setup/config/.config/bat/` |
+| `~/.config/eza/` | `~/dev-setup/config/.config/eza/` |
+| `~/.config/navi/` | `~/dev-setup/config/.config/navi/` |
+| `~/.config/glow/` | `~/dev-setup/config/.config/glow/` |
+| `~/.config/starship.toml` | `~/dev-setup/config/.config/starship.toml` |
+
+> Configs Zed et `~/CLAUDE.md` sont copiés (pas symlinkés) via le hook `pre-commit`.
 
 ### Workflow de mise à jour
 
 ```bash
 cd ~/dev-setup
-git commit -m "update"   # le hook pre-commit copie tout automatiquement
-git push
+git commit -m "update"   # les dotfiles sont déjà dans le repo (symlinks)
+git push                  # le pre-commit sync Zed + CLAUDE.md automatiquement
 ```
 
 ---
@@ -368,5 +375,4 @@ Barre de statut affiche : `répertoire · user · session`
 
 - `fdfind` est la commande apt pour `fd` (conflit de nom). Alias recommandé : `alias fd=fdfind`
 - `bat` apt vs cargo : le binaire cargo (`~/.cargo/bin/bat`) est prioritaire si `~/.cargo/bin` est en tête de `$PATH`
-- `bottom` se lance avec `btm` (pas `bottom`)
 - `uv` est le remplaçant moderne de `pip` + `venv` + `pyenv` en un seul outil

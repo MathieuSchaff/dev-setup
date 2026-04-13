@@ -134,7 +134,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 
 # Outils CLI installés via cargo
-cargo install bat delta eza tree-sitter-cli navi starship
+cargo install bat git-delta eza tree-sitter-cli navi starship
 ```
 
 | Outil | Commande | Description |
@@ -166,7 +166,7 @@ Utilisé par les alias `cs` (TUI sur `~/dev-setup/cheatsheet/`), `gl` (pager), `
 
 ```bash
 # nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 ```
 
 > ⚠️ **`exec zsh` redémarre le shell** — les commandes suivantes doivent être tapées dans le nouveau shell.
@@ -213,20 +213,21 @@ LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/re
 
 ```bash
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-sudo rm -rf /opt/nvim-linux-x86_64
-sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+sudo rm -rf /opt/nvim
+sudo mkdir -p /opt/nvim
+sudo tar -C /opt/nvim --strip-components=1 -xzf nvim-linux-x86_64.tar.gz
 rm nvim-linux-x86_64.tar.gz
 
 # Vérifier
-/opt/nvim-linux-x86_64/bin/nvim --version
+/opt/nvim/bin/nvim --version
 ```
 
-> Le PATH `/opt/nvim-linux-x86_64/bin` est dans le `.zshrc` — il sera actif après `exec zsh` à l'étape 8.  
-> La config nvim est copiée à l'étape suivante depuis `~/dev-setup/.config/nvim/`.
+> Le PATH `/opt/nvim/bin` est dans le `.zshrc` — il sera actif après `exec zsh` à l'étape 8.  
+> La config nvim est copiée à l'étape suivante depuis `~/dev-setup/config/.config/nvim/`.
 
 ---
 
-## 8. Cloner dev-setup et copier les configs
+## 8. Cloner dev-setup et déployer les configs
 
 C'est l'étape centrale — elle applique tous les fichiers de configuration.
 
@@ -235,20 +236,24 @@ C'est l'étape centrale — elle applique tous les fichiers de configuration.
 # HTTPS ici car SSH n'est pas encore configuré (clés générées à l'étape 10)
 git clone https://github.com/MathieuSchaff/dotfiles-2026 ~/dev-setup
 
-# Rendre le script exécutable
-chmod +x ~/dev-setup/install.sh
+# Rendre les scripts exécutables
+chmod +x ~/dev-setup/setup.sh ~/dev-setup/bootstrap.sh ~/dev-setup/install.sh
 
-# Déployer (backup automatique des fichiers existants)
+# Déployer les configs (symlinks)
 ~/dev-setup/install.sh
 
 # Recharger le shell
 exec zsh
 ```
 
+> **Note :** si tu pars d'une machine vierge, `./setup.sh` fait tout (outils + configs).
+> Les étapes 1 à 7 ci-dessus sont déjà couvertes par `./bootstrap.sh`.
+
 Le script `install.sh` :
-- Copie chaque fichier à la bonne destination
-- Si un fichier existe déjà et est **différent**, il est sauvegardé dans `~/.dotfiles-backup/<timestamp>/` avant d'être écrasé
-- Si un fichier est déjà **identique**, il est ignoré
+- Crée des **symlinks** de chaque dotfile vers le repo (`~/.zshrc → ~/dev-setup/config/.zshrc`, etc.)
+- Si un fichier existe déjà, il est sauvegardé dans `~/.dotfiles-backup/<timestamp>/` avant remplacement par le symlink
+- Si le symlink est déjà en place, il est ignoré ("link ok")
+- Copie les configs Zed vers Windows (symlinks non supportés sur `/mnt/c/`)
 - Affiche un résumé de ce qui a changé
 
 ### Ce que ça configure automatiquement
@@ -302,10 +307,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 
-# Go
-wget https://go.dev/dl/go1.25.6.linux-amd64.tar.gz
+# Go (télécharger la dernière version depuis go.dev)
+GO_VERSION=$(curl -fsSL "https://go.dev/VERSION?m=text" | head -1)
+wget "https://go.dev/dl/${GO_VERSION}.linux-amd64.tar.gz"
 sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf go1.25.6.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf "${GO_VERSION}.linux-amd64.tar.gz"
+rm "${GO_VERSION}.linux-amd64.tar.gz"
 # Ajouter au PATH : export PATH=$PATH:/usr/local/go/bin
 
 # bottom (moniteur système)

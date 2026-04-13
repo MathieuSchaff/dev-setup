@@ -115,13 +115,13 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 
 ## Popup & intégrations custom
 
-| Raccourci         | Effet                                                     |
-|-------------------|-----------------------------------------------------------|
-| `Ctrl+g`          | **Popup lazygit** flottant (90×90%, sans préfixe)         |
-| `prefix + Ctrl+g` | **Navi** — split temporaire, colle dans le pane précédent |
+| Raccourci | Effet                                                            |
+|-----------|------------------------------------------------------------------|
+| `Ctrl+g`  | **Popup lazygit** flottant (90×90%, sans préfixe)                |
+| `Alt+N`   | **Popup navi** — fonctionne aussi en SSH, nvim, psql...          |
 
-> `Ctrl+g` fonctionne depuis n'importe quel pane tmux, dans n'importe quelle app.
-> Le popup hérite du `pane_current_path` → lazygit ouvre dans le bon repo.
+> Ces raccourcis fonctionnent depuis n'importe quel pane, dans n'importe quelle app.
+> `Ctrl+g` hérite du `pane_current_path` → lazygit ouvre dans le bon repo.
 
 ---
 

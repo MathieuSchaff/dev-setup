@@ -1,118 +1,118 @@
 ; curl — HTTP client
 ; Focus API REST + téléchargement
 
-% curl, get
+% curl, get, fetch, request, http, web, api
 
-# GET simple
+# GET simple / Requête / Fetch URL
 curl <url>
 
-# GET avec suivi des redirections
+# GET avec suivi redirections / Follow redirects / Location
 curl -L <url>
 
-# GET silencieux mais affiche les erreurs
+# GET silencieux / Silent mode (show errors only)
 curl -sS <url>
 
-# GET avec headers custom
+# GET avec headers / Custom headers / Authentication
 curl -H "Authorization: Bearer <token>" <url>
 
-# GET avec plusieurs headers
+# GET multiples headers / Multiple headers / Accept / Content-type
 curl -H "Accept: application/json" -H "X-Custom: <value>" <url>
 
-# GET et pretty-print JSON (nécessite jq)
+# GET et formater JSON / Pretty-print JSON / Display (needs jq)
 curl -sS <url> | jq .
 
-# GET avec paramètres query (URL-encodés)
+# GET avec paramètres / Query params / URL-encoded
 curl -G <url> --data-urlencode "<key>=<value>"
 
-% curl, post, put, delete
+% curl, post, put, delete, patch, write, update, destroy, api, rest, method
 
-# POST JSON
+# POST JSON / Envoyer données / Send data / JSON payload
 curl -X POST <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
 
-# POST JSON depuis un fichier
+# POST JSON depuis fichier / Send data from file / Upload JSON
 curl -X POST <url> -H "Content-Type: application/json" -d @<path_to_json_file>
 
-# POST form-urlencoded
+# POST formulaire / Send form-urlencoded data
 curl -X POST <url> -d "<key>=<value>&<key2>=<value2>"
 
-# POST multipart (upload fichier)
+# POST multipart / Upload fichier / Send file / Form data
 curl -X POST <url> -F "file=@<path_to_file>" -F "<field>=<value>"
 
-# PUT JSON
+# PUT JSON / Remplacer / Update / Replace resource
 curl -X PUT <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
 
-# DELETE
+# DELETE / Supprimer / Effacer / Remove resource
 curl -X DELETE <url>
 
-# PATCH JSON
+# PATCH JSON / Modifier / Update / Partial update
 curl -X PATCH <url> -H "Content-Type: application/json" -d '<{"key":"value"}>'
 
-% curl, auth
+% curl, auth, login, security, identity, credentials, token
 
-# Basic auth
+# Basic auth / Authentification simple / Username & password
 curl -u <user>:<password> <url>
 
-# Bearer token
+# Bearer token / Authentification JWT / Authorization header
 curl -H "Authorization: Bearer <token>" <url>
 
-# API key dans un header
+# API key / Clé API / Authentication header
 curl -H "X-API-Key: <key>" <url>
 
-# Avec un .netrc
+# Avec .netrc / Config file auth / Credentials file
 curl --netrc <url>
 
-% curl, debug, verbose
+% curl, debug, verbose, inspect, diagnose, network, logs, timing
 
-# Mode verbose (request + response headers)
+# Mode verbose / Debug / Inspect headers / Detailed logs
 curl -v <url>
 
-# Afficher uniquement les headers de réponse
+# Afficher headers uniquement / Response headers only / Head request
 curl -I <url>
 
-# Afficher headers + body
+# Afficher headers + body / Include response headers
 curl -i <url>
 
-# Mesurer le temps total
+# Mesurer temps / Total time / Performance / Latency
 curl -o /dev/null -s -w "Total: %{time_total}s\n" <url>
 
-# Détails timings (DNS, connect, TTFB, total)
+# Détails timings / Network breakdown / Performance (DNS, TTFB, Total)
 curl -o /dev/null -s -w "DNS: %{time_namelookup}s\nConnect: %{time_connect}s\nTTFB: %{time_starttransfer}s\nTotal: %{time_total}s\n" <url>
 
-% curl, download
+% curl, download, file, save, transfer, fetch, get
 
-# Télécharger en gardant le nom du fichier distant
+# Télécharger / Sauvegarder / Download & save (remote name)
 curl -LO <url>
 
-# Télécharger avec un nom local custom
+# Télécharger / Sauvegarder / Download & save (custom name)
 curl -L -o <local_file> <url>
 
-# Reprendre un téléchargement interrompu
+# Reprendre / Continuer / Resume download / Partial fetch
 curl -C - -LO <url>
 
-# Télécharger avec une barre de progression classique
+# Télécharger / Progrès / Download with progress bar
 curl -# -LO <url>
 
-# Suivre les redirections + limiter la vitesse
+# Télécharger / Limiter vitesse / Bandwidth limit / Throttling
 curl -L --limit-rate <1M> -O <url>
 
-% curl, timeout, retry
+% curl, timeout, retry, wait, reliability, network
 
-# Timeout total (s)
+# Timeout total / Limite temps / Max request time
 curl --max-time <seconds> <url>
 
-# Timeout de connexion uniquement
+# Timeout connexion / Connection timeout / Wait limit
 curl --connect-timeout <seconds> <url>
 
-# Retries automatiques sur erreur
+# Retries / Réessayer / Automatic retry on error
 curl --retry <n> --retry-delay <seconds> <url>
 
-% curl, cookies
+% curl, cookies, session, state, storage
 
-# Sauver les cookies reçus
+# Sauver cookies / Save cookies / Cookie jar
 curl -c <cookies.txt> <url>
 
-# Envoyer les cookies sauvegardés
+# Envoyer cookies / Use cookies / Load cookies
 curl -b <cookies.txt> <url>
 
-# Sauver ET réutiliser (session)
+# Session complète / Save & use cookies / Persistent session
 curl -c <cookies.txt> -b <cookies.txt> <url>

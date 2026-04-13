@@ -1,46 +1,28 @@
-% navi
+% navi, edit, config, setup, customize, cheatsheet, local, éditer, configurer
 
-# Lancer l'interface complète
-navi
+# Éditer cheatsheet / Modifier / Edit a cheatsheet (visual selection)
+$EDITOR <cheat_file>
 
-# Filtrer directement sur un terme
-navi --query "<term>"
+# Éditer config / Modifier / Edit navi configuration
+$EDITOR $(navi info config-path)
 
-# Imprimer la commande au lieu de l'exécuter (pour pipe)
-navi --print
+# Créer cheatsheet / Nouvelle / Create new local cheatsheet
+$EDITOR ~/dev-setup/cheats/<new_name>.cheat
 
-# Filtrer + imprimer (utile pour binder dans un script)
-navi --query "<term>" --print
+$ cheat_file: fd . ~/dev-setup/cheats/ --- --preview 'bat --color=always {}'
 
-# Ouvrir navi dans le tag d'une section précise
-navi --tag-rules "<tag>"
+% navi, search, online, community, repo, browse, import, chercher, trouver, importer
 
-$ tag: navi info cheats-path && grep -h '^%' ~/dev-setup/cheats/*.cheat | sed 's/%\s*//' | tr ',' '\n' | awk '{$1=$1}1' | sort -u | fzf
+# Chercher / Importer cheatsheets / Browse and import community cheatsheets
+navi repo browse
 
-# Afficher le chemin des cheats configurés
-navi info cheats-path
+# Ajouter repo / GitHub / Add cheatsheet repository from GitHub
+navi repo add <url>
 
-# Afficher le chemin du fichier de config
-navi info config-path
+% navi, debug, logs, cache, troubleshoot, réparer, fixer
 
-# Exemple de config à écrire dans config.yaml
-navi info cheats-example
+# Voir logs / Debug / Follow navi logs
+tail -f ~/.config/navi/navi.log
 
-# Lancer une fonction intégrée (démo)
-navi fn welcome
-
-# Répéter la dernière commande navi
-navi fn last
-
-% navi, widget
-
-# Widget zsh — insère la commande dans le buffer (mappé sur Ctrl+N)
-# (c'est un binding, pas une commande shell — rappel seulement)
-# Voir ~/.zshrc : source <(navi widget zsh)
-navi widget zsh
-
-# Widget bash
-navi widget bash
-
-# Widget fish
-navi widget fish
+# Rafraîchir cache / Forcer / Force refresh variables (skip cache)
+navi --no-cache

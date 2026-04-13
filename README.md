@@ -8,10 +8,12 @@ Configuration Linux / macOS (environnement actuel : WSL2 Ubuntu x86_64).
 
 Ce repo contient deux choses distinctes :
 
-1. **Les dotfiles** — copies des fichiers de config actifs (`~/.zshrc`, `~/.gitconfig`, etc.)
+1. **Les dotfiles** — fichiers de config source (`config/.zshrc`, `config/.gitconfig`, etc.)
 2. **La documentation** — guide d'install, inventaire des outils, cheatsheet
 
-Le hook `pre-commit` copie automatiquement les fichiers actifs depuis `~/` dans ce repo à chaque commit. Le repo est donc toujours en sync avec la machine.
+`install.sh` crée des **symlinks** depuis `~/` vers les fichiers du repo. Exemple : `~/.zshrc → ~/dev-setup/config/.zshrc`. Toute modification est donc immédiatement active — pas besoin de copie.
+
+Le hook `pre-commit` sync uniquement les fichiers qui ne peuvent pas être symlinkés : configs Zed (côté Windows) et `~/CLAUDE.md`.
 
 ---
 
@@ -19,27 +21,33 @@ Le hook `pre-commit` copie automatiquement les fichiers actifs depuis `~/` dans 
 
 Voir **[SETUP.md](./SETUP.md)** pour la séquence complète d'installation.
 
-Une fois les outils installés, déployer les configs en une commande :
-
 ```bash
 git clone https://github.com/MathieuSchaff/dotfiles-2026 ~/dev-setup
-chmod +x ~/dev-setup/install.sh
-~/dev-setup/install.sh
+chmod +x ~/dev-setup/setup.sh ~/dev-setup/bootstrap.sh ~/dev-setup/install.sh
+
+# Tout d'un coup (outils + configs)
+./setup.sh
+
+# Ou séparément :
+./bootstrap.sh    # installe les outils uniquement
+./install.sh      # déploie les configs (symlinks) uniquement
+
 exec zsh
 ```
 
 ### Ce que fait `install.sh`
 
-- Copie chaque dotfile à son emplacement (`~/.zshrc`, `~/.gitconfig`, `~/.tmux.conf`...)
-- Si un fichier existe déjà et est **différent** → backup horodaté dans `~/.dotfiles-backup/` avant d'écraser
-- Si un fichier est déjà **identique** → ignoré
+- Crée des **symlinks** de chaque dotfile vers le repo (`~/.zshrc → ~/dev-setup/config/.zshrc`, etc.)
+- Si un fichier existe déjà → backup horodaté dans `~/.dotfiles-backup/` avant remplacement par le symlink
+- Si le symlink est déjà en place → ignoré ("link ok")
+- Copie les configs Zed vers Windows (symlinks non supportés sur `/mnt/c/`)
 - Affiche un résumé de ce qui a changé
 
 ---
 
 ## Mettre à jour depuis une machine existante
 
-Le hook `pre-commit` se charge de tout — il suffit de committer :
+Les dotfiles sont des symlinks — toute modification de `~/.zshrc` (par exemple) modifie directement le fichier dans le repo. Il suffit de committer :
 
 ```bash
 cd ~/dev-setup
@@ -47,11 +55,13 @@ git commit -m "update"
 git push
 ```
 
+> Le hook `pre-commit` sync automatiquement les configs Zed (Windows) et `~/CLAUDE.md` dans le repo.
+
 Pour mettre à jour les outils eux-mêmes :
 
 ```bash
 update-all     # apt, omz, plugins zsh, rust/cargo, uv, lazygit, fzf
-update-nvim    # Neovim (pre-built → /opt/nvim-linux-x86_64/)
+update-nvim    # Neovim (pre-built → /opt/nvim/)
 update-node    # Node via nvm
 update-bun     # Bun
 ```
@@ -68,31 +78,28 @@ update-bun     # Bun
 | `tools.md`               | Inventaire complet des outils installés, chemins, versions     |
 | `cheatsheet/`            | Référence rapide lisible : zsh, lazygit, vi-mode, delta, fzf   |
 | `cheats/`                | Cheatsheets navi (`.cheat`) — git, tools, docker, linux, ssh, bun, npm, curl, navi |
-| `.zshrc`                 | Shell : aliases, fonctions, plugins Oh My Zsh                  |
-| `.gitconfig`             | Git : delta comme pager, side-by-side, nvim comme éditeur      |
-| `.tmux.conf`             | Tmux : Catppuccin macchiato, `Ctrl+g` lazygit, `prefix+Ctrl+g` navi |
-| `.config/lazygit/`       | Lazygit : delta comme pager, nvim comme éditeur                |
-| `.config/nvim/`          | Neovim : config AstroNvim + syntax `.cheat`                    |
-| `.config/navi/`          | Navi : cheats path, couleurs, shell zsh                        |
-| `.config/starship.toml`  | Starship : prompt Catppuccin macchiato, texte coloré sans bg   |
+| `config/.zshrc`                 | Shell : aliases, fonctions, plugins Oh My Zsh                  |
+| `config/.gitconfig`             | Git : delta comme pager, side-by-side, nvim comme éditeur      |
+| `config/.tmux.conf`             | Tmux : Catppuccin macchiato, `Ctrl+g` lazygit, `prefix+Ctrl+g` navi |
+| `config/.config/lazygit/`       | Lazygit : delta comme pager, nvim comme éditeur                |
+| `config/.config/nvim/`          | Neovim : config AstroNvim + syntax `.cheat`                    |
+| `config/.config/navi/`          | Navi : cheats path, couleurs, shell zsh                        |
+| `config/.config/starship.toml`  | Starship : prompt Catppuccin macchiato, texte coloré sans bg   |
 
 ---
 
 ## Stack
 
-| Outil | Version | Installé via |
-|-------|---------|-------------|
-| zsh + Oh My Zsh | — | apt |
-| tmux | — | apt |
-| Neovim | v0.12.1 | pre-built → `/opt/nvim-linux-x86_64/` |
-| lazygit | latest | curl GitHub releases |
-| delta | 0.19.2 | cargo |
-| eza | latest | cargo |
-| bat | latest | cargo |
-| navi | latest | cargo |
-| starship | latest | cargo |
-| glow | latest | `sudo snap install glow` ou `go install` |
-| fzf | latest | git |
-| Node | v24 | nvm |
-| Bun | 1.3 | curl |
-| Rust | 1.94 | rustup |
+| Outil | Installé via |
+|-------|-------------|
+| zsh + Oh My Zsh | apt |
+| tmux | apt |
+| Neovim (AstroNvim v6) | pre-built → `/opt/nvim/` |
+| lazygit | curl GitHub releases |
+| delta, eza, bat, navi, starship | cargo |
+| glow | `go install` ou snap |
+| fzf | git clone |
+| Node | nvm |
+| Bun | curl |
+| Rust | rustup |
+| Go | bootstrap.sh (latest depuis go.dev) |

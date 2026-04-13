@@ -2,7 +2,7 @@
 
 Éditeur principal côté Windows, mode vim activé avec base_keymap VSCode.
 Config source : `C:\Users\schaf\AppData\Roaming\Zed\`
-Backup versionné : `~/dev-setup/.config/zed/` (déployé via `install.sh`,
+Backup versionné : `~/dev-setup/config/.config/zed/` (déployé via `install.sh`,
 auto-détection de `/mnt/c/Users/*/AppData/Roaming/Zed/`).
 
 ## Sommaire
@@ -232,7 +232,7 @@ node_modules, dist, .turbo, .next, .vscode, .storybook, .husky,
 | `keymap.json`   | Keymaps vim normal/visual/insert + Workspace    |
 
 Emplacement actif : `C:\Users\schaf\AppData\Roaming\Zed\`
-Backup versionné : `~/dev-setup/.config/zed/`
+Backup versionné : `~/dev-setup/config/.config/zed/`
 Sync : hook `pre-commit` copie depuis `/mnt/c/Users/schaf/AppData/Roaming/Zed/` vers le repo.
 Déploiement inverse via `install.sh` (auto-détection WSL).
 

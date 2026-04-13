@@ -15,6 +15,13 @@
 
 set -euo pipefail
 
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64)  ARCH_ALT="amd64"; ARCH_GH="x86_64" ;;
+    aarch64) ARCH_ALT="arm64"; ARCH_GH="arm64"   ;;
+    *)       echo "Architecture non supportée : $ARCH" >&2; exit 1 ;;
+esac
+
 C_B=$'\e[1;34m'; C_G=$'\e[32m'; C_Y=$'\e[33m'; C_R=$'\e[31m'; C_D=$'\e[2m'; C_0=$'\e[0m'
 
 ALL_TOOLS=(dive lazygit lazydocker ctop neovim fzf)
@@ -55,9 +62,9 @@ update_dive() {
   info "dive ${cur:-<none>} → $latest"
   [[ $CHECK -eq 1 ]] && return
   local tmp; tmp=$(mktemp -d)
-  trap "rm -rf $tmp" RETURN
-  ( cd "$tmp" && curl -fsSLO "https://github.com/wagoodman/dive/releases/download/v${latest}/dive_${latest}_linux_amd64.deb" )
-  sudo apt install -y "$tmp/dive_${latest}_linux_amd64.deb"
+  trap 'rm -rf "$tmp"' RETURN
+  ( cd "$tmp" && curl -fsSLO "https://github.com/wagoodman/dive/releases/download/v${latest}/dive_${latest}_linux_${ARCH_ALT}.deb" )
+  sudo apt install -y "$tmp/dive_${latest}_linux_${ARCH_ALT}.deb"
   ok "dive → $(v_dive)"
 }
 
@@ -69,9 +76,9 @@ update_lazygit() {
   info "lazygit ${cur:-<none>} → $latest"
   [[ $CHECK -eq 1 ]] && return
   local tmp; tmp=$(mktemp -d)
-  trap "rm -rf $tmp" RETURN
+  trap 'rm -rf "$tmp"' RETURN
   ( cd "$tmp" \
-      && curl -fsSLo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${latest}/lazygit_${latest}_Linux_x86_64.tar.gz" \
+      && curl -fsSLo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${latest}/lazygit_${latest}_Linux_${ARCH_GH}.tar.gz" \
       && tar xf lazygit.tar.gz lazygit \
       && sudo install lazygit /usr/local/bin )
   ok "lazygit → $(v_lazygit)"
@@ -93,7 +100,7 @@ update_ctop() {
   if [[ "$cur" == "$latest" ]]; then skip "ctop $cur up-to-date"; return; fi
   info "ctop ${cur:-<none>} → $latest"
   [[ $CHECK -eq 1 ]] && return
-  sudo curl -fsSLo /usr/local/bin/ctop "https://github.com/bcicen/ctop/releases/download/v${latest}/ctop-${latest}-linux-amd64"
+  sudo curl -fsSLo /usr/local/bin/ctop "https://github.com/bcicen/ctop/releases/download/v${latest}/ctop-${latest}-linux-${ARCH_ALT}"
   sudo chmod +x /usr/local/bin/ctop
   ok "ctop → $(v_ctop)"
 }
@@ -111,10 +118,12 @@ update_neovim() {
   info "neovim ${cur:-<none>} → $latest"
   [[ $CHECK -eq 1 ]] && return
   local tmp; tmp=$(mktemp -d)
-  trap "rm -rf $tmp" RETURN
+  trap 'rm -rf "$tmp"' RETURN
   ( cd "$tmp" \
-      && curl -fsSLo nvim.tar.gz "https://github.com/neovim/neovim/releases/download/v${latest}/nvim-linux-x86_64.tar.gz" \
-      && sudo tar -C /opt -xf nvim.tar.gz )
+      && curl -fsSLo nvim.tar.gz "https://github.com/neovim/neovim/releases/download/v${latest}/nvim-linux-${ARCH_GH}.tar.gz" \
+      && sudo rm -rf /opt/nvim \
+      && sudo mkdir -p /opt/nvim \
+      && sudo tar -C /opt/nvim --strip-components=1 -xf nvim.tar.gz )
   ok "neovim → $(v_nvim)"
 }
 

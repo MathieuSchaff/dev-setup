@@ -2,70 +2,70 @@
 ; Doc complète : ~/dev-setup/cheatsheet/dive.md
 ; Config : ~/.dive.yaml
 
-% dive, docker, images
+% dive, docker, images, explore, layer, size, storage, analyze, optimize, inspect
 
-# Analyser une image Docker locale
+# Analyser / Explorer / Inspecter image Docker / Analyze local image
 dive <image>
 
 $ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
 
-# Analyser une image par ID
+# Analyser / Explorer / Inspecter par ID / Analyze image by ID
 dive <image_id>
 
 $ image_id: docker images --format '{{.ID}} {{.Repository}}:{{.Tag}}' --- --column 1
 
-# Build + analyse en une passe (wrapper docker build)
+# Build + Analyser / Compiler / Build and analyze image
 dive build -t <name>:<tag> .
 
-# Build avec Dockerfile spécifique
+# Build + Analyser (Dockerfile spécifique) / Custom Dockerfile build
 dive build -t <name>:<tag> -f <dockerfile> .
 
-# Ignorer les erreurs de parsing et analyser quand même
+# Analyser / Forcer / Ignore errors and analyze anyway
 dive --ignore-errors <image>
 
-% dive, podman
+% dive, podman, container, images, explore
 
-# Analyser une image via podman
+# Analyser via Podman / Explorer / Inspect image via Podman
 dive --source podman <image>
 
-% dive, archive
+% dive, archive, tar, storage, offline, export
 
-# Analyser un tar exporté (sans daemon docker)
+# Analyser archive TAR / Offline analysis / Analyze docker-archive
 dive --source docker-archive <archive.tar>
 
-# Export + analyse en une ligne
+# Exporter + Analyser / Export and analyze TAR in one go
 docker save <image> -o /tmp/img.tar && dive --source docker-archive /tmp/img.tar
 
 $ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
 
-% dive, ci
+% dive, ci, automate, quality, gate, report, json
 
-# Mode CI — échec si l'image dépasse les seuils
+# Mode CI / Automatiser / Verify image thresholds (fail if inefficient)
 CI=true dive <image>
 
-# CI avec fichier de règles
+# Mode CI (config externe) / CI with rules file
 CI=true dive <image> --ci-config .dive-ci
 
-# CI avec seuils inline
+# Mode CI (seuils inline) / CI with inline thresholds (efficiency, wasted bytes)
 dive <image> --ci --lowestEfficiency 0.95 --highestWastedBytes 20MB
 
-# Export JSON de l'analyse (skip TUI)
+# Exporter JSON / Générer rapport / Export analysis to JSON (skip TUI)
 dive <image> -j dive-report.json
 
 $ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
 
-% dive, config
+% dive, config, settings, edit, customize
 
-# Ouvrir la config dans nvim
+# Éditer config / Open config in nvim
 nvim ~/.dive.yaml
 
-# Utiliser un fichier de config ponctuel
+# Utiliser config spécifique / Custom config file
 dive --config <path_to_yaml> <image>
 
-% dive, version
+% dive, version, help, information
 
-# Version de dive installée
+# Voir version / Show installed version
 dive --version
 
-# Aide
+# Aide / Help / Usage instructions
 dive --help

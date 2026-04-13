@@ -1,118 +1,111 @@
 ; npm — Node Package Manager
 ; Complète pnpm/bun pour les projets legacy ou les outils globaux
 
-% npm, init, install
+% npm, init, install, setup, start, projet, initialiser, installer, projet
 
-# Initialiser un package.json (interactif)
+# Initialiser / Créer / Setup / New package.json (interactive)
 npm init
 
-# Initialiser avec les valeurs par défaut
+# Initialiser / Setup avec défauts / Default values (no prompts)
 npm init -y
 
-# Installer les deps du package.json
+# Installer / Fetch / Download dependencies (from package.json)
 npm install
 
-# Alias court
+# Installer / Alias court / Short alias (install)
 npm i
 
-# Installation CI — exige un lockfile à jour, plus rapide
+# Installer / CI / Reproducible build / Clean install (npm ci)
 npm ci
 
-# Installer en mode production (skip devDeps)
+# Installer / Production / Skip devDependencies (omit dev)
 npm install --omit=dev
 
-% npm, add, remove
+% npm, add, remove, delete, uninstall, dependencies, package, management, deps, supprimer, ajouter, effacer, cleanup
 
-# Ajouter une dépendance
+# Ajouter / Installer / Add / Install dependency
 npm install <package>
 
-# Ajouter en devDependency
+# Ajouter / Dev / Save dev dependency
 npm install -D <package>
 
-# Ajouter en version exacte (pas de caret)
+# Ajouter / Fixer / Pin / Exact version (no caret)
 npm install --save-exact <package>
 
-# Ajouter globalement
+# Ajouter globalement / Global install / System-wide dependency
 npm install -g <package>
 
-# Installer une version précise
+# Installer / Version spécifique / Specific version
 npm install <package>@<version>
 
-# Installer la dernière version
+# Installer / Dernière version / Latest version
 npm install <package>@latest
 
-# Supprimer une dépendance
+# Supprimer / Retirer / Effacer / Remove / Delete / Uninstall dependency
 npm uninstall <package>
 
-# Supprimer un paquet global
+# Supprimer globalement / Global uninstall / Remove system-wide package
 npm uninstall -g <package>
 
-% npm, run, scripts
+% npm, run, scripts, execute, lancer, runner
 
-# Lister les scripts disponibles
-npm run
+# Lancer / Exécuter / Run / Execute npm script
+npm run <script_name>
 
-# Lancer un script
-npm run <script>
+# Exécuter / Lancer / Npx / Run command (npx style)
+npx <package_name> <args>
 
-$ script: node -e 'const s=require("./package.json").scripts||{};for(const k in s)console.log(k+" — "+s[k])' 2>/dev/null | fzf --delimiter=' — ' | cut -d' ' -f1
+$ script_name: jq -r '.scripts | to_entries[] | "\(.key)\t\(.value)"' package.json --- --column 1 --delimiter $'\t' --preview 'echo {2}'
+$ package_name: npm ls --all --json | jq -r '.dependencies | keys[]' --- --preview 'npm view {1} description'
 
-# Lancer les tests
-npm test
 
-# Lancer le start
-npm start
+% npm, info, search, view, list, versions, inspect, metadata, lister, chercher
 
-# Exécuter un binaire d'un package sans l'installer
-npx <package> <args>
-
-% npm, info, search
-
-# Voir les infos d'un package (version, deps, repo)
+# Voir infos / Inspecter / View package info (metadata)
 npm view <package>
 
-# Voir la dernière version publiée
+# Voir version / Latest version / View latest published version
 npm view <package> version
 
-# Voir toutes les versions publiées
+# Voir versions / All versions / View all published versions
 npm view <package> versions
 
-# Voir l'arbre des deps installées
+# Lister / Arbre / Show installed dependencies tree
 npm ls
 
-# Arbre complet (toutes profondeurs)
+# Lister / Arbre complet / Show full dependency tree (all depths)
 npm ls --all
 
-# Vérifier une dep installée en particulier
+# Vérifier / Check / Find specific installed dependency
 npm ls <package>
 
-% npm, outdated, update, audit
+% npm, outdated, update, audit, security, quality, fix, vulnerabilities, verify, réparer, vérifier
 
-# Lister les deps dépassées
+# Lister périmées / Outdated / List outdated dependencies
 npm outdated
 
-# Mettre à jour dans les limites du semver (package.json)
+# Mettre à jour / Update / Upgrade dependencies (respect semver)
 npm update
 
-# Audit de sécurité
+# Audit / Sécurité / Security audit
 npm audit
 
-# Fix automatique des vulnérabilités
+# Fix / Réparer / Audit fix (automatic)
 npm audit fix
 
-# Fix avec bump de version majeure
+# Fix / Forcer / Audit fix (force, includes major updates)
 npm audit fix --force
 
-% npm, cache, clean
+% npm, cache, clean, verify, storage, cleanup, maintenance, vider, nettoyer, vérifier
 
-# Vider le cache
+# Vider cache / Nettoyer / Purge / Clear / Clean cache
 npm cache clean --force
 
-# Vérifier l'intégrité du cache
+# Vérifier cache / Verify cache integrity
 npm cache verify
 
-# Afficher la racine des node_modules globaux
+# Afficher racine globale / Show global node_modules path
 npm root -g
 
-# Afficher la config effective
+# Afficher config / Show effective npm config
 npm config list

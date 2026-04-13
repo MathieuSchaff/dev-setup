@@ -39,14 +39,14 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 ## Outils installés (résumé)
 - **Shell** : zsh + Oh My Zsh, prompt Starship (Catppuccin macchiato, texte coloré sans bg), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`
 - **Terminal multiplexer** : tmux + TPM, thème Catppuccin macchiato
-- **Éditeur** : Neovim v0.12.1 (pre-built, `/opt/nvim-linux-x86_64/bin/nvim`), config AstroNvim dans `~/.config/nvim/`
+- **Éditeur** : Neovim (pre-built, `/opt/nvim/bin/nvim`), config AstroNvim v6 dans `~/.config/nvim/`
 - **Git TUI** : lazygit (`/usr/local/bin/lazygit`), alias `lg`, popup tmux via `Ctrl+g`
 - **Diff** : delta (`~/.cargo/bin/delta`) — configuré dans `~/.gitconfig` et `~/.config/lazygit/config.yml`
 - **ls** : eza (`~/.cargo/bin/eza`), aliases `l`, `ll`, `tree`
 - **cat** : bat (`~/.cargo/bin/bat`), alias `cat`
 - **Fuzzy** : fzf (`~/.fzf/`), zoxide (`z`)
 - **Search** : ripgrep (`rg`), fd (`fdfind`, alias `fd`), ag
-- **Runtimes** : Node v24 (nvm), Bun 1.3, Python (miniconda), Go 1.25, Rust 1.94
+- **Runtimes** : Node (nvm), Bun, Python (miniconda), Go (latest via go.dev), Rust (rustup)
 - **Package managers** : cargo, npm, pnpm, bun, uv, conda
 - **AI CLIs** : claude (`~/.local/bin/claude`), gemini (npm global), kimi
 - **Éditeur Windows** : Zed (config `C:\Users\schaf\AppData\Roaming\Zed\`), vim_mode + Biome + vtsls, backup dans `~/dev-setup/.config/zed/`
@@ -67,7 +67,7 @@ Repo distant : github.com/MathieuSchaff/dotfiles-2026
 
 ## PATH (ordre de priorité)
 ```
-~/.local/bin → ~/miniconda3/bin → ~/.bun/bin → /opt/nvim-linux-x86_64/bin
-→ ~/.local/share/pnpm → ~/.nvm/versions/node/v24.14.0/bin
+~/.local/bin → ~/miniconda3/bin → ~/.bun/bin → /opt/nvim/bin
+→ ~/.local/share/pnpm → ~/.nvm/versions/node/<version>/bin
 → ~/.cargo/bin → /usr/local/bin → /usr/bin → /usr/local/go/bin → ~/.fzf/bin
 ```

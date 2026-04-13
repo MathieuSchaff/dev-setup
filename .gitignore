@@ -1,0 +1,22 @@
+# Local/Secrets (IMPORTANT)
+*.local
+.zshrc.local
+.bashrc.local
+config/.zshrc.local
+config/.bashrc.local
+cr.md
+# OS/System junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Backups
+.dotfiles-backup/
+*.bak
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~

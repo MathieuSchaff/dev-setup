@@ -92,7 +92,7 @@ rules:
 
 ## Config `~/.dive.yaml`
 
-Fichier actif sur cette machine, copie de référence dans `~/dev-setup/.dive.yaml`.
+Fichier actif sur cette machine, copie de référence dans `~/dev-setup/config/.dive.yaml`.
 
 ```yaml
 container-engine: docker

@@ -1,208 +1,76 @@
 ; Linux basics — processes, ports, disk, files, systemd, archives
 ; Contexte : WSL2 Ubuntu
 
-% linux, processes
+% linux, processes, kill, stop, list, monitor, top, ps, cpu, memory, processus, tuer, terminer
 
-# Lister tous les processus (mode BSD)
-ps aux
+# Tuer processus / Kill process by PID (visual selection)
+kill -9 <pid>
 
-# Chercher un processus par nom
-pgrep -a <name>
+# Voir détails processus / Show process details (ps)
+ps -fp <pid>
 
-# Chercher un processus + parent
-pgrep -af <name>
+$ pid: ps -eo pid,pcpu,pmem,user,comm --sort=-pcpu | head -30 --- --header-lines 1 --column 1 --preview 'ps -fp {1}'
 
-# Kill par nom (SIGTERM)
-pkill <name>
+% linux, ports, network, listen, tcp, udp, connectivity, lsof, netstat, réseau, connexion
 
-# Kill par nom (SIGKILL, brutal)
-pkill -9 <name>
+# Trouver port / Chercher / Find which process uses a port (lsof)
+sudo lsof -i :<port_number>
 
-# Kill par PID
-kill <pid>
+$ port_number: sudo lsof -i -P -n | grep LISTEN | awk '{print $9}' | cut -d: -f2 | sort -u --- --preview 'sudo lsof -i :{1}'
 
-$ pid: ps -eo pid,pcpu,pmem,comm --sort=-pcpu | head -30 | tail -n +2 | fzf | awk '{print $1}'
+% linux, disk, files, find, search, grep, size, storage, cleanup, chercher, trouver, espace, disque, fichiers
 
-# Voir l'arbre des processus
-pstree -p
+# Chercher + Afficher / Trouver / Find and display file (fd + batcat)
+batcat <file_path>
 
-# Top interactif moderne
-btm
+# Chercher pattern / Trouver texte / Search pattern in files (ripgrep)
+rg "<pattern>" <path>
 
-# htop classique
-htop
+# Taille dossier / Espace disque / Directory size (sorted)
+du -sh <path>/* | sort -h
 
-% linux, ports, network
+$ file_path: fdfind -t f . --- --preview 'batcat --color=always --style=numbers --line-range :50 {}'
+$ path: fdfind -t d . --- --preview 'ls -R {} | head -n 20'
 
-# Ports en écoute (ss moderne)
-ss -tulpn
+% linux, systemctl, services, daemon, init, start, stop, status, restart, logs, journal, service
 
-# Ports en écoute filtrés par port
-ss -tulpn | grep <port>
+# Statut service / Check service status (systemctl)
+systemctl status <service_name>
 
-# Connexions établies
-ss -tp
+# Démarrer service / Start service
+sudo systemctl start <service_name>
 
-# Ports en écoute (lsof)
-sudo lsof -i -P -n | grep LISTEN
+# Arrêter service / Stopper / Stop service
+sudo systemctl stop <service_name>
 
-# Qui utilise un port spécifique
-sudo lsof -i :<port>
+# Redémarrer service / Restart service
+sudo systemctl restart <service_name>
 
-# Tester qu'un port est ouvert sur un host
-nc -zv <host> <port>
+# Voir logs service / Journal / Follow service logs (journalctl)
+journalctl -u <service_name> -f
 
-# Résolution DNS
-dig <domain>
+$ service_name: systemctl list-units --type=service --all --format='table {{.Unit}}\t{{.Active}}\t{{.Sub}}' --- --header-lines 1 --column 1 --preview 'systemctl status {1}'
 
-# Résolution courte
-dig +short <domain>
+% linux, env, variable, shell, environment, print, configuration
 
-# IP publique
-curl -sS ifconfig.me
+# Afficher variable d'env / Show environment variable value
+echo $<env_var>
 
-% linux, disk, files
+$ env_var: env | cut -d= -f1 --- --preview 'printenv {1}'
 
-# Espace disque global
-df -h
+% wsl, windows, integration, explorer, clipboard, network, system, windows
 
-# Taille d'un dossier
-du -sh <path>
+# Ouvrir dossier courant dans Windows / Open folder in Explorer
+explorer.exe .
 
-# Top 10 des plus gros items d'un dossier
-du -h --max-depth=1 <path> | sort -hr | head
+# IP de l'hôte Windows / Get Windows host IP (for services on host)
+ip route | grep default | awk '{print $3}'
 
-# Navigateur disque interactif (si installé)
-ncdu <path>
+# Copier vers presse-papier Windows / Copy to Windows clipboard
+echo "<text>" | clip.exe
 
-# Chercher les plus gros fichiers (> 100M) dans un dossier
-fd -t f -S +100m . <path>
+# Ouvrir fichier/URL dans Windows / Open with default Windows app
+wslview <file_or_url>
 
-# Chercher par nom (fd, alias de fdfind)
-fd <pattern>
-
-# Trouver les fichiers modifiés dans les X dernières minutes
-fd --changed-within <30m> . <path>
-
-% linux, permissions
-
-# Rendre un fichier exécutable
-chmod +x <file>
-
-# Permissions numériques (rwx pour owner, r pour autres)
-chmod 755 <file>
-
-# Changer le owner
-sudo chown <user>:<group> <file>
-
-# Récursif
-sudo chown -R <user>:<group> <path>
-
-# Voir les permissions détaillées
-stat <file>
-
-% linux, archives
-
-# Créer un tar.gz
-tar czf <archive.tar.gz> <path>
-
-# Extraire un tar.gz
-tar xzf <archive.tar.gz>
-
-# Extraire dans un dossier spécifique
-tar xzf <archive.tar.gz> -C <dest_dir>
-
-# Lister le contenu d'un tar sans extraire
-tar tzf <archive.tar.gz>
-
-# Zip récursif
-zip -r <archive.zip> <path>
-
-# Unzip
-unzip <archive.zip>
-
-# Unzip dans un dossier spécifique
-unzip <archive.zip> -d <dest_dir>
-
-% linux, systemctl, services
-
-# Statut d'un service
-systemctl status <service>
-
-# Démarrer un service
-sudo systemctl start <service>
-
-# Arrêter un service
-sudo systemctl stop <service>
-
-# Redémarrer un service
-sudo systemctl restart <service>
-
-# Activer au boot
-sudo systemctl enable <service>
-
-# Désactiver au boot
-sudo systemctl disable <service>
-
-# Lister tous les services actifs
-systemctl list-units --type=service --state=running
-
-% linux, journalctl, logs
-
-# Logs système (dernières lignes)
-journalctl -xe
-
-# Suivre les logs en temps réel
-journalctl -f
-
-# Logs d'un service spécifique
-journalctl -u <service>
-
-# Logs d'un service en live
-journalctl -fu <service>
-
-# Logs depuis N minutes
-journalctl --since "<10 min ago>"
-
-% linux, env, path
-
-# Lister toutes les variables d'env
-env
-
-# Chercher une variable d'env
-env | grep <name>
-
-# Afficher le PATH lisiblement
-echo $PATH | tr ':' '\n'
-
-# Trouver où est un exécutable
-which <command>
-
-# Version détaillée (alias, fonction, builtin, path...)
-type <command>
-
-# Pareil, POSIX
-command -v <command>
-
-% linux, history, apt
-
-# Chercher dans l'historique
-history | grep <pattern>
-
-# Rerun la dernière commande
-!!
-
-# Rerun avec sudo
-sudo !!
-
-# Update du système (Ubuntu/Debian)
-sudo apt update && sudo apt upgrade -y
-
-# Installer un paquet
-sudo apt install <package>
-
-# Chercher un paquet
-apt search <pattern>
-
-# Voir les infos d'un paquet
-apt show <package>
+# Voir utilisation mémoire WSL / Show WSL RAM usage
+free -h --human

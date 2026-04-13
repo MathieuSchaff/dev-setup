@@ -7,12 +7,12 @@ il complète et exécute.
 
 | Commande / Raccourci     | Contexte | Effet                                              |
 |--------------------------|----------|----------------------------------------------------|
-| `navi`                   | Terminal | Interface complète                                 |
-| `Ctrl+N`                 | Zsh      | Widget — insère la commande dans le buffer courant |
-| `prefix + Ctrl+g`        | Tmux     | Split temporaire — colle dans le pane précédent    |
-| `navi --query "<terme>"` | Terminal | Filtre direct sur un terme                         |
+| `navi`                   | Terminal | Interface complète                                      |
+| `Ctrl+N`                 | Zsh      | Widget — insère la commande dans le buffer courant      |
+| `Alt+N`                  | Tmux     | Popup flottant — fonctionne aussi en SSH, nvim, psql... |
+| `navi --query "<terme>"` | Terminal | Filtre direct sur un terme                              |
 
-> Le widget tmux fonctionne dans **n'importe quelle app** : vim, psql, SSH...
+> `Ctrl+N` = widget zsh (shell local). `Alt+N` = popup tmux (partout, SSH inclus).
 
 ## Sélection des variables
 

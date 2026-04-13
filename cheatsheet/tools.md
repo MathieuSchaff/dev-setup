@@ -143,14 +143,12 @@ Aliasé sur `cat`. S'intègre automatiquement avec fzf pour les previews.
 Glow rend le markdown dans le terminal — titres, tables, listes, code highlight.
 Config : `~/.config/glow/glow.yml` (style dark, pager, width 90, mouse).
 
-### Aliases et fonctions
+> Aliases zsh (`cs`, `mdp`) → [zsh.md — Cheatsheets (glow)](./zsh.md#cheatsheets-glow).
 
-| Commande            | Effet                                                       |
-|---------------------|-------------------------------------------------------------|
-| `cs`                | fzf sur `cheatsheet/` + preview glow, `q` pour revenir à la liste |
-| `gl <fichier>`      | Glow avec pager sur un fichier                              |
-| `glow <file>`       | Rendre un fichier (ou stdin avec `-`)                       |
-| `glow github.com/<user>/<repo>` | Fetch et rendre un README distant               |
+| Commande                            | Effet                                        |
+|-------------------------------------|----------------------------------------------|
+| `glow <fichier>`                    | Rendre un fichier (ou stdin avec `-`)        |
+| `glow github.com/<user>/<repo>`     | Fetch et rendre un README distant            |
 
 ### TUI — raccourcis
 
@@ -184,9 +182,10 @@ Navigation type `less` — voir [Pager `less`](#pager-less--touches-communes).
 
 | Raccourci    | Effet                                              |
 |--------------|----------------------------------------------------|
-| `Ctrl+T`     | chercher fichier, insérer le chemin                |
-| `Ctrl+R`     | chercher dans l'historique de commandes            |
-| `Alt+C`      | fuzzy cd dans un sous-dossier                      |
+| `Ctrl+T`     | chercher fichier + preview bat, insérer le chemin  |
+| `Ctrl+R`     | chercher dans l'historique (`Ctrl+Y` = copier)     |
+| `Ctrl+F`     | fuzzy cd avec preview arborescence (remplace Alt+C)|
+| `zdf`        | idem en commande (fd + fzf + eza tree + zoxide)    |
 | `Tab`        | fzf-tab — complétion fuzzy (popup tmux si actif)   |
 | `Ctrl+Space` | fzf-tab — sélection multiple                       |
 | `F1` / `F2`  | fzf-tab — changer de groupe de suggestions         |
@@ -195,12 +194,22 @@ Navigation type `less` — voir [Pager `less`](#pager-less--touches-communes).
 
 ### Dans l'interface fzf
 
-| Touche    | Effet              |
-|-----------|--------------------|
-| `↑` / `↓` | naviguer           |
-| `Tab`     | sélection multiple |
-| `Enter`   | valider            |
-| `Ctrl+C`  | annuler            |
+| Touche      | Effet                          |
+|-------------|--------------------------------|
+| `↑` / `↓`  | naviguer                       |
+| `Tab`       | sélection multiple             |
+| `Enter`     | valider                        |
+| `Ctrl+C`    | annuler                        |
+| `Ctrl+/`    | toggle / déplacer la preview   |
+| `Ctrl+D`    | scroll preview bas (demi-page) |
+| `Ctrl+U`    | scroll preview haut (demi-page)|
+
+### Config
+
+- Thème : **Catppuccin Macchiato** (cohérent avec starship/tmux)
+- Popup tmux automatique si dans tmux, sinon `--height`
+- `Ctrl+T` : preview bat, skip `.git/node_modules/target/.venv`
+- `Ctrl+R` : `Ctrl+Y` copie la commande dans le clipboard
 
 ---
 
