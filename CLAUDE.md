@@ -20,6 +20,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/cheatsheet/zed.md`          | Zed — keymaps vim, LSP TS/Biome/vtsls, Ollama |
 | `~/dev-setup/cheatsheet/dive.md`         | Dive — TUI d'exploration d'images Docker, config, mode CI |
 | `~/dev-setup/cheatsheet/update-tools.md` | Script `update-tools` — updater des CLI hors apt/cargo |
+| `~/dev-setup/cheatsheet/plugins/`        | Cheatsheets plugins & MCP servers Claude Code |
 | `~/dev-setup/scripts/update-tools.sh`    | Script d'update des outils hors package manager (dive, lazygit, ctop, ...) |
 | `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, dive, linux, ssh, bun, npm, curl, navi |
 | `~/dev-setup/.gitconfig`                 | Config git de référence (à copier dans `~/.gitconfig`) |

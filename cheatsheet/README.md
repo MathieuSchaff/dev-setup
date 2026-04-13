@@ -21,6 +21,10 @@ La table des fichiers est dans [`~/dev-setup/CLAUDE.md`](../CLAUDE.md) ; ce doss
 - Tables `| col | col |` — la colonne de gauche est toujours la touche / commande / option
 - Cross-link entre fichiers via `[texte](./autre.md)`
 
+## Voir aussi
+
+- [plugins/](./plugins/) — Cheatsheets plugins & MCP servers Claude Code ([index](./plugins/README.md))
+
 ## Plugins zsh installés
 
 - `zsh-autosuggestions` — suggestions grises basées sur l'historique, `→` pour accepter

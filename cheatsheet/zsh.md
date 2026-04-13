@@ -103,7 +103,7 @@ Une seule commande : `update`. Tab-completion activée (flags + catégories).
 | `cargo`        | Outils cargo : bat, delta, eza, tree-sitter-cli         |
 | `go`           | Go (tarball depuis go.dev, comparaison de version)      |
 | `uv`           | `uv self update`                                        |
-| `tools`        | Binaires manuels via `update-tools.sh` (dive, lazygit, lazydocker, ctop, nvim, fzf) |
+| `tools`        | Binaires manuels via `update-tools.sh` (git, dive, lazygit, lazydocker, ctop, nvim, fzf) |
 
 **Catégories runtime** (sélectif uniquement — risque de casser des projets) :
 

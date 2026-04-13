@@ -70,16 +70,34 @@ fi
 
 blue "[1/9] Base system packages (apt)"
 if [[ "$DRYRUN" == "1" ]]; then
-    dry "apt update && apt upgrade + install zsh curl git build-essential tmux ripgrep fd-find zoxide tree neofetch xclip sqlite3 postgresql-client python3 python3-pip python3-dev libssl-dev cmake wget unzip"
+    dry "apt update && apt upgrade + install zsh curl git build-essential tmux ripgrep fd-find zoxide tree neofetch xclip sqlite3 postgresql-client python3 python3-pip python3-dev python3-venv libssl-dev libsqlite3-dev libicu-dev cmake ninja-build pkg-config wget unzip ffmpeg xvfb"
 else
     sudo apt update && sudo apt upgrade -y
     sudo apt install -y \
         zsh curl git build-essential tmux \
         ripgrep fd-find zoxide tree neofetch \
         xclip sqlite3 postgresql-client \
-        python3 python3-pip python3-dev \
-        libssl-dev cmake wget unzip
+        python3 python3-pip python3-dev python3-venv \
+        libssl-dev libsqlite3-dev libicu-dev \
+        cmake ninja-build pkg-config wget unzip \
+        ffmpeg xvfb
     green "  done"
+fi
+
+# ── 1b. GitHub CLI (gh) ──────────────────────────────────────────────────────
+
+if ! installed gh; then
+    if [[ "$DRYRUN" == "1" ]]; then dry "install GitHub CLI (official repository)"; else
+    (type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
+    && sudo mkdir -p -m 755 /etc/apt/keyrings \
+    && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
+    green "  gh installed"; fi
+else
+    echo "  gh already installed"
 fi
 
 # ── 2. Oh My Zsh + plugins ──────────────────────────────────────────────────
@@ -133,12 +151,14 @@ else
     echo "  Rust already installed ($(rustc --version))"
 fi
 
-CARGO_TOOLS="bat delta eza tree-sitter-cli navi starship cargo-update"
+CARGO_TOOLS="bat delta eza tree-sitter-cli navi starship cargo-update tealdeer bottom"
 for tool in $CARGO_TOOLS; do
     bin="$tool"
     # Mapping between tool/crate name and binary name
     [[ "$tool" == "tree-sitter-cli" ]] && bin="tree-sitter"
     [[ "$tool" == "cargo-update" ]] && bin="cargo-install-update"
+    [[ "$tool" == "tealdeer" ]] && bin="tldr"
+    [[ "$tool" == "bottom" ]] && bin="btm"
 
     if ! installed "$bin"; then
         crate="$tool"

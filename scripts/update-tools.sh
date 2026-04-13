@@ -7,11 +7,12 @@
 #   update-tools --check       # affiche seulement ce qui est outdated
 #   update-tools --list        # liste les outils supportés
 #
-# Outils gérés : dive, lazygit, lazydocker, ctop, neovim, fzf
+# Outils gérés : dive, lazygit, lazydocker, ctop, neovim, fzf, git
 #
 # Note : les outils cargo (delta, eza, bat) se mettent à jour via
 #   `cargo install-update -a` (après `cargo install cargo-update`).
-# Les outils apt (ripgrep, fd, glow, ...) via `sudo apt upgrade`.
+# Les outils apt stock (ripgrep, fd, glow, ...) via `sudo apt upgrade`.
+# Git utilise le PPA git-core/ppa pour avoir la dernière version stable.
 
 set -euo pipefail
 
@@ -24,7 +25,7 @@ esac
 
 C_B=$'\e[1;34m'; C_G=$'\e[32m'; C_Y=$'\e[33m'; C_R=$'\e[31m'; C_D=$'\e[2m'; C_0=$'\e[0m'
 
-ALL_TOOLS=(dive lazygit lazydocker ctop neovim fzf)
+ALL_TOOLS=(git dive lazygit lazydocker ctop neovim fzf)
 
 usage() {
   sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
@@ -45,6 +46,7 @@ gh_latest() {
 
 # ---------- version detectors (echo empty string if not installed) ----------
 
+v_git()        { command -v git        >/dev/null && git --version | grep -oP 'version \K\S+'; }
 v_dive()       { command -v dive       >/dev/null && dive --version 2>/dev/null | grep -oP '^dive \K\S+'; }
 v_lazygit()    { command -v lazygit    >/dev/null && lazygit --version 2>/dev/null | grep -oP ', version=\K[^,]+'; }
 v_lazydocker() { command -v lazydocker >/dev/null && lazydocker --version 2>/dev/null | grep -oP 'Version:\s*\K\S+' | head -1; }
@@ -53,6 +55,25 @@ v_nvim()       { command -v nvim       >/dev/null && nvim --version | head -1 | 
 v_fzf()        { command -v fzf        >/dev/null && fzf --version | awk '{print $1}'; }
 
 # ---------- updaters ----------
+
+update_git() {
+  local latest cur
+  latest=$(gh_latest git/git)
+  cur=$(v_git || true)
+  if [[ "$cur" == "$latest" ]]; then skip "git $cur up-to-date"; return; fi
+  info "git ${cur:-<none>} → $latest"
+  [[ $CHECK -eq 1 ]] && return
+  # Requires PPA git-core/ppa — install once with:
+  #   sudo add-apt-repository -y ppa:git-core/ppa && sudo apt update
+  if ! grep -q 'git-core' /etc/apt/sources.list.d/*.list 2>/dev/null \
+     && ! grep -rq 'git-core' /etc/apt/sources.list.d/*.sources 2>/dev/null; then
+    warn "PPA git-core/ppa not found — adding it"
+    sudo add-apt-repository -y ppa:git-core/ppa
+  fi
+  sudo apt update -qq
+  sudo apt install -y git
+  ok "git → $(v_git)"
+}
 
 update_dive() {
   local latest cur
@@ -157,6 +178,7 @@ done
 for t in "${TOOLS[@]}"; do
   section "$t"
   case "$t" in
+    git)           update_git ;;
     dive)          update_dive ;;
     lazygit)       update_lazygit ;;
     lazydocker)    update_lazydocker ;;

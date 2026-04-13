@@ -24,7 +24,7 @@ Documentation des outils et CLI disponibles sur ce WSL.
 
 | Outil | Commande | Chemin | Description |
 |-------|----------|--------|-------------|
-| [git](https://git-scm.com/) | `git` | `/usr/bin/git` | Contrôle de version |
+| [git](https://git-scm.com/) | `git` | `/usr/bin/git` | Contrôle de version (PPA `git-core/ppa` — dernière version stable) |
 | [curl](https://curl.se/) | `curl` | `/usr/bin/curl` | Requêtes HTTP en ligne de commande |
 | [cmake](https://cmake.org/) | `cmake` | `/usr/bin/cmake` | Système de build C/C++ |
 | [sqlite3](https://sqlite.org/) | `sqlite3` | `/usr/bin/sqlite3` | Base de données SQLite en CLI |

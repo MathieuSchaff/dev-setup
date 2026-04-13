@@ -194,12 +194,13 @@ Navigation type `less` — voir [Pager `less`](#pager-less--touches-communes).
 
 ### Dans l'interface fzf
 
-| Touche      | Effet                          |
-|-------------|--------------------------------|
-| `↑` / `↓`  | naviguer                       |
-| `Tab`       | sélection multiple             |
-| `Enter`     | valider                        |
-| `Ctrl+C`    | annuler                        |
+| Touche      | Effet                                        |
+|-------------|----------------------------------------------|
+| `↑` / `↓`   | naviguer                                     |
+| `Tab`       | sélection multiple (si supportée par l'alias)|
+| `Shift+Tab` | désélectionner                               |
+| `Enter`     | valider                                      |
+| `Ctrl+C`    | annuler                      |
 | `Ctrl+/`    | toggle / déplacer la preview   |
 | `Ctrl+D`    | scroll preview bas (demi-page) |
 | `Ctrl+U`    | scroll preview haut (demi-page)|
@@ -285,6 +286,8 @@ Utilisées par delta, glow `-p`, git log et `man`.
 | Commande                | Effet                                   |
 |-------------------------|-----------------------------------------|
 | `rg <pattern>`          | chercher récursivement                  |
+| `rg <pattern> -i`       | chercher sans tenir compte de la casse  |
+| `rg <pattern> -S`       | smart-case (casse si majuscule présente)|
 | `rg <pattern> -t js`    | dans les fichiers JS uniquement         |
 | `rg <pattern> -C 2`     | avec 2 lignes de contexte               |
 | `rg <pattern> -l`       | afficher seulement les noms de fichiers |
