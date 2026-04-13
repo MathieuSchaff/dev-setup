@@ -16,15 +16,18 @@ Met à jour les outils installés **manuellement** (téléchargement de binaire,
 | `ctop`       | binaire direct      | `curl -o /usr/local/bin/ctop`                      |
 | `neovim`     | tar.gz (GitHub)     | extract dans `/opt/nvim-linux-x86_64/`             |
 | `fzf`        | git repo (`~/.fzf`) | `git pull` + `./install --bin`                     |
+| `tmux`       | tar.gz (GitHub)     | compile depuis source (`./configure && make`)       |
+| `omz`        | git repo (`~/.oh-my-zsh`) | `git pull origin master`                     |
 
-> Tous comparent la version locale à la dernière release GitHub avant d'agir.
+> Tous comparent la version locale à la dernière release GitHub avant d'agir.  
+> Exception `omz` : pas de tag de version fiable, `git pull` décide.
 
 ## Ce qui n'est **pas** géré
 
 | Type        | Comment update              |
 |-------------|-----------------------------|
-| Outils apt (`ripgrep`, `fd`, `glow`, `tmux`, `zsh`...)        | `sudo apt update && sudo apt upgrade` |
-| Outils cargo (`delta`, `eza`, `bat`)                          | `cargo install-update -a` (après `cargo install cargo-update`) |
+| Outils apt (`ripgrep`, `fd`, `glow`, `zsh`...)                | `sudo apt update && sudo apt upgrade` |
+| Outils cargo (`delta`, `eza`, `bat`, `navi`)                  | `cargo install-update -a` (après `cargo install cargo-update`) |
 | Outils npm globaux (`gemini`, `@biomejs/biome`...)            | `npm update -g`               |
 | Outils bun globaux                                            | `bun update -g`               |
 | Python / uv / conda                                           | leur propre gestionnaire      |

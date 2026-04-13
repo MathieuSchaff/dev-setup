@@ -93,9 +93,9 @@ tmux ls
 
 $ category: echo -e "apt\nomz\nzsh-plugins\nrust\ncargo\ngo\nuv\ntools\nnode\nbun\npnpm\nconda" | fzf
 
-% update-tools, cli, binaries, binaires, dive, lazygit, lazydocker, ctop, neovim, fzf, outdated
+% update-tools, cli, binaries, binaires, dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz, outdated
 
-# Update all manually installed CLIs (dive, lazygit, lazydocker, ctop, neovim, fzf)
+# Update all manually installed CLIs (dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz)
 ~/dev-setup/scripts/update-tools.sh
 
 # Update a specific tool / Mettre à jour un outil précis

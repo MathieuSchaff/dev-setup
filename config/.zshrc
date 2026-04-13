@@ -75,7 +75,7 @@ _update_tools() {
     '(-c --check)'{-c,--check}'[check outdated without updating]' \
     '(-l --list)'{-l,--list}'[list managed tools]' \
     '(-h --help)'{-h,--help}'[show help]' \
-    '*:tool:(dive lazygit lazydocker ctop neovim fzf)'
+    '*:tool:(git dive lazygit lazydocker ctop neovim fzf tmux omz)'
 }
 compdef _update_tools update-tools
 

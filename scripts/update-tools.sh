@@ -7,7 +7,7 @@
 #   update-tools --check       # affiche seulement ce qui est outdated
 #   update-tools --list        # liste les outils supportés
 #
-# Outils gérés : dive, lazygit, lazydocker, ctop, neovim, fzf, git
+# Outils gérés : dive, lazygit, lazydocker, ctop, neovim, fzf, git, tmux, omz
 #
 # Note : les outils cargo (delta, eza, bat) se mettent à jour via
 #   `cargo install-update -a` (après `cargo install cargo-update`).
@@ -25,7 +25,7 @@ esac
 
 C_B=$'\e[1;34m'; C_G=$'\e[32m'; C_Y=$'\e[33m'; C_R=$'\e[31m'; C_D=$'\e[2m'; C_0=$'\e[0m'
 
-ALL_TOOLS=(git dive lazygit lazydocker ctop neovim fzf)
+ALL_TOOLS=(git dive lazygit lazydocker ctop neovim fzf tmux omz)
 
 usage() {
   sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
@@ -53,6 +53,8 @@ v_lazydocker() { command -v lazydocker >/dev/null && lazydocker --version 2>/dev
 v_ctop()       { command -v ctop       >/dev/null && ctop -v 2>&1 | grep -oP 'version \K[^,]+'; }
 v_nvim()       { command -v nvim       >/dev/null && nvim --version | head -1 | grep -oP 'v\K\S+'; }
 v_fzf()        { command -v fzf        >/dev/null && fzf --version | awk '{print $1}'; }
+v_tmux()       { command -v tmux       >/dev/null && tmux -V | grep -oP 'tmux \K\S+'; }
+v_omz()        { [[ -d ~/.oh-my-zsh ]] && ( cd ~/.oh-my-zsh && git describe --tags --abbrev=0 2>/dev/null || git rev-parse --short HEAD 2>/dev/null ); }
 
 # ---------- updaters ----------
 
@@ -160,6 +162,36 @@ update_fzf() {
   ok "fzf → $(v_fzf)"
 }
 
+update_tmux() {
+  local latest cur
+  latest=$(gh_latest tmux/tmux)
+  cur=$(v_tmux || true)
+  if [[ "$cur" == "$latest" ]]; then skip "tmux $cur up-to-date"; return; fi
+  info "tmux ${cur:-<none>} → $latest"
+  [[ $CHECK -eq 1 ]] && return
+  # Compile depuis les sources (pas de binaire précompilé officiel)
+  sudo apt install -y libevent-dev libncurses-dev build-essential bison pkg-config >/dev/null 2>&1
+  local tmp; tmp=$(mktemp -d)
+  trap 'rm -rf "$tmp"' RETURN
+  ( cd "$tmp" \
+      && curl -fsSLo tmux.tar.gz "https://github.com/tmux/tmux/releases/download/${latest}/tmux-${latest}.tar.gz" \
+      && tar xf tmux.tar.gz \
+      && cd "tmux-${latest}" \
+      && ./configure --prefix=/usr/local >/dev/null 2>&1 \
+      && make -j"$(nproc)" >/dev/null 2>&1 \
+      && sudo make install >/dev/null 2>&1 )
+  ok "tmux → $(v_tmux)"
+}
+
+update_omz() {
+  [[ ! -d ~/.oh-my-zsh ]] && { fail "~/.oh-my-zsh absent — skip"; return; }
+  local cur; cur=$(v_omz || true)
+  info "oh-my-zsh ${cur:-<unknown>} → latest"
+  [[ $CHECK -eq 1 ]] && { warn "omz: --check non supporté (git pull décide)"; return; }
+  ( cd ~/.oh-my-zsh && git pull --quiet origin master )
+  ok "oh-my-zsh → $(v_omz)"
+}
+
 # ---------- dispatch ----------
 
 CHECK=0
@@ -185,6 +217,8 @@ for t in "${TOOLS[@]}"; do
     ctop)          update_ctop ;;
     neovim|nvim)   update_neovim ;;
     fzf)           update_fzf ;;
+    tmux)          update_tmux ;;
+    omz)           update_omz ;;
     *)             fail "outil inconnu: $t (voir --list)" ;;
   esac
 done
