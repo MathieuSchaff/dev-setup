@@ -15,6 +15,9 @@ Thumbs.db
 *.bak
 *.tmp
 
+# Superpowers (generated plans/specs)
+docs/superpowers/
+
 # Editors
 .vscode/
 .idea/
