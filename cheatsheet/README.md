@@ -7,6 +7,7 @@ La table des fichiers est dans [`~/dev-setup/CLAUDE.md`](../CLAUDE.md) ; ce doss
 
 | Méthode     | Commande          | Description                                  |
 |-------------|-------------------|----------------------------------------------|
+| apps       | `gl apps.md`      | Gestion des paquets & formats (OS)           |
 | navi widget | `Ctrl+N`          | Sélection interactive, insère dans le shell  |
 | navi tmux   | `prefix + Ctrl+g` | Fonctionne dans vim, psql, SSH...            |
 | navi direct | `navi`            | Interface complète                           |
