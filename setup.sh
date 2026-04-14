@@ -14,6 +14,13 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo ""
 "$DIR/install.sh"
 
+# KDE/Plasma (Tuxedo OS) — intégration système (ksshaskpass, Konsole, ssh-agent systemd)
+# Skippé silencieusement hors KDE. --force pour outrepasser.
+if [[ "${XDG_CURRENT_DESKTOP:-}" =~ (KDE|Plasma) ]] || command -v plasmashell &>/dev/null; then
+    echo ""
+    "$DIR/bootstrap-kde.sh" "$@"
+fi
+
 echo ""
 printf "\033[32m%s\033[0m\n" "=== Full setup complete ==="
 echo "Run 'exec zsh' to reload your shell."

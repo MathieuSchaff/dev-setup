@@ -68,7 +68,7 @@ fi
 
 # ── 1. Base system packages ─────────────────────────────────────────────────
 
-blue "[1/9] Base system packages (apt)"
+blue "[1/10] Base system packages (apt)"
 if [[ "$DRYRUN" == "1" ]]; then
     dry "apt update && apt upgrade + install zsh curl git build-essential tmux ripgrep fd-find zoxide tree neofetch xclip sqlite3 postgresql-client python3 python3-pip python3-dev python3-venv libssl-dev libsqlite3-dev libicu-dev clang libclang-dev cmake ninja-build pkg-config wget unzip ffmpeg xvfb"
 else
@@ -103,7 +103,7 @@ fi
 
 # ── 2. Oh My Zsh + plugins ──────────────────────────────────────────────────
 
-blue "[2/9] Zsh + Oh My Zsh + plugins"
+blue "[2/10] Zsh + Oh My Zsh + plugins"
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     if [[ "$DRYRUN" == "1" ]]; then dry "install Oh My Zsh"; else
@@ -140,7 +140,7 @@ fi
 
 # ── 3. Rust + cargo tools ───────────────────────────────────────────────────
 
-blue "[3/9] Rust + cargo tools"
+blue "[3/10] Rust + cargo tools"
 
 if ! installed rustc; then
     if [[ "$DRYRUN" == "1" ]]; then dry "install Rust via rustup"; else
@@ -174,7 +174,7 @@ done
 
 # ── 4. Glow ──────────────────────────────────────────────────────────────────
 
-blue "[4/9] Glow (markdown reader)"
+blue "[4/10] Glow (markdown reader)"
 
 # Note: snap doesn't work in WSL2 — prefer go install
 if ! installed glow; then
@@ -192,7 +192,7 @@ fi
 
 # ── 5. Node (nvm) + Bun ─────────────────────────────────────────────────────
 
-blue "[5/9] Node (nvm) + Bun"
+blue "[5/10] Node (nvm) + Bun"
 
 export NVM_DIR="$HOME/.nvm"
 if [ ! -d "$NVM_DIR" ]; then
@@ -233,7 +233,7 @@ fi
 
 # ── 6. fzf ───────────────────────────────────────────────────────────────────
 
-blue "[6/9] fzf"
+blue "[6/10] fzf"
 
 if [ ! -d "$HOME/.fzf" ]; then
     if [[ "$DRYRUN" == "1" ]]; then dry "clone + install fzf"; else
@@ -246,7 +246,7 @@ fi
 
 # ── 7. Lazygit & Lazydocker ────────────────────────────────────────────────
 
-blue "[7/9] Lazygit & Lazydocker"
+blue "[7/10] Lazygit & Lazydocker"
 
 if ! installed lazygit; then
     if [[ "$DRYRUN" == "1" ]]; then dry "install lazygit (GitHub release)"; else
@@ -271,7 +271,7 @@ fi
 
 # ── 8. Neovim & Other tools ──────────────────────────────────────────────────
 
-blue "[8/9] Neovim, Dive, Ctop"
+blue "[8/10] Neovim, Dive, Ctop"
 
 if ! installed nvim; then
     if [[ "$DRYRUN" == "1" ]]; then dry "install Neovim (GitHub release → /opt/)"; else
@@ -306,7 +306,7 @@ fi
 
 # ── 9. Tmux TPM ─────────────────────────────────────────────────────────────
 
-blue "[9/9] Tmux TPM"
+blue "[9/10] Tmux TPM"
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     if [[ "$DRYRUN" == "1" ]]; then dry "clone TPM (tmux plugin manager)"; else
@@ -316,6 +316,71 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 else
     echo "  TPM already installed"
 fi
+
+# ── 10. Zsh completions ─────────────────────────────────────────────────────
+# Génère les complétions zsh manquantes dans ~/.oh-my-zsh/custom/completions/
+# (déjà dans le fpath par défaut d'oh-my-zsh, compinit les charge au prochain shell).
+# Chaque complétion est skippée si le binaire source n'est pas installé, ou si
+# le fichier est déjà présent → idempotent.
+
+blue "[10/10] Zsh completions"
+
+COMPDIR="$HOME/.oh-my-zsh/custom/completions"
+mkdir -p "$COMPDIR"
+
+gen_completion() {
+    # $1: nom de la complétion (fichier _<nom>), $2: binaire à vérifier, $3: commande
+    local name="$1" bin="$2" cmd="$3"
+    local target="$COMPDIR/_$name"
+    if [ -s "$target" ]; then echo "  _$name already present"; return; fi
+    if ! installed "$bin"; then yellow "  skipped _$name ($bin not installed)"; return; fi
+    if [[ "$DRYRUN" == "1" ]]; then dry "$cmd > $target"; return; fi
+    eval "$cmd" > "$target"
+    green "  _$name generated"
+}
+
+dl_completion() {
+    # $1: nom, $2: binaire à vérifier, $3: URL upstream
+    local name="$1" bin="$2" url="$3"
+    local target="$COMPDIR/_$name"
+    if [ -s "$target" ]; then echo "  _$name already present"; return; fi
+    if ! installed "$bin"; then yellow "  skipped _$name ($bin not installed)"; return; fi
+    if [[ "$DRYRUN" == "1" ]]; then dry "curl -fsSL $url -o $target"; return; fi
+    curl -fsSL "$url" -o "$target"
+    green "  _$name downloaded"
+}
+
+# Auto-générées par le binaire source
+gen_completion rustup   rustup   "rustup completions zsh"
+gen_completion cargo    rustup   "rustup completions zsh cargo"
+gen_completion gh       gh       "gh completion -s zsh"
+gen_completion starship starship "starship completions zsh"
+gen_completion glow     glow     "glow completion zsh"
+gen_completion pnpm     pnpm     "pnpm completion zsh"
+
+# Téléchargées depuis le repo upstream (pas de sous-commande `completions`)
+dl_completion eza   eza   "https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza"
+dl_completion delta delta "https://raw.githubusercontent.com/dandavison/delta/main/etc/completion/completion.zsh"
+
+# bun — cas spécial : dumpe dans ~/.bun/_bun, sourcé directement par .zshrc (pas via fpath)
+if installed bun; then
+    if [ ! -s "$HOME/.bun/_bun" ]; then
+        if [[ "$DRYRUN" == "1" ]]; then dry "bun completions"
+        else
+            bun completions >/dev/null 2>&1 || true
+            green "  _bun installed (~/.bun/_bun)"
+        fi
+    else
+        echo "  _bun already present (~/.bun/_bun)"
+    fi
+else
+    yellow "  skipped _bun (bun not installed)"
+fi
+
+# bat : upstream ne publie pas de complétion zsh (seulement bash/fish/powershell).
+# La version apt de bat dépose _bat dans /usr/share/zsh/vendor-completions/. Ici
+# bat vient de cargo, donc pas de _bat. À écrire à la main ou installer la version
+# apt en parallèle si besoin.
 
 # ── Optional tools ───────────────────────────────────────────────────────────
 
@@ -366,6 +431,7 @@ green "=== Bootstrap complete ==="
 echo ""
 echo "Next steps:"
 echo "  1. Run ./install.sh to deploy configs (symlinks)"
-echo "  2. exec zsh to reload your shell"
+echo "  2. exec zsh to reload your shell (picks up new custom completions)"
 echo "  3. In tmux: Ctrl+b + I to install tmux plugins"
 echo "  4. Generate SSH key: ssh-keygen -t ed25519"
+echo "  5. On KDE/Plasma: ./bootstrap-kde.sh for ssh-agent+KWallet+ksshaskpass+Konsole"

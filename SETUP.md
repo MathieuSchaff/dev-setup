@@ -368,6 +368,8 @@ Rien à ajouter dans `.zshrc` — le dossier `~/.oh-my-zsh/custom/completions/` 
 
 Section **spécifique à Tuxedo OS / KDE Plasma**. À ignorer sur WSL ou autre DE (GNOME, i3, etc.) — le setup diffère.
 
+> **Automatisation :** tout ce qui suit est scripté dans `~/dev-setup/bootstrap-kde.sh` (appelé automatiquement par `setup.sh` si `$XDG_CURRENT_DESKTOP` matche `KDE|Plasma`). Les sections ci-dessous documentent le détail pour débogage/contexte. Pour lancer manuellement : `./bootstrap-kde.sh` (ou `--dry-run` pour preview, `--force` pour outrepasser la détection KDE).
+
 ### 13.1 ssh-agent + KWallet + ksshaskpass (une seule saisie de passphrase)
 
 **Objectif :** ne plus retaper la passphrase à chaque `git push`. Stockage dans KWallet, déverrouillé automatiquement via PAM au login KDE.
