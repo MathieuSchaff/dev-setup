@@ -70,7 +70,7 @@ fi
 
 blue "[1/9] Base system packages (apt)"
 if [[ "$DRYRUN" == "1" ]]; then
-    dry "apt update && apt upgrade + install zsh curl git build-essential tmux ripgrep fd-find zoxide tree neofetch xclip sqlite3 postgresql-client python3 python3-pip python3-dev python3-venv libssl-dev libsqlite3-dev libicu-dev cmake ninja-build pkg-config wget unzip ffmpeg xvfb"
+    dry "apt update && apt upgrade + install zsh curl git build-essential tmux ripgrep fd-find zoxide tree neofetch xclip sqlite3 postgresql-client python3 python3-pip python3-dev python3-venv libssl-dev libsqlite3-dev libicu-dev clang libclang-dev cmake ninja-build pkg-config wget unzip ffmpeg xvfb"
 else
     sudo apt update && sudo apt upgrade -y
     sudo apt install -y \
@@ -79,6 +79,7 @@ else
         xclip sqlite3 postgresql-client \
         python3 python3-pip python3-dev python3-venv \
         libssl-dev libsqlite3-dev libicu-dev \
+        clang libclang-dev \
         cmake ninja-build pkg-config wget unzip \
         ffmpeg xvfb
     green "  done"

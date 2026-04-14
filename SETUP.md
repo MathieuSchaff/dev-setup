@@ -89,7 +89,8 @@ sudo apt install -y \
   ripgrep fd-find zoxide tree neofetch \
   xclip sqlite3 postgresql-client \
   python3 python3-pip python3-dev \
-  libssl-dev cmake wget unzip
+  libssl-dev cmake wget unzip \
+  clang libclang-dev
 ```
 
 ---
