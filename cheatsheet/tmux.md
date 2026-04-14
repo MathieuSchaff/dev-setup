@@ -1,7 +1,7 @@
 # Tmux
 
 Multiplexeur de terminal — sessions persistantes, splits, copy-mode.
-Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b`**.
+Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème **Catppuccin macchiato** · préfixe **`Ctrl+b`**.
 
 ## Sommaire
 
@@ -71,9 +71,10 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 
 | Raccourci          | Effet                                            |
 |--------------------|--------------------------------------------------|
-| `Ctrl+b %`         | Split **vertical** (nouveau pane à droite)       |
-| `Ctrl+b "`         | Split **horizontal** (nouveau pane en bas)       |
-| `Ctrl+b ←↑↓→`      | Naviguer entre panes                             |
+| `Ctrl+b %`         | Split **vertical** — démarre dans le cwd du pane |
+| `Ctrl+b "`         | Split **horizontal** — démarre dans le cwd du pane |
+| `Ctrl+h/j/k/l`     | Naviguer entre panes (sans préfixe, via vim-tmux-navigator) |
+| `Ctrl+b ←↑↓→`      | Naviguer entre panes (fallback)                  |
 | `Ctrl+b o`         | Pane suivant                                     |
 | `Ctrl+b ;`         | Dernier pane utilisé                             |
 | `Ctrl+b z`         | **Zoom** / dézoom sur le pane courant            |
@@ -84,7 +85,8 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 | `Ctrl+b Ctrl+←↑↓→` | Redimensionner le pane courant                   |
 | `Ctrl+b q`         | Afficher le numéro des panes (puis `N` pour aller)|
 
-> Tes splits n'ont **pas** de binding `|` / `-` custom — utilise les defaults `%` et `"`.
+> Les splits (`%` et `"`) démarrent dans le **cwd du pane courant** (override des defaults tmux qui démarrent dans `$HOME`).
+> `Ctrl+h/j/k/l` (sans préfixe) navigue de manière transparente entre panes tmux **et** splits Neovim via le plugin `vim-tmux-navigator`.
 
 ---
 
@@ -104,11 +106,11 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 | `n` / `N`           | Résultat suivant / précédent                |
 | `v`                 | Début de sélection                          |
 | `Ctrl+v`            | Sélection **rectangulaire**                 |
-| `y`                 | Copier dans le clipboard système (xclip)    |
+| `y`                 | Copier dans le clipboard système (via `tmux-yank` → `wl-copy` sous Wayland) |
 | `q` / `Esc`         | Quitter le copy mode                        |
 | `Ctrl+b ]`          | Coller le dernier buffer                    |
 
-> `tmux-yank` est installé → `y` copie directement dans le clipboard Windows/Linux.
+> `tmux-yank` est installé → `y` copie directement dans le clipboard système. Sur Wayland, utilise `wl-copy` (paquet `wl-clipboard`). Fallback automatique sur `xclip`/`xsel` si absent.
 > Souris : `mouse on` → tu peux aussi sélectionner à la souris.
 
 ---
@@ -139,17 +141,21 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 | `renumber-windows`  | `on`            | Renumérotation auto à la fermeture      |
 | `mode-keys`         | `vi`            | Copy mode vim-like                      |
 | `set-titles`        | `on`            | Titre de la fenêtre terminale dynamique |
+| `history-limit`     | `50000`         | Scrollback large (défaut : 2000)        |
 
 ---
 
 ## Plugins (via TPM)
 
-| Plugin                       | Rôle                                            |
-|------------------------------|-------------------------------------------------|
-| `tmux-plugins/tpm`           | Gestionnaire de plugins (requis)                |
-| `tmux-plugins/tmux-sensible` | Defaults sensés (escape-time, history, utf8...) |
-| `tmux-plugins/tmux-yank`     | Copie du copy-mode vers le clipboard système    |
-| `catppuccin/tmux#v2.3.0`     | Thème Catppuccin (flavor macchiato) — **pinné en v2.3.0** car l'API a été réécrite en v2 mi-2024 |
+| Plugin                         | Rôle                                            |
+|--------------------------------|-------------------------------------------------|
+| `tmux-plugins/tpm`             | Gestionnaire de plugins (requis)                |
+| `tmux-plugins/tmux-sensible`   | Defaults sensés (escape-time, history, utf8...) |
+| `tmux-plugins/tmux-yank`       | Copie du copy-mode vers le clipboard système    |
+| `christoomey/vim-tmux-navigator` | `Ctrl+h/j/k/l` navigue entre panes tmux ET splits Neovim (plugin requis aussi côté nvim) |
+| `tmux-plugins/tmux-resurrect`  | Sauvegarde/restore manuel des sessions (`prefix + Ctrl+s` / `prefix + Ctrl+r`) |
+| `tmux-plugins/tmux-continuum`  | Sauvegarde auto toutes les 15 min + restore au démarrage (`@continuum-restore 'on'`) |
+| `catppuccin/tmux#v2.3.0`       | Thème Catppuccin (flavor macchiato) — **pinné en v2.3.0** car l'API a été réécrite en v2 mi-2024 |
 
 ### TPM — commandes
 
@@ -245,9 +251,16 @@ existantes pour l'éviter — utilise `tn <nom>` pour créer en arrière-plan.
 
 Sans ça, le passage en mode NORMAL après `Esc` a un délai perceptible.
 
-### Clipboard WSL
+### Clipboard Wayland (Tuxedo OS / KDE)
 
-`xclip` doit être installé (`sudo apt install xclip`) pour que `y` fonctionne.
+Installer **`wl-clipboard`** (`sudo apt install wl-clipboard`) pour `wl-copy`/`wl-paste`. `tmux-yank` détecte auto l'outil présent et fallback sur `xclip` (XWayland) si absent. `wl-copy` natif est préféré.
+
+### Resurrect + Continuum
+
+- **Sauvegarde auto** toutes les 15 min dans `~/.tmux/resurrect/` (continuum).
+- **Restore auto** au démarrage de tmux (flag `@continuum-restore 'on'`).
+- **Manuel** : `prefix + Ctrl+s` (save) / `prefix + Ctrl+r` (restore).
+- Contenu des panes capturé (`@resurrect-capture-pane-contents 'on'`) — buffer visible restauré après reboot.
 
 ### `Ctrl+g` sans préfixe
 

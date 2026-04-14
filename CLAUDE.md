@@ -19,19 +19,21 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/cheatsheet/navi.md`         | Navi — bindings, config, syntax cheat files  |
 | `~/dev-setup/cheatsheet/zed.md`          | Zed — keymaps vim, LSP TS/Biome/vtsls, Ollama |
 | `~/dev-setup/cheatsheet/dive.md`         | Dive — TUI d'exploration d'images Docker, config, mode CI |
+| `~/dev-setup/cheatsheet/ghostty.md`      | Ghostty — config, raccourcis, thèmes, shell integration, pièges Wayland |
 | `~/dev-setup/cheatsheet/update-tools.md` | Script `update-tools` — updater des CLI hors apt/cargo |
 | `~/dev-setup/cheatsheet/plugins/`        | Cheatsheets plugins & MCP servers Claude Code |
 | `~/dev-setup/scripts/update-tools.sh`    | Script d'update des outils hors package manager (dive, lazygit, ctop, ...) |
 | `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, dive, linux, ssh, bun, npm, curl, navi |
-| `~/dev-setup/.gitconfig`                 | Config git de référence (à copier dans `~/.gitconfig`) |
-| `~/dev-setup/.zshrc`                     | Zshrc de référence                           |
-| `~/dev-setup/.tmux.conf`                 | Tmux de référence                            |
-| `~/dev-setup/.config/lazygit/config.yml` | Config lazygit de référence                  |
-| `~/dev-setup/.config/navi/config.yaml`   | Config navi (cheats path, couleurs, shell)   |
-| `~/dev-setup/.config/zed/settings.json`  | Config Zed (thème, LSP, Biome, Ollama)       |
-| `~/dev-setup/.config/zed/keymap.json`    | Keymaps Zed (vim normal/visual/insert)       |
-| `~/dev-setup/.dive.yaml`                 | Config dive de référence (copie de `~/.dive.yaml`) |
-| `~/dev-setup/.config/starship.toml`      | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
+| `~/dev-setup/config/.gitconfig`          | Config git de référence (symlink cible de `~/.gitconfig`) |
+| `~/dev-setup/config/.zshrc`              | Zshrc de référence                           |
+| `~/dev-setup/config/.tmux.conf`          | Tmux de référence                            |
+| `~/dev-setup/config/.config/lazygit/config.yml` | Config lazygit de référence           |
+| `~/dev-setup/config/.config/navi/config.yaml`   | Config navi (cheats path, couleurs, shell) |
+| `~/dev-setup/config/.config/zed/settings.json`  | Config Zed (thème, LSP, Biome, Ollama) |
+| `~/dev-setup/config/.config/zed/keymap.json`    | Keymaps Zed (vim normal/visual/insert) |
+| `~/dev-setup/config/.config/ghostty/config`     | Config Ghostty (Catppuccin Macchiato, JetBrainsMono Nerd Font) |
+| `~/dev-setup/config/.dive.yaml`          | Config dive de référence                     |
+| `~/dev-setup/config/.config/starship.toml` | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
 
 > Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc. (sous `~/` via symlinks créés par `install.sh`).  
 > `~/dev-setup/` sert de backup/référence versionné.  
@@ -39,7 +41,8 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 
 ## Outils installés (résumé)
 - **Shell** : zsh + Oh My Zsh, prompt Starship (Catppuccin macchiato, texte coloré sans bg), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`. Complétions custom dans `~/.oh-my-zsh/custom/completions/` pour : `bun`, `rustup`, `cargo`, `gh`, `starship`, `glow`, `pnpm`, `eza`, `delta`.
-- **Terminal multiplexer** : tmux + TPM, thème Catppuccin **v2.3.0** macchiato (API v2 — pinned dans `.tmux.conf`)
+- **Terminal multiplexer** : tmux + TPM, thème Catppuccin **v2.3.0** macchiato (API v2 — pinned dans `.tmux.conf`). Plugins : `tpm`, `tmux-sensible`, `tmux-yank`, `vim-tmux-navigator`, `tmux-resurrect`, `tmux-continuum`, `catppuccin/tmux`.
+- **Terminal émulateur** : **Ghostty** 1.3.1 (Wayland natif, GPU, GTK4). Config `~/.config/ghostty/` symlinkée vers `~/dev-setup/config/.config/ghostty/`. Thème Catppuccin Macchiato, JetBrainsMono Nerd Font 12pt. Aucun binding de split natif — tmux gère le multi-pane.
 - **Éditeur** : Neovim (pre-built, `/opt/nvim/bin/nvim`), config AstroNvim v6 dans `~/.config/nvim/`
 - **Git TUI** : lazygit (`/usr/local/bin/lazygit`), alias `lg`, popup tmux via `Ctrl+g`
 - **Diff** : delta (`~/.cargo/bin/delta`) — configuré dans `~/.gitconfig` et `~/.config/lazygit/config.yml`
@@ -50,8 +53,8 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 - **Runtimes** : Node (nvm), Bun, Python (miniconda), Go (latest via go.dev), Rust (rustup)
 - **Package managers** : cargo, npm, pnpm, bun, uv, conda
 - **AI CLIs** : claude (`~/.local/bin/claude`), gemini (npm global), kimi
-- **Éditeur additionnel** : Zed — vim_mode + Biome + vtsls. Sur Tuxedo OS, config dans `~/.config/zed/`. Backup référence dans `~/dev-setup/.config/zed/`.
-- **Terminal émulateur** (Tuxedo OS / KDE) : Konsole, profil custom `~/.local/share/konsole/Zsh.profile` (force `/usr/bin/zsh`, font `JetBrainsMono Nerd Font 12pt`)
+- **Éditeur additionnel** : Zed — vim_mode + Biome + vtsls. Sur Tuxedo OS, config dans `~/.config/zed/`. Backup référence dans `~/dev-setup/config/.config/zed/`.
+- **Clipboard Wayland** : `wl-clipboard` (`wl-copy`/`wl-paste`) — utilisé par `tmux-yank` via auto-détection, fallback sur `xclip` via XWayland si absent.
 - **ssh-agent** : real ssh-agent via systemd user (`~/.config/systemd/user/ssh-agent.service`), socket `$XDG_RUNTIME_DIR/ssh-agent.socket`. Passphrase gérée par **ksshaskpass + KWallet** (prompt une fois au login, stockée dans KWallet). Autostart : `~/.config/autostart/ssh-add.desktop`.
 
 ## Config lazygit (ce qu'on a fait)

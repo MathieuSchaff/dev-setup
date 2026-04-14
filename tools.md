@@ -16,7 +16,8 @@ Documentation des outils et CLI installés (Tuxedo OS — Linux natif, précéde
 | [tmux](https://github.com/tmux/tmux) | `tmux` | `/usr/bin/tmux` | Multiplexeur de terminal |
 | [tree](https://linux.die.net/man/1/tree) | `tree` | `/usr/bin/tree` | Affiche l'arborescence des dossiers |
 | [neofetch](https://github.com/dylanaraps/neofetch) | `neofetch` | `/usr/bin/neofetch` | Infos système dans le terminal |
-| [xclip](https://github.com/astrand/xclip) | `xclip` | `/usr/bin/xclip` | Copier/coller depuis le terminal |
+| [xclip](https://github.com/astrand/xclip) | `xclip` | `/usr/bin/xclip` | Copier/coller depuis le terminal (X11, fallback sous Wayland via XWayland) |
+| [wl-clipboard](https://github.com/bugaevc/wl-clipboard) | `wl-copy` / `wl-paste` | `/usr/bin/wl-copy` | Clipboard natif Wayland (utilisé par `tmux-yank`) |
 | [zsh](https://www.zsh.org/) | `zsh` | `/usr/bin/zsh` | Shell principal |
 | [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) | (plugin zsh) | `/usr/share/zsh-syntax-highlighting/` | Coloration syntaxique dans zsh |
 
@@ -258,6 +259,17 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 ---
 
+## Terminal émulateur — Ghostty
+
+> Cheatsheet complet → **[cheatsheet/ghostty.md](./cheatsheet/ghostty.md)**
+
+- **Binaire** : `/usr/bin/ghostty` (version 1.3.1)
+- **Config source** : `~/.config/ghostty/` → symlink vers `~/dev-setup/config/.config/ghostty/`
+- **Stack** : Catppuccin Macchiato, JetBrainsMono Nerd Font 12pt, Wayland natif (KWin), `window-decoration = client` (requis GTK/Wayland), blur KDE, `copy-on-select`, scrollback 100k lignes.
+- **Pas de splits/tabs bindés** : tmux prend en charge toute la gestion multi-pane.
+
+---
+
 ## Claude Code — Plugins installés
 
 > Chemin : `~/.claude/plugins/cache/claude-plugins-official/`
@@ -299,6 +311,7 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 | `~/.config/navi/` | `~/dev-setup/config/.config/navi/` |
 | `~/.config/glow/` | `~/dev-setup/config/.config/glow/` |
 | `~/.config/starship.toml` | `~/dev-setup/config/.config/starship.toml` |
+| `~/.config/ghostty/` | `~/dev-setup/config/.config/ghostty/` |
 
 > Configs Zed et `~/CLAUDE.md` sont copiés (pas symlinkés) via le hook `pre-commit`.
 
@@ -337,15 +350,20 @@ Barre de statut affiche : `répertoire · user · session`
 |--------|-------------|
 | `tmux-plugins/tpm` | Gestionnaire de plugins tmux |
 | `tmux-plugins/tmux-sensible` | Defaults sensibles |
-| `tmux-plugins/tmux-yank` | Copie dans le clipboard système |
-| `catppuccin/tmux` | Thème Catppuccin |
+| `tmux-plugins/tmux-yank` | Copie dans le clipboard système (détecte wl-copy/xclip) |
+| `christoomey/vim-tmux-navigator` | Navigation transparente tmux ↔ Neovim (`Ctrl+h/j/k/l`) |
+| `tmux-plugins/tmux-resurrect` | Sauvegarde/restore manuel des sessions |
+| `tmux-plugins/tmux-continuum` | Sauvegarde auto + restore au démarrage |
+| `catppuccin/tmux#v2.3.0` | Thème Catppuccin (pinné en v2.3.0) |
 
 ### Bindings personnalisés
 
 | Raccourci | Effet |
 |-----------|-------|
 | `Ctrl+g` | Ouvrir lazygit en popup flottant (sans préfixe) |
-| `prefix + Ctrl+g` | Ouvrir navi dans un split temporaire |
+| `Alt+n` | Ouvrir navi dans un split temporaire |
+| `Ctrl+h/j/k/l` | Naviguer panes tmux / splits Neovim (vim-tmux-navigator) |
+| `prefix + "` / `%` | Split démarrant dans le cwd du pane courant |
 
 ### Copy mode (vi)
 
@@ -353,7 +371,7 @@ Barre de statut affiche : `répertoire · user · session`
 |-----------|--------|
 | `v` | Début de sélection |
 | `C-v` | Sélection rectangulaire |
-| `y` | Copie dans le clipboard (`xclip`) |
+| `y` | Copie dans le clipboard (via `tmux-yank` → `wl-copy` sous Wayland) |
 
 ---
 

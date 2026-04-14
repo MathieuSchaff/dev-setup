@@ -1,0 +1,21 @@
+# Config Tuxedo/KDE (Wayland)
+window-decoration = client
+linux-cgroup = never
+
+# Apparence
+theme = Catppuccin Macchiato
+font-family = JetBrainsMono Nerd Font
+font-size = 12
+background-opacity = 0.92
+background-blur-radius = 20
+window-padding-x = 8
+window-padding-y = 8
+cursor-style = block
+cursor-style-blink = false
+
+# Comportement
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+confirm-close-surface = false
+scrollback-limit = 100000
+window-save-state = always

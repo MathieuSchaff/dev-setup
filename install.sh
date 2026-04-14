@@ -85,6 +85,7 @@ backup_and_link "$CFG/.config/eza"                 "$HOME/.config/eza"
 backup_and_link "$CFG/.config/navi"                "$HOME/.config/navi"
 backup_and_link "$CFG/.config/glow"                "$HOME/.config/glow"
 backup_and_link "$CFG/.config/starship.toml"       "$HOME/.config/starship.toml"
+backup_and_link "$CFG/.config/ghostty"             "$HOME/.config/ghostty"
 
 # ── Local / Secrets ───────────────────────────────────────────────────────────
 # Création automatique de fichiers locaux vides s'ils n'existent pas.
