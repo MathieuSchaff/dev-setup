@@ -279,7 +279,7 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 ## Dotfiles
 
-> Dépôt : `~/dev-setup/` → github.com/MathieuSchaff/dotfiles-2026  
+> Dépôt : `~/dev-setup/` → github.com/MathieuSchaff/dev-setup  
 > Méthode : `install.sh` crée des **symlinks** — les fichiers actifs pointent directement vers le repo
 
 ### Fichiers symlinkés
