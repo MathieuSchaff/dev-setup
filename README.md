@@ -22,7 +22,7 @@ Le hook `pre-commit` sync uniquement les fichiers qui ne peuvent pas être symli
 Voir **[SETUP.md](./SETUP.md)** pour la séquence complète d'installation.
 
 ```bash
-git clone https://github.com/MathieuSchaff/dotfiles-2026 ~/dev-setup
+git clone https://github.com/MathieuSchaff/dev-setup ~/dev-setup
 chmod +x ~/dev-setup/setup.sh ~/dev-setup/bootstrap.sh ~/dev-setup/install.sh
 
 # Tout d'un coup (outils + configs)

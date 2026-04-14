@@ -1,3 +1,7 @@
+# Force $SHELL to zsh — la session KDE peut hériter d'un ancien $SHELL=/bin/bash
+# (avant chsh), ce qui casse fzf preview, tmux popup, etc. qui spawn via $SHELL.
+export SHELL=/usr/bin/zsh
+
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""  # prompt géré par Starship (~/.config/starship.toml)
@@ -211,6 +215,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="/opt/nvim/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:$HOME/go/bin"
 export PATH="$PATH:/mnt/c/Program Files/GitHub CLI"
 
 # bun completions

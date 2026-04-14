@@ -76,7 +76,9 @@ sudo echo "OK"         # doit afficher OK sans erreur
 9. [Tmux + TPM](#9-tmux--tpm)
 10. [SSH pour GitHub](#10-ssh-pour-github)
 11. [Outils optionnels](#11-outils-optionnels)
-12. [Checklist finale](#12-checklist-finale)
+12. [Complétions zsh avancées](#12-complétions-zsh-avancées)
+13. [KDE / Tuxedo OS — intégration système](#13-kde--tuxedo-os--intégration-système)
+14. [Checklist finale](#14-checklist-finale)
 
 ---
 
@@ -235,7 +237,7 @@ C'est l'étape centrale — elle applique tous les fichiers de configuration.
 ```bash
 # Cloner le repo de dotfiles
 # HTTPS ici car SSH n'est pas encore configuré (clés générées à l'étape 10)
-git clone https://github.com/MathieuSchaff/dotfiles-2026 ~/dev-setup
+git clone https://github.com/MathieuSchaff/dev-setup ~/dev-setup
 
 # Rendre les scripts exécutables
 chmod +x ~/dev-setup/setup.sh ~/dev-setup/bootstrap.sh ~/dev-setup/install.sh
@@ -279,7 +281,7 @@ tmux
 # Dans tmux : Ctrl+b + I
 ```
 
-Plugins installés : `catppuccin/tmux`, `tmux-sensible`, `tmux-yank`.
+Plugins installés : `catppuccin/tmux#v2.3.0` (pinné — l'API v2 est incompatible avec v0.3/v1, voir [cheatsheet/tmux.md](./cheatsheet/tmux.md#thème-catppuccin-macchiato-api-v2)), `tmux-sensible`, `tmux-yank`.
 
 ---
 
@@ -322,7 +324,166 @@ sudo apt install bottom   # ou : cargo install bottom
 
 ---
 
-## 12. Checklist finale
+## 12. Complétions zsh avancées
+
+Une fois les outils installés (cargo, go, bun, pnpm…), certains ne déposent pas automatiquement leur complétion zsh dans `/usr/share/zsh/vendor-completions/` (c'est le cas dès qu'on installe hors apt — via `cargo install`, `curl | bash`, `go install`…). On génère les manquantes dans `~/.oh-my-zsh/custom/completions/` (déjà dans le fpath par défaut, `compinit` les charge au prochain shell).
+
+### Auto-générées par le binaire
+
+```bash
+mkdir -p ~/.oh-my-zsh/custom/completions
+cd ~/.oh-my-zsh/custom/completions
+
+rustup completions zsh        > _rustup
+rustup completions zsh cargo  > _cargo      # wrapper → $(rustc --print sysroot)/share/zsh/site-functions/_cargo
+gh completion -s zsh          > _gh
+starship completions zsh      > _starship
+glow completion zsh           > _glow
+pnpm completion zsh           > _pnpm
+bun completions                              # dépose ~/.bun/_bun, déjà sourcé par .zshrc
+```
+
+### Téléchargées depuis le repo upstream (pas de sous-commande `completions`)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza \
+  -o ~/.oh-my-zsh/custom/completions/_eza
+
+curl -fsSL https://raw.githubusercontent.com/dandavison/delta/main/etc/completion/completion.zsh \
+  -o ~/.oh-my-zsh/custom/completions/_delta
+```
+
+### Activation
+
+Rien à ajouter dans `.zshrc` — le dossier `~/.oh-my-zsh/custom/completions/` est déjà dans le fpath. Ouvrir un nouveau shell suffit. Si une complétion ne prend pas : `rm ~/.zcompdump*` et relancer zsh.
+
+### Non couvert par cette liste
+
+- **`bat`** : le repo upstream (sharkdp/bat) ne publie pas de complétion zsh (seulement bash/fish/powershell). La version apt de bat dépose `_bat` dans `/usr/share/zsh/vendor-completions/`, à installer en parallèle si besoin.
+- **`docker`** : sa complétion arrive automatiquement via le paquet apt `docker-ce-cli` si/quand docker est installé.
+
+---
+
+## 13. KDE / Tuxedo OS — intégration système
+
+Section **spécifique à Tuxedo OS / KDE Plasma**. À ignorer sur WSL ou autre DE (GNOME, i3, etc.) — le setup diffère.
+
+### 13.1 ssh-agent + KWallet + ksshaskpass (une seule saisie de passphrase)
+
+**Objectif :** ne plus retaper la passphrase à chaque `git push`. Stockage dans KWallet, déverrouillé automatiquement via PAM au login KDE.
+
+```bash
+# 1. Installer le prompt KDE (si pas déjà présent)
+sudo apt install -y ksshaskpass
+
+# 2. Neutraliser gpg-agent en tant qu'agent SSH (Tuxedo OS l'active par défaut
+#    via le preset global gpg-agent-ssh.socket)
+systemctl --user mask gpg-agent-ssh.socket
+```
+
+Écrire `~/.config/systemd/user/ssh-agent.service` :
+
+```ini
+[Unit]
+Description=SSH Agent
+After=graphical-session-pre.target
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+
+[Install]
+WantedBy=default.target
+```
+
+Écrire `~/.config/environment.d/10-ssh.conf` :
+
+```
+SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/ssh-agent.socket
+SSH_ASKPASS=/usr/bin/ksshaskpass
+SSH_ASKPASS_REQUIRE=prefer
+```
+
+Écrire `~/.config/autostart/ssh-add.desktop` (remplacer le chemin de la clé si besoin) :
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=ssh-add
+Comment=Load ssh key into the agent at KDE login
+Exec=ssh-add /home/USER/.ssh/id_rsa
+X-KDE-AutostartScript=true
+OnlyShowIn=KDE;
+Terminal=false
+```
+
+Activer :
+
+```bash
+systemctl --user daemon-reload
+systemctl --user enable --now ssh-agent.service
+```
+
+**Puis logout/login KDE** (ou reboot). Au premier login, ksshaskpass affiche un prompt passphrase — **cocher "Mémoriser dans le portefeuille"**. Aux logins suivants : zéro prompt tant que KWallet reste déverrouillé (ce qui est le cas par défaut si le mot de passe KWallet = le mot de passe login Linux, configuré via PAM).
+
+**Vérifications :**
+```bash
+echo $SSH_AUTH_SOCK   # doit pointer /run/user/<uid>/ssh-agent.socket
+ssh-add -l            # doit lister la clé
+ssh -T git@github.com # doit saluer sans prompt
+```
+
+**Si ça déconne :**
+- Prompt à chaque login = KWallet pas déverrouillé automatiquement → System Settings → KDE Wallet → mot de passe Wallet = mot de passe login + activer déverrouillage PAM.
+- Pas de fenêtre ksshaskpass = vérifier que l'autostart est actif (System Settings → Autostart) et `env | grep SSH`.
+
+### 13.2 Konsole — profil zsh + Nerd Font
+
+**Problème sur installation fraîche :** Konsole lance `bash` par défaut (même avec `chsh -s /usr/bin/zsh` appliqué, car la session KDE a souvent démarré avant `chsh` et hérite d'un `$SHELL` figé), et utilise une font non-Nerd (icônes eza/starship illisibles).
+
+#### Fonts
+
+```bash
+# JetBrainsMono Nerd Font (recommandée pour Konsole)
+mkdir -p ~/.local/share/fonts/JetBrainsMonoNF
+cd ~/.local/share/fonts/JetBrainsMonoNF
+curl -fsSL -o JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
+unzip -o JetBrainsMono.zip && rm JetBrainsMono.zip
+
+# Rebuild du cache fontconfig
+fc-cache -fv
+```
+
+#### Profil Konsole
+
+Écrire `~/.local/share/konsole/Zsh.profile` :
+
+```ini
+[Appearance]
+ColorScheme=Breeze
+Font=JetBrainsMono Nerd Font,12,-1,5,50,0,0,0,0,0
+
+[General]
+Command=/usr/bin/zsh
+Name=Zsh
+Parent=FALLBACK/
+```
+
+Dans `~/.config/konsolerc`, ajouter (ou éditer si section existe) :
+
+```ini
+[Desktop Entry]
+DefaultProfile=Zsh.profile
+```
+
+Redémarrer Konsole → les nouveaux onglets lancent zsh directement (plus besoin de `exec zsh`), avec les icônes Nerd Font.
+
+**Note sur `$SHELL` :** même après ça, `$SHELL` reste `/bin/bash` jusqu'au prochain logout/login KDE complet (variable figée par la session manager). Pour corriger immédiatement : `export SHELL=/usr/bin/zsh` dans le `.zshrc` (déjà présent dans `~/dev-setup/config/.zshrc`). Sinon `fzf` et autres outils spawneraient des sous-shells bash et ne chargeraient pas le `.zshrc` → cassure des alias/fonctions (`cs`, `lg`, etc.).
+
+---
+
+## 14. Checklist finale
 
 - [ ] Linux (Ubuntu/Debian) ou macOS disponible
 - [ ] Git disponible (`git --version`)
@@ -346,6 +507,9 @@ sudo apt install bottom   # ou : cargo install bottom
 - [ ] `lg` fonctionne (lazygit avec smart exit)
 - [ ] `Ctrl+g` ouvre lazygit en popup tmux
 - [ ] `git diff` utilise delta (côte-à-côte + syntax highlighting)
+- [ ] Complétions zsh avancées générées (`gh <TAB>`, `cargo <TAB>`, `eza --<TAB>`, etc. — voir section 12)
+- [ ] (Tuxedo OS / KDE uniquement) ssh-agent + KWallet : `git push` ne demande plus la passphrase (voir section 13.1)
+- [ ] (Tuxedo OS / KDE uniquement) Konsole lance zsh directement + icônes Nerd Font lisibles (voir section 13.2)
 
 ---
 

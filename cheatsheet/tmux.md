@@ -149,7 +149,7 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 | `tmux-plugins/tpm`           | Gestionnaire de plugins (requis)                |
 | `tmux-plugins/tmux-sensible` | Defaults sensés (escape-time, history, utf8...) |
 | `tmux-plugins/tmux-yank`     | Copie du copy-mode vers le clipboard système    |
-| `catppuccin/tmux`            | Thème Catppuccin (flavour macchiato)            |
+| `catppuccin/tmux#v2.3.0`     | Thème Catppuccin (flavor macchiato) — **pinné en v2.3.0** car l'API a été réécrite en v2 mi-2024 |
 
 ### TPM — commandes
 
@@ -161,15 +161,49 @@ Config : `~/.tmux.conf` · thème **Catppuccin macchiato** · préfixe **`Ctrl+b
 
 ---
 
-## Thème Catppuccin macchiato
+## Thème Catppuccin macchiato (API v2)
 
-Flavour forcé dans `.tmux.conf` (les 2 autres lignes `latte`/`frappe`/`mocha` en haut sont surchargées par la dernière).
+**Important :** catppuccin/tmux a été totalement réécrit en v2 mi-2024. L'API v1 (`@catppuccin_flavour`, `@catppuccin_window_left_separator`, `@catppuccin_status_modules_right`, `@catppuccin_status_fill`, `@catppuccin_window_default_fill` etc.) est **silencieusement ignorée** en v2. Pour rester prévisible, la version est **pinnée** dans `.tmux.conf` : `set -g @plugin 'catppuccin/tmux#v2.3.0'`.
 
-Barre de statut à droite : `directory · user · session`.
-Séparateurs : `window_left_separator ""`, `window_right_separator " "`, `window_middle_separator " █"`.
+### Options actives
 
-> Pour changer de flavour : éditer la dernière ligne `@catppuccin_flavour` dans `~/.tmux.conf`,
-> puis recharger la config.
+| Option                                       | Valeur       | Effet                                                              |
+|----------------------------------------------|--------------|--------------------------------------------------------------------|
+| `@catppuccin_flavor`                         | `macchiato`  | Palette (note : **flavor**, spelling US — c'était `flavour` en v1) |
+| `@catppuccin_window_status_style`            | `slanted`    | Séparateurs en biais (Powerline-like). Autres valeurs : `basic`, `rounded`, `custom`, `none` |
+| `@catppuccin_window_number_position`         | `right`      | Numéro de window à droite du texte                                 |
+| `@catppuccin_window_text`                    | `' #W'`      | Format tab inactive (`#W` = window name)                           |
+| `@catppuccin_window_current_text`            | `' #W'`      | Format tab active                                                  |
+
+### Modules status-right (v2 — assemblage explicite)
+
+En v2, plus de `@catppuccin_status_modules_right` — il faut composer `status-right` toi-même avec les modules catppuccin comme format strings :
+
+```tmux
+set -g status-right '#{E:@catppuccin_status_directory}'
+set -agF status-right '#{E:@catppuccin_status_user}'
+set -agF status-right '#{E:@catppuccin_status_session}'
+```
+
+Modules dispo (fichiers dans `~/.tmux/plugins/tmux/status/`) : `application`, `battery`, `clima`, `cpu`, `date_time`, `directory`, `gitmux`, `host`, `kube`, `load`, `pomodoro_plus`, `ram`, `session`, `uptime`, `user`, `weather`.
+
+### Chargement du plugin
+
+En v2, il faut **explicitement** exécuter `catppuccin.tmux` dans la config (même avec TPM) :
+
+```tmux
+run '~/.tmux/plugins/tmux/catppuccin.tmux'
+```
+
+Ordre dans `.tmux.conf` : options `@catppuccin_*` → `run catppuccin.tmux` → `set -g status-right ...` → `run tpm` (en dernière ligne).
+
+### Changer de flavor
+
+Éditer `@catppuccin_flavor` (`latte` / `frappe` / `macchiato` / `mocha`) dans `.tmux.conf`, puis `tmux source ~/.tmux.conf`.
+
+### Upgrade depuis v0.3.x
+
+Si tu viens de la v1 : `~/.tmux/plugins/tpm/bin/clean_plugins && ~/.tmux/plugins/tpm/bin/install_plugins` pour forcer un nettoyage + réinstall du plugin.
 
 ---
 

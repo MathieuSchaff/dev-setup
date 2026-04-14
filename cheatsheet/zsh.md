@@ -81,6 +81,56 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 | `Ctrl+g`               | Ouvrir lazygit en popup flottant (sans préfixe)  |
 | `Alt+N`                | Ouvrir navi en popup flottant (sans préfixe)     |
 
+## Complétions
+
+Trois sources alimentent compinit au démarrage de zsh :
+
+| Source                                   | Origine                                                                  |
+|------------------------------------------|--------------------------------------------------------------------------|
+| Système                                  | `/usr/share/zsh/functions/Completion/{Unix,Debian,Base,...}` (paquet `zsh`) |
+| Vendor                                   | `/usr/share/zsh/vendor-completions/` (ajoutées par `.deb` tiers : systemd, fd, ripgrep, flatpak…) |
+| oh-my-zsh plugins                        | `~/.oh-my-zsh/plugins/<nom>/` + `~/.oh-my-zsh/custom/plugins/<nom>/` (listés dans `plugins=(...)` du `.zshrc`) |
+| oh-my-zsh custom completions             | `~/.oh-my-zsh/custom/completions/` (déposé manuellement — déjà dans le fpath par défaut) |
+| Sourcé dans `.zshrc`                     | `~/.bun/_bun` (ligne `[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"`) |
+
+### Complétions custom déjà en place
+
+Déposées dans `~/.oh-my-zsh/custom/completions/` :
+
+| Outil      | Comment la générer                                                             |
+|------------|--------------------------------------------------------------------------------|
+| `rustup`   | `rustup completions zsh > ~/.oh-my-zsh/custom/completions/_rustup`            |
+| `cargo`    | `rustup completions zsh cargo > ~/.oh-my-zsh/custom/completions/_cargo` (wrapper qui source le vrai `_cargo` livré avec Rust) |
+| `gh`       | `gh completion -s zsh > ~/.oh-my-zsh/custom/completions/_gh`                  |
+| `starship` | `starship completions zsh > ~/.oh-my-zsh/custom/completions/_starship`        |
+| `glow`     | `glow completion zsh > ~/.oh-my-zsh/custom/completions/_glow`                 |
+| `pnpm`     | `pnpm completion zsh > ~/.oh-my-zsh/custom/completions/_pnpm`                 |
+| `eza`      | `curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza -o ~/.oh-my-zsh/custom/completions/_eza` (pas de sous-commande `completions` dans eza — récupération depuis le repo upstream) |
+| `delta`    | `curl -fsSL https://raw.githubusercontent.com/dandavison/delta/main/etc/completion/completion.zsh -o ~/.oh-my-zsh/custom/completions/_delta` |
+| `bun`      | `bun completions` → installe dans `~/.bun/_bun` ; déjà sourcé par `.zshrc` |
+
+**Cas non couvert :** `bat` — le repo upstream (sharkdp/bat) ne publie pas de complétion zsh (seulement bash/fish/powershell). À écrire à la main si besoin, ou installer la version `apt` en parallèle (elle dépose `_bat` dans `/usr/share/zsh/vendor-completions/`).
+
+### Tester si une commande a sa complétion
+
+```sh
+<cmd> <TAB>
+```
+
+Si ça propose des sous-commandes/flags/arguments typés → OK. Si ça propose les **fichiers** du dossier courant → pas de complétion (zsh tombe sur la complétion par défaut).
+
+### Ajouter une nouvelle complétion
+
+```sh
+# Exemple : un outil <foo> qui a une sous-commande `completions zsh`
+<foo> completions zsh > ~/.oh-my-zsh/custom/completions/_foo
+
+# Fichier doit commencer par `#compdef <foo>` — vérifier :
+head -1 ~/.oh-my-zsh/custom/completions/_foo
+```
+
+Un fichier `_<cmd>` avec `#compdef <cmd>` est automatiquement pris en compte par compinit au prochain shell. Si ça ne prend pas effet : `rm ~/.zcompdump*` puis relancer zsh pour forcer un rebuild du cache.
+
 ## Updates
 
 Une seule commande : `update`. Tab-completion activée (flags + catégories).

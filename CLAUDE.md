@@ -1,7 +1,7 @@
 # Contexte — Setup de schaff
 
 ## Qui
-Mathieu Schaff. Environnement : WSL2 (Ubuntu) sur Windows.
+Mathieu Schaff. Environnement : Tuxedo OS (Ubuntu-based KDE, Linux natif). Machine précédente : WSL2 (Ubuntu) sur Windows — migration effectuée le 2026-04-14.
 
 ## Dotfiles et cheatsheet
 Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
@@ -33,13 +33,13 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/.dive.yaml`                 | Config dive de référence (copie de `~/.dive.yaml`) |
 | `~/dev-setup/.config/starship.toml`      | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
 
-> Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc.  
-> Les fichiers Zed actifs sont dans `C:\Users\schaf\AppData\Roaming\Zed\` (Windows).  
-> `~/dev-setup/` sert de backup/référence versionné.
+> Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc. (sous `~/` via symlinks créés par `install.sh`).  
+> `~/dev-setup/` sert de backup/référence versionné.  
+> Note historique : sur l'ancienne machine WSL, Zed tournait côté Windows avec config dans `C:\Users\schaf\AppData\Roaming\Zed\`. Sur Tuxedo OS, Zed (s'il est installé) utilise `~/.config/zed/` directement.
 
 ## Outils installés (résumé)
-- **Shell** : zsh + Oh My Zsh, prompt Starship (Catppuccin macchiato, texte coloré sans bg), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`
-- **Terminal multiplexer** : tmux + TPM, thème Catppuccin macchiato
+- **Shell** : zsh + Oh My Zsh, prompt Starship (Catppuccin macchiato, texte coloré sans bg), plugins : `vi-mode`, `fzf-tab`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-history-substring-search`. Complétions custom dans `~/.oh-my-zsh/custom/completions/` pour : `bun`, `rustup`, `cargo`, `gh`, `starship`, `glow`, `pnpm`, `eza`, `delta`.
+- **Terminal multiplexer** : tmux + TPM, thème Catppuccin **v2.3.0** macchiato (API v2 — pinned dans `.tmux.conf`)
 - **Éditeur** : Neovim (pre-built, `/opt/nvim/bin/nvim`), config AstroNvim v6 dans `~/.config/nvim/`
 - **Git TUI** : lazygit (`/usr/local/bin/lazygit`), alias `lg`, popup tmux via `Ctrl+g`
 - **Diff** : delta (`~/.cargo/bin/delta`) — configuré dans `~/.gitconfig` et `~/.config/lazygit/config.yml`
@@ -50,7 +50,9 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 - **Runtimes** : Node (nvm), Bun, Python (miniconda), Go (latest via go.dev), Rust (rustup)
 - **Package managers** : cargo, npm, pnpm, bun, uv, conda
 - **AI CLIs** : claude (`~/.local/bin/claude`), gemini (npm global), kimi
-- **Éditeur Windows** : Zed (config `C:\Users\schaf\AppData\Roaming\Zed\`), vim_mode + Biome + vtsls, backup dans `~/dev-setup/.config/zed/`
+- **Éditeur additionnel** : Zed — vim_mode + Biome + vtsls. Sur Tuxedo OS, config dans `~/.config/zed/`. Backup référence dans `~/dev-setup/.config/zed/`.
+- **Terminal émulateur** (Tuxedo OS / KDE) : Konsole, profil custom `~/.local/share/konsole/Zsh.profile` (force `/usr/bin/zsh`, font `JetBrainsMono Nerd Font 12pt`)
+- **ssh-agent** : real ssh-agent via systemd user (`~/.config/systemd/user/ssh-agent.service`), socket `$XDG_RUNTIME_DIR/ssh-agent.socket`. Passphrase gérée par **ksshaskpass + KWallet** (prompt une fois au login, stockée dans KWallet). Autostart : `~/.config/autostart/ssh-add.desktop`.
 
 ## Config lazygit (ce qu'on a fait)
 - `~/.config/lazygit/config.yml` : pager = delta (`--dark --paging=never`), éditeur = nvim
@@ -64,7 +66,7 @@ Le hook `pre-commit` copie automatiquement les fichiers actifs dans le repo à c
 cd ~/dev-setup && git commit -m "update" && git push
 ```
 Pour déployer sur une nouvelle machine : `~/dev-setup/install.sh` (backup automatique des fichiers existants).
-Repo distant : github.com/MathieuSchaff/dotfiles-2026
+Repo distant : github.com/MathieuSchaff/dev-setup
 
 ## PATH (ordre de priorité)
 ```

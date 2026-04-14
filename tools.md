@@ -1,6 +1,6 @@
-# WSL Tools & CLI
+# Tools & CLI
 
-Documentation des outils et CLI disponibles sur ce WSL.
+Documentation des outils et CLI installés (Tuxedo OS — Linux natif, précédemment WSL2 Ubuntu).
 
 ---
 
