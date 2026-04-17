@@ -86,6 +86,7 @@ backup_and_link "$CFG/.config/navi"                "$HOME/.config/navi"
 backup_and_link "$CFG/.config/glow"                "$HOME/.config/glow"
 backup_and_link "$CFG/.config/starship.toml"       "$HOME/.config/starship.toml"
 backup_and_link "$CFG/.config/ghostty"             "$HOME/.config/ghostty"
+backup_and_link "$CFG/.config/zed"                 "$HOME/.config/zed"
 
 # ── Local / Secrets ───────────────────────────────────────────────────────────
 # Création automatique de fichiers locaux vides s'ils n'existent pas.
@@ -94,26 +95,6 @@ backup_and_link "$CFG/.config/ghostty"             "$HOME/.config/ghostty"
 if [ ! -f "$HOME/.zshrc.local" ]; then
     touch "$HOME/.zshrc.local"
     blue "  created    $HOME/.zshrc.local (place your secrets here)\n"
-fi
-
-# ── Zed (WSL only — config lives on Windows side) ────────────────────────────
-# Auto-detect the Windows Zed directory by scanning /mnt/c/Users/*/AppData/Roaming/Zed.
-# On pure Linux or a WSL machine without Zed installed, this section is skipped.
-
-ZED_WIN_DIR=""
-for candidate in /mnt/c/Users/*/AppData/Roaming/Zed; do
-    if [ -d "$candidate" ]; then
-        ZED_WIN_DIR="$candidate"
-        break
-    fi
-done
-
-if [ -n "$ZED_WIN_DIR" ]; then
-    blue "  → Zed detected at $ZED_WIN_DIR"
-    backup_and_copy "$CFG/.config/zed/settings.json" "$ZED_WIN_DIR/settings.json"
-    backup_and_copy "$CFG/.config/zed/keymap.json"   "$ZED_WIN_DIR/keymap.json"
-else
-    yellow "  skipped    Zed (no Windows Zed install found under /mnt/c/Users/*/AppData/Roaming/Zed)"
 fi
 
 # ── Summary ───────────────────────────────────────────────────────────────────

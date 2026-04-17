@@ -1,3 +1,6 @@
+# Load central color palette
+[ -f "$HOME/dev-setup/config/colors.sh" ] && source "$HOME/dev-setup/config/colors.sh"
+
 # Force $SHELL to zsh — la session KDE peut hériter d'un ancien $SHELL=/bin/bash
 # (avant chsh), ce qui casse fzf preview, tmux popup, etc. qui spawn via $SHELL.
 export SHELL=/usr/bin/zsh
@@ -21,6 +24,12 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 # open completion in tmux popup when inside tmux
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# Catppuccin Macchiato pour fzf-tab (le popup tmux n'hérite pas de FZF_DEFAULT_OPTS)
+zstyle ':fzf-tab:*' fzf-flags \
+  --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
+  --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+  --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796 \
+  --color=border:#494d64
 
 # User configuration
 

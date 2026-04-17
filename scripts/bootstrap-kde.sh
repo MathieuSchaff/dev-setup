@@ -12,6 +12,7 @@
 #   - déploie ~/.config/autostart/ssh-add.desktop (charge les clés au login)
 #   - masque gpg-agent-ssh.socket (Tuxedo OS fait de gpg-agent l'agent SSH par défaut)
 #   - active ssh-agent.service
+#   - crée ~/Mathieu/ (vault, projets, media, docs, tmp) + configure XDG user dirs
 #
 # Usage :
 #   ./bootstrap-kde.sh              # installe tout
@@ -62,7 +63,7 @@ echo ""
 
 # ── 1. Paquets apt KDE ───────────────────────────────────────────────────────
 
-blue "[1/5] ksshaskpass (prompt passphrase KDE + KWallet)"
+blue "[1/6] ksshaskpass (prompt passphrase KDE + KWallet)"
 if ! dpkg -l ksshaskpass 2>/dev/null | grep -q "^ii"; then
     if [[ "$DRYRUN" == "1" ]]; then dry "sudo apt install ksshaskpass"
     else
@@ -75,7 +76,7 @@ fi
 
 # ── 2. Nerd Font ─────────────────────────────────────────────────────────────
 
-blue "[2/5] JetBrainsMono Nerd Font"
+blue "[2/6] JetBrainsMono Nerd Font"
 FONT_DIR="$HOME/.local/share/fonts/JetBrainsMonoNF"
 if [ ! -d "$FONT_DIR" ] || [ -z "$(ls -A "$FONT_DIR" 2>/dev/null)" ]; then
     if [[ "$DRYRUN" == "1" ]]; then dry "download + unzip JetBrainsMono Nerd Font → $FONT_DIR ; fc-cache -fv"
@@ -95,7 +96,7 @@ fi
 
 # ── 3. Konsole — profil Zsh ─────────────────────────────────────────────────
 
-blue "[3/5] Konsole profile (Zsh + Nerd Font)"
+blue "[3/6] Konsole profile (Zsh + Nerd Font)"
 KONSOLE_PROFILE="$HOME/.local/share/konsole/Zsh.profile"
 if [ ! -f "$KONSOLE_PROFILE" ]; then
     if [[ "$DRYRUN" == "1" ]]; then dry "cp $KDE_DIR/konsole/Zsh.profile → $KONSOLE_PROFILE"
@@ -133,7 +134,7 @@ fi
 
 # ── 4. ssh-agent (systemd user + environment.d + autostart) ─────────────────
 
-blue "[4/5] ssh-agent systemd user + ksshaskpass + autostart"
+blue "[4/6] ssh-agent systemd user + ksshaskpass + autostart"
 
 deploy_file() {
     # $1: source dans le repo, $2: destination
@@ -154,7 +155,7 @@ deploy_file "$KDE_DIR/autostart/ssh-add.desktop"   "$HOME/.config/autostart/ssh-
 
 # ── 5. Activer ssh-agent.service + neutraliser gpg-agent-ssh.socket ─────────
 
-blue "[5/5] Activation systemd user"
+blue "[5/6] Activation systemd user"
 
 # Mask gpg-agent-ssh.socket (le preset Debian l'active globalement)
 if [ -L "$HOME/.config/systemd/user/gpg-agent-ssh.socket" ]; then
@@ -176,6 +177,41 @@ else
         systemctl --user daemon-reload
         systemctl --user enable --now ssh-agent.service
         green "  ssh-agent.service enabled + started"
+    fi
+fi
+
+# ── 6. Dossier personnel ~/Mathieu/ + XDG user dirs ─────────────────────────
+
+blue "[6/6] Personal folder ~/Mathieu/ + XDG user dirs"
+
+MATHIEU_DIRS=(
+    "$HOME/Mathieu/vault"
+    "$HOME/Mathieu/projets"
+    "$HOME/Mathieu/media/videos"
+    "$HOME/Mathieu/media/photos"
+    "$HOME/Mathieu/media/musique"
+    "$HOME/Mathieu/docs"
+    "$HOME/Mathieu/tmp"
+)
+for d in "${MATHIEU_DIRS[@]}"; do
+    if [ ! -d "$d" ]; then
+        if [[ "$DRYRUN" == "1" ]]; then dry "mkdir -p $d"
+        else
+            mkdir -p "$d"
+            green "  created $d"
+        fi
+    fi
+done
+
+XDG_CONF="$HOME/.config/user-dirs.dirs"
+if grep -q 'Mathieu' "$XDG_CONF" 2>/dev/null; then
+    echo "  user-dirs.dirs already points to ~/Mathieu/"
+else
+    if [[ "$DRYRUN" == "1" ]]; then dry "deploy $KDE_DIR/user-dirs.dirs → $XDG_CONF && xdg-user-dirs-update"
+    else
+        cp "$KDE_DIR/user-dirs.dirs" "$XDG_CONF"
+        xdg-user-dirs-update
+        green "  user-dirs.dirs deployed + updated"
     fi
 fi
 

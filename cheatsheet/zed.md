@@ -1,9 +1,8 @@
 # Zed — Config & Keymaps
 
-Éditeur principal côté Windows, mode vim activé avec base_keymap VSCode.
-Config source : `C:\Users\schaf\AppData\Roaming\Zed\`
-Backup versionné : `~/dev-setup/config/.config/zed/` (déployé via `install.sh`,
-auto-détection de `/mnt/c/Users/*/AppData/Roaming/Zed/`).
+Éditeur additionnel (Tuxedo OS), mode vim activé avec base_keymap VSCode.
+Config source : `~/.config/zed/` (symlink vers `~/dev-setup/config/.config/zed/`).
+Backup versionné : `~/dev-setup/config/.config/zed/` (syncé via hook `pre-commit`, déployé via `scripts/install.sh`).
 
 ## Sommaire
 
@@ -231,10 +230,10 @@ node_modules, dist, .turbo, .next, .vscode, .storybook, .husky,
 | `settings.json` | Thème, font, LSP, Biome, Ollama, exclusions     |
 | `keymap.json`   | Keymaps vim normal/visual/insert + Workspace    |
 
-Emplacement actif : `C:\Users\schaf\AppData\Roaming\Zed\`
+Emplacement actif : `~/.config/zed/` (symlink vers `~/dev-setup/config/.config/zed/`)
 Backup versionné : `~/dev-setup/config/.config/zed/`
-Sync : hook `pre-commit` copie depuis `/mnt/c/Users/schaf/AppData/Roaming/Zed/` vers le repo.
-Déploiement inverse via `install.sh` (auto-détection WSL).
+Sync : hook `pre-commit` copie les configs dans le repo.
+Déploiement via `scripts/install.sh`.
 
 ---
 

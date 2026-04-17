@@ -240,23 +240,22 @@ C'est l'étape centrale — elle applique tous les fichiers de configuration.
 git clone https://github.com/MathieuSchaff/dev-setup ~/dev-setup
 
 # Rendre les scripts exécutables
-chmod +x ~/dev-setup/setup.sh ~/dev-setup/bootstrap.sh ~/dev-setup/install.sh
+chmod +x ~/dev-setup/scripts/*.sh
 
 # Déployer les configs (symlinks)
-~/dev-setup/install.sh
+~/dev-setup/scripts/install.sh
 
 # Recharger le shell
 exec zsh
 ```
 
-> **Note :** si tu pars d'une machine vierge, `./setup.sh` fait tout (outils + configs).
-> Les étapes 1 à 7 ci-dessus sont déjà couvertes par `./bootstrap.sh`.
+> **Note :** si tu pars d'une machine vierge, `./scripts/setup.sh` fait tout (outils + configs).
+> Les étapes 1 à 7 ci-dessus sont déjà couvertes par `./scripts/bootstrap.sh`.
 
-Le script `install.sh` :
+Le script `scripts/install.sh` :
 - Crée des **symlinks** de chaque dotfile vers le repo (`~/.zshrc → ~/dev-setup/config/.zshrc`, etc.)
 - Si un fichier existe déjà, il est sauvegardé dans `~/.dotfiles-backup/<timestamp>/` avant remplacement par le symlink
 - Si le symlink est déjà en place, il est ignoré ("link ok")
-- Copie les configs Zed vers Windows (symlinks non supportés sur `/mnt/c/`)
 - Affiche un résumé de ce qui a changé
 
 ### Ce que ça configure automatiquement
@@ -368,7 +367,7 @@ Rien à ajouter dans `.zshrc` — le dossier `~/.oh-my-zsh/custom/completions/` 
 
 Section **spécifique à Tuxedo OS / KDE Plasma**. À ignorer sur WSL ou autre DE (GNOME, i3, etc.) — le setup diffère.
 
-> **Automatisation :** tout ce qui suit est scripté dans `~/dev-setup/bootstrap-kde.sh` (appelé automatiquement par `setup.sh` si `$XDG_CURRENT_DESKTOP` matche `KDE|Plasma`). Les sections ci-dessous documentent le détail pour débogage/contexte. Pour lancer manuellement : `./bootstrap-kde.sh` (ou `--dry-run` pour preview, `--force` pour outrepasser la détection KDE).
+> **Automatisation :** tout ce qui suit est scripté dans `~/dev-setup/scripts/bootstrap-kde.sh` (appelé automatiquement par `scripts/setup.sh` si `$XDG_CURRENT_DESKTOP` matche `KDE|Plasma`). Les sections ci-dessous documentent le détail pour débogage/contexte. Pour lancer manuellement : `./scripts/bootstrap-kde.sh` (ou `--dry-run` pour preview, `--force` pour outrepasser la détection KDE).
 
 ### 13.1 ssh-agent + KWallet + ksshaskpass (une seule saisie de passphrase)
 
@@ -483,6 +482,44 @@ Redémarrer Konsole → les nouveaux onglets lancent zsh directement (plus besoi
 
 **Note sur `$SHELL` :** même après ça, `$SHELL` reste `/bin/bash` jusqu'au prochain logout/login KDE complet (variable figée par la session manager). Pour corriger immédiatement : `export SHELL=/usr/bin/zsh` dans le `.zshrc` (déjà présent dans `~/dev-setup/config/.zshrc`). Sinon `fzf` et autres outils spawneraient des sous-shells bash et ne chargeraient pas le `.zshrc` → cassure des alias/fonctions (`cs`, `lg`, etc.).
 
+### 13.3 Dossier personnel ~/Mathieu/ + XDG user dirs
+
+Centralise tous les fichiers personnels sous `~/Mathieu/` plutôt que de les éparpiller dans `~`.
+
+```
+~/Mathieu/
+├── vault/          # Obsidian
+├── projets/        # projets perso (hors code pro)
+├── media/
+│   ├── videos/
+│   ├── photos/
+│   └── musique/
+├── docs/           # admin, scans
+└── tmp/            # fichiers temporaires
+```
+
+```bash
+mkdir -p ~/Mathieu/{vault,projets,media/{videos,photos,musique},docs,tmp}
+```
+
+Rediriger les apps GTK/Qt via XDG (`~/.config/user-dirs.dirs`) :
+
+```bash
+# Éditer ~/.config/user-dirs.dirs :
+XDG_DOCUMENTS_DIR="$HOME/Mathieu/docs"
+XDG_MUSIC_DIR="$HOME/Mathieu/media/musique"
+XDG_PICTURES_DIR="$HOME/Mathieu/media/photos"
+XDG_VIDEOS_DIR="$HOME/Mathieu/media/videos"
+
+# Appliquer :
+xdg-user-dirs-update
+```
+
+Apps non-XDG (Discord, Steam...) : configurer manuellement dans chaque app.  
+Obsidian : ouvrir `~/Mathieu/vault` comme vault manuellement.
+
+> **Automatisé par `scripts/bootstrap-kde.sh`** — crée les dossiers et déploie `user-dirs.dirs`.
+
 ---
 
 ## 14. Checklist finale
@@ -501,8 +538,8 @@ Redémarrer Konsole → les nouveaux onglets lancent zsh directement (plus besoi
 - [ ] Lazygit installé (`/usr/local/bin/lazygit`)
 - [ ] Neovim installé
 - [ ] `~/dev-setup/` cloné depuis GitHub
-- [ ] `chmod +x ~/dev-setup/install.sh`
-- [ ] `install.sh` exécuté — configs déployées (`.zshrc`, `.gitconfig`, `.tmux.conf`, lazygit, nvim)
+- [ ] `chmod +x ~/dev-setup/scripts/*.sh`
+- [ ] `scripts/install.sh` exécuté — configs déployées (`.zshrc`, `.gitconfig`, `.tmux.conf`, lazygit, nvim)
 - [ ] Shell rechargé (`exec zsh`)
 - [ ] TPM installé + plugins tmux (`Ctrl+b + I`)
 - [ ] Clé SSH générée et ajoutée à GitHub
@@ -512,6 +549,7 @@ Redémarrer Konsole → les nouveaux onglets lancent zsh directement (plus besoi
 - [ ] Complétions zsh avancées générées (`gh <TAB>`, `cargo <TAB>`, `eza --<TAB>`, etc. — voir section 12)
 - [ ] (Tuxedo OS / KDE uniquement) ssh-agent + KWallet : `git push` ne demande plus la passphrase (voir section 13.1)
 - [ ] (Tuxedo OS / KDE uniquement) Konsole lance zsh directement + icônes Nerd Font lisibles (voir section 13.2)
+- [ ] (Tuxedo OS / KDE uniquement) `~/Mathieu/` créé + XDG user dirs configuré (voir section 13.3)
 
 ---
 

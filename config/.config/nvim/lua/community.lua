@@ -42,7 +42,6 @@ return {
   -- Modern completion and fast
   { import = "astrocommunity.completion.blink-cmp" },
 
-  { import = "astrocommunity.completion.supermaven-nvim" },
   -- { import = "astrocommunity.lsp.ts-error-translator-nvim" },
 
   -- === TESTS ===

@@ -42,6 +42,7 @@ Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème 
 | Raccourci        | Effet                              |
 |------------------|------------------------------------|
 | `Ctrl+b s`       | Liste interactive des sessions     |
+| `Alt+s`          | **Popup fzf** — switcher floue entre sessions (sans préfixe, exclut la courante) |
 | `Ctrl+b $`       | Renommer la session courante       |
 | `Ctrl+b (` / `)` | Session précédente / suivante      |
 | `Ctrl+b d`       | Détacher                           |
@@ -119,8 +120,9 @@ Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème 
 
 | Raccourci | Effet                                                            |
 |-----------|------------------------------------------------------------------|
-| `Ctrl+g`  | **Popup lazygit** flottant (90×90%, sans préfixe)                |
-| `Alt+N`   | **Popup navi** — fonctionne aussi en SSH, nvim, psql...          |
+| `Ctrl+g`    | **Popup lazygit** flottant (90×90%, sans préfixe)                |
+| `Alt+N`     | **Popup navi** — fonctionne aussi en SSH, nvim, psql...          |
+| `Alt+s`     | **Popup fzf sessions** — fuzzy-find + `Entrée` pour switcher (40×40%, sans préfixe) |
 
 > Ces raccourcis fonctionnent depuis n'importe quel pane, dans n'importe quelle app.
 > `Ctrl+g` hérite du `pane_current_path` → lazygit ouvre dans le bon repo.
@@ -142,6 +144,19 @@ Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème 
 | `mode-keys`         | `vi`            | Copy mode vim-like                      |
 | `set-titles`        | `on`            | Titre de la fenêtre terminale dynamique |
 | `history-limit`     | `50000`         | Scrollback large (défaut : 2000)        |
+| `status-position`   | `top`           | Status bar en haut (défaut : `bottom`)  |
+
+### Status-left — liste des sessions
+
+Au lieu d'afficher juste la session courante, `status-left` itère sur **toutes** les sessions avec la courante en surbrillance (`reverse`) :
+
+```tmux
+set -g status-left "#[fg=#c6a0f6,bold] sessions: #[default]#{S:#{?session_attached,#[reverse] #S #[noreverse] , #S  }}"
+```
+
+- `#{S:format}` → itère sur chaque session, applique `format`
+- `#{?session_attached,X,Y}` → conditionnel : `X` si la session est la courante, `Y` sinon
+- `#[reverse]` / `#[noreverse]` → inverse fg/bg pour highlight
 
 ---
 

@@ -94,7 +94,7 @@ Documentation des outils et CLI installés (Tuxedo OS — Linux natif, précéde
 
 | Langage | Commande | Chemin | Géré par |
 |---------|----------|--------|----------|
-| Go | `go` | `/usr/local/go/bin/go` | `bootstrap.sh` / `update` (latest depuis go.dev) |
+| Go | `go` | `/usr/local/go/bin/go` | `scripts/bootstrap.sh` / `update` (latest depuis go.dev) |
 | Rust | `rustc` | `~/.cargo/bin/rustc` | rustup |
 | Node.js | `node` | `~/.nvm/versions/node/` | nvm |
 | Python 3 | `python3` | `/usr/bin/python3` | apt |
@@ -253,8 +253,8 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 > Cheatsheet complet (keymaps, LSP, Biome, Ollama, pièges) → **[cheatsheet/zed.md](./cheatsheet/zed.md)**
 
-- **Config source :** `C:\Users\schaf\AppData\Roaming\Zed\`
-- **Backup versionné :** `~/dev-setup/config/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `install.sh` avec auto-détection WSL)
+- **Config source :** `~/.config/zed/` (Tuxedo OS, symlink vers `~/dev-setup/config/.config/zed/`)
+- **Backup versionné :** `~/dev-setup/config/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `scripts/install.sh`)
 - **Stack :** vim_mode + base_keymap VSCode, Catppuccin Mocha, vtsls + Biome pour TS/TSX/JS/JSX, format_on_save, Ollama (Qwen Coder 7B)
 
 ---
@@ -292,7 +292,7 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 ## Dotfiles
 
 > Dépôt : `~/dev-setup/` → github.com/MathieuSchaff/dev-setup  
-> Méthode : `install.sh` crée des **symlinks** — les fichiers actifs pointent directement vers le repo
+> Méthode : `scripts/install.sh` crée des **symlinks** — les fichiers actifs pointent directement vers le repo
 
 ### Fichiers symlinkés
 

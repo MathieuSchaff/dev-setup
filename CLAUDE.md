@@ -22,7 +22,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/cheatsheet/ghostty.md`      | Ghostty — config, raccourcis, thèmes, shell integration, pièges Wayland |
 | `~/dev-setup/cheatsheet/update-tools.md` | Script `update-tools` — updater des CLI hors apt/cargo |
 | `~/dev-setup/cheatsheet/plugins/`        | Cheatsheets plugins & MCP servers Claude Code |
-| `~/dev-setup/scripts/update-tools.sh`    | Script d'update des outils hors package manager (dive, lazygit, ctop, ...) |
+| `~/dev-setup/scripts/`                   | Scripts : `setup.sh`, `bootstrap.sh`, `install.sh`, `bootstrap-kde.sh`, `update.sh`, `update-tools.sh` |
 | `~/dev-setup/cheats/`                    | Cheatsheets navi (`.cheat`) — git, tools, docker, dive, linux, ssh, bun, npm, curl, navi |
 | `~/dev-setup/config/.gitconfig`          | Config git de référence (symlink cible de `~/.gitconfig`) |
 | `~/dev-setup/config/.zshrc`              | Zshrc de référence                           |
@@ -35,7 +35,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/config/.dive.yaml`          | Config dive de référence                     |
 | `~/dev-setup/config/.config/starship.toml` | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
 
-> Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc. (sous `~/` via symlinks créés par `install.sh`).  
+> Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc. (sous `~/` via symlinks créés par `scripts/install.sh`).  
 > `~/dev-setup/` sert de backup/référence versionné.  
 > Note historique : sur l'ancienne machine WSL, Zed tournait côté Windows avec config dans `C:\Users\schaf\AppData\Roaming\Zed\`. Sur Tuxedo OS, Zed (s'il est installé) utilise `~/.config/zed/` directement.
 
@@ -68,8 +68,21 @@ Le hook `pre-commit` copie automatiquement les fichiers actifs dans le repo à c
 ```bash
 cd ~/dev-setup && git commit -m "update" && git push
 ```
-Pour déployer sur une nouvelle machine : `~/dev-setup/install.sh` (backup automatique des fichiers existants).
+Pour déployer sur une nouvelle machine : `~/dev-setup/scripts/install.sh` (backup automatique des fichiers existants).
 Repo distant : github.com/MathieuSchaff/dev-setup
+
+## Dossier personnel ~/Mathieu/
+
+```
+~/Mathieu/
+├── vault/          # Obsidian vault
+├── projets/        # projets perso
+├── media/{videos,photos,musique}/
+├── docs/
+└── tmp/
+```
+
+XDG user dirs redirigent Documents/Music/Pictures/Videos vers `~/Mathieu/`. Déployé par `scripts/bootstrap-kde.sh`.
 
 ## PATH (ordre de priorité)
 ```
