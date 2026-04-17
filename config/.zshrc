@@ -24,6 +24,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 # open completion in tmux popup when inside tmux
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+zstyle ':fzf-tab:*' popup-pad 30 8
 # Catppuccin Macchiato pour fzf-tab (le popup tmux n'hérite pas de FZF_DEFAULT_OPTS)
 zstyle ':fzf-tab:*' fzf-flags \
   --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
