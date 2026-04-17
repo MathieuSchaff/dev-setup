@@ -87,10 +87,11 @@ for t in "${targets[@]}"; do
     node)
       if [ -s "$NVM_DIR/nvm.sh" ]; then
         source "$NVM_DIR/nvm.sh"
-        nvm install node --reinstall-packages-from=node
-        nvm alias default node
+        nvm install --lts --reinstall-packages-from=default
+        nvm alias default 'lts/*'
+        nvm use default
         npm update -g
-        echo "  ${C_G}✓${C_0} node $(node --version)"
+        echo "  ${C_G}✓${C_0} node $(node --version) (LTS)"
       fi
       ;;
     bun)
