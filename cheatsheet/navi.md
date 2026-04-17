@@ -25,18 +25,20 @@ il complète et exécute.
 
 Chemin : `~/dev-setup/cheats/`
 
-| Fichier                | Contenu                                       |
-|------------------------|-----------------------------------------------|
-| `git.cheat`            | branches, commits, diff, log, stash, reset    |
-| `tools.cheat`          | eza, bat, rg, fd, zoxide, tmux, updates       |
-| `docker.cheat`         | images, containers, volumes, networks, cleanup|
-| `docker-compose.cheat` | up, down, logs, ps, build, exec               |
-| `linux.cheat`          | processus, disque, réseau, perms, archives    |
-| `ssh.cheat`            | connexions, clés, tunnels, config             |
-| `curl.cheat`           | GET/POST, headers, auth, download             |
-| `bun.cheat`            | install, run, dev, test, workspaces           |
-| `npm.cheat`            | install, scripts, publish, audit              |
-| `navi.cheat`           | lancement, édition, search, shell widget      |
+| Fichier                | Contenu                                               |
+|------------------------|-------------------------------------------------------|
+| `git.cheat`            | branches, commits, diff, log, stash, worktree         |
+| `tools.cheat`          | eza, bat, rg, fd, zoxide, tmux, glow, bottom          |
+| `dev-setup.cheat`      | scripts update, update-tools, bootstrap, install      |
+| `docker.cheat`         | conteneurs, images, volumes, networks, cleanup        |
+| `docker-compose.cheat` | up, down, logs, ps, build, exec                       |
+| `dive.cheat`           | explorer images Docker/Podman, CI, config             |
+| `linux.cheat`          | processus, ports, disk, systemd, desktop (Wayland/WSL)|
+| `ssh.cheat`            | connexions, clés, tunnels, scp, rsync                 |
+| `curl.cheat`           | GET/POST, headers, auth, download, timings            |
+| `bun.cheat`            | install, run, test, build, pm                         |
+| `npm.cheat`            | install, scripts, view, audit, cache                  |
+| `navi.cheat`           | édition, repos, debug                                 |
 
 ## Syntaxe des `.cheat`
 

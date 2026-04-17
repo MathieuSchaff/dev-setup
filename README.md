@@ -1,6 +1,6 @@
 # dev-setup
 
-Configuration Linux (environnement actuel : Tuxedo OS, Ubuntu-based KDE).
+Configuration Linux en dual-boot — **Tuxedo OS** (Ubuntu-based KDE, Linux natif) et **WSL2 Ubuntu** sur Windows. Mêmes dotfiles sur les deux.
 
 ---
 
@@ -12,8 +12,6 @@ Ce repo contient deux choses distinctes :
 2. **La documentation** — guide d'install, inventaire des outils, cheatsheet
 
 `install.sh` crée des **symlinks** depuis `~/` vers les fichiers du repo. Exemple : `~/.zshrc → ~/dev-setup/config/.zshrc`. Toute modification est donc immédiatement active — pas besoin de copie.
-
-Le hook `pre-commit` sync uniquement les fichiers qui ne peuvent pas être symlinkés : configs Zed (côté Windows) et `~/CLAUDE.md`.
 
 ---
 
@@ -54,15 +52,16 @@ git commit -m "update"
 git push
 ```
 
-> Le hook `pre-commit` sync automatiquement les configs Zed (Windows) et `~/CLAUDE.md` dans le repo.
-
 Pour mettre à jour les outils eux-mêmes :
 
 ```bash
-update-all     # apt, omz, plugins zsh, rust/cargo, uv, lazygit, fzf
-update-nvim    # Neovim (pre-built → /opt/nvim/)
-update-node    # Node via nvm
-update-bun     # Bun
+update             # safe : apt, omz, zsh-plugins, rust, cargo, go, uv, tools
+update --all       # tout, y compris runtimes (node, bun, pnpm, conda)
+update <category>  # catégorie précise (apt, rust, node, bun...)
+update --list      # voir les catégories disponibles
+
+update-tools       # CLI hors apt/cargo (dive, lazygit, lazydocker, ctop, neovim, fzf)
+update-tools --check  # vérifier ce qui est obsolète sans rien changer
 ```
 
 ---
@@ -75,11 +74,11 @@ update-bun     # Bun
 | `scripts/`               | Scripts : `setup.sh`, `bootstrap.sh`, `install.sh`, `bootstrap-kde.sh`, `update.sh`, `update-tools.sh` |
 | `CLAUDE.md`              | Contexte pour Claude Code — outils, config, chemins            |
 | `tools.md`               | Inventaire complet des outils installés, chemins, versions     |
-| `cheatsheet/`            | Référence rapide lisible : zsh, lazygit, vi-mode, delta, fzf   |
-| `cheats/`                | Cheatsheets navi (`.cheat`) — git, tools, docker, linux, ssh, bun, npm, curl, navi |
+| `cheatsheet/`            | Référence rapide en markdown : zsh, tmux, git, lazygit, tools, navi, zed, ghostty, dive, ctop, lazydocker, apps, vi-mode, update-tools, plugins/ |
+| `cheats/`                | Cheatsheets navi (`.cheat`) : git, tools, dev-setup, docker, docker-compose, dive, linux, ssh, curl, bun, npm, navi |
 | `config/.zshrc`                 | Shell : aliases, fonctions, plugins Oh My Zsh                  |
 | `config/.gitconfig`             | Git : delta comme pager, side-by-side, nvim comme éditeur      |
-| `config/.tmux.conf`             | Tmux : Catppuccin macchiato, `Ctrl+g` lazygit, `prefix+Ctrl+g` navi |
+| `config/.tmux.conf`             | Tmux : Catppuccin macchiato, `Ctrl+g` lazygit, `Alt+N` navi, `Alt+U` sessions, `Ctrl+e` cheatsheets |
 | `config/.config/lazygit/`       | Lazygit : delta comme pager, nvim comme éditeur                |
 | `config/.config/nvim/`          | Neovim : config AstroNvim + syntax `.cheat`                    |
 | `config/.config/navi/`          | Navi : cheats path, couleurs, shell zsh                        |

@@ -182,7 +182,7 @@ cheat-browse-widget() {
   zle reset-prompt
 }
 zle -N cheat-browse-widget
-bindkey '^E' cheat-browse-widget
+bindkey '^[p' cheat-browse-widget
 
 # historique
 HISTSIZE=50000

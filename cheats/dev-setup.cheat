@@ -1,0 +1,51 @@
+; Scripts dev-setup — update, bootstrap, install, setup
+; Repo : ~/dev-setup/scripts/
+
+% dev-setup, update, upgrade, maintenance, system, mettre à jour, tout mettre à jour
+
+# Tout mettre à jour — safe (apt, omz, rust, cargo, go, uv, tools)
+~/dev-setup/scripts/update.sh
+
+# Tout mettre à jour incluant runtimes (node, bun, pnpm, conda)
+~/dev-setup/scripts/update.sh --all
+
+# Mettre à jour une catégorie précise
+~/dev-setup/scripts/update.sh <category>
+
+# Voir les catégories disponibles
+~/dev-setup/scripts/update.sh --list
+
+$ category: echo -e "apt\nomz\nzsh-plugins\nrust\ncargo\ngo\nuv\ntools\nnode\nbun\npnpm\nconda" | fzf
+
+% dev-setup, update-tools, cli, binaries, binaires, dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz, outdated
+
+# Mettre à jour les CLI installés manuellement (dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz)
+~/dev-setup/scripts/update-tools.sh
+
+# Mettre à jour un outil précis
+~/dev-setup/scripts/update-tools.sh <tool>
+
+# Vérifier ce qui est obsolète sans rien changer
+~/dev-setup/scripts/update-tools.sh --check
+
+# Lister les outils gérés
+~/dev-setup/scripts/update-tools.sh --list
+
+$ tool: echo -e "dive\nlazygit\nlazydocker\nctop\nneovim\nfzf" | fzf
+
+% dev-setup, setup, bootstrap, install, deploy, déployer, new machine, nouvelle machine, dotfiles, configs, symlinks
+
+# Bootstrap — installer tous les outils sur une machine fraîche
+~/dev-setup/scripts/bootstrap.sh
+
+# Bootstrap complet sans prompt (inclut go, uv, miniconda)
+~/dev-setup/scripts/bootstrap.sh --all
+
+# Déployer uniquement les configs (symlinks .zshrc, .gitconfig, .tmux.conf, nvim, lazygit…)
+~/dev-setup/scripts/install.sh
+
+# Setup complet — outils + configs
+~/dev-setup/scripts/setup.sh
+
+# Setup complet sans prompt
+~/dev-setup/scripts/setup.sh --all

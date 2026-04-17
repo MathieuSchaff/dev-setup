@@ -1,74 +1,73 @@
 ; SSH, SCP, rsync, ssh-keygen
-; Hosts du ~/.ssh/config sont utilisés comme fuzzy selector
+; Les hosts du ~/.ssh/config sont proposés comme fuzzy selector
 
 % ssh, connect, se connecter, remote, config, accès
 
-# Se connecter à un host / serveur distant (config ou host complet)
+# Se connecter à un host (config ~/.ssh/config ou FQDN)
 ssh <host_name>
 
-# Se connecter avec un utilisateur spécifique / user
+# Se connecter avec un utilisateur spécifique
 ssh <user_name>@<host_name>
 
-$ host_name: (awk '/^Host /{for(i=2;i<=NF;i++)print $i}' ~/.ssh/config 2>/dev/null | grep -v '\*') | sort -u --- --preview 'ssh -G {1}'
-$ user_name: whoami --- --preview 'whoami'
+$ host_name: awk '/^Host /{for(i=2;i<=NF;i++)print $i}' ~/.ssh/config 2>/dev/null | grep -v '\*' | sort -u --- --preview 'ssh -G {1}' --preview-window 'right:60%'
 
-# Se connecter avec une clé privée / identité / certificat spécifique
-ssh -i <path_to_key> <user>@<host>
+# Se connecter avec une clé privée spécifique
+ssh -i <key_path> <user_name>@<host_name>
 
-# Se connecter sur un port non-standard / SSH port
-ssh -p <port> <user>@<host>
+# Se connecter sur un port non-standard
+ssh -p <port> <user_name>@<host_name>
 
 % ssh, tunnel, forward, redirection, bridge
 
-# Port forwarding LOCAL : localhost:8080 -> host:80 (tunnel local)
-ssh -L <8080>:<localhost>:<80> <host>
+# Port forwarding LOCAL (local:local_port → remote:remote_port via host)
+ssh -L <local_port>:localhost:<remote_port> <host_name>
 
-# Port forwarding REMOTE : host:9090 -> localhost:3000 (tunnel distant)
-ssh -R <9090>:<localhost>:<3000> <host>
+# Port forwarding REMOTE (remote:remote_port → local:local_port via host)
+ssh -R <remote_port>:localhost:<local_port> <host_name>
 
-# Proxy SOCKS dynamique / navigation web sécurisée via ssh (tunnel)
-ssh -D <1080> <host>
+# Proxy SOCKS dynamique (navigation via ssh)
+ssh -D <socks_port> <host_name>
 
-# Tunnel en background / arrière-plan sans shell (fN)
-ssh -fN -L <8080>:<localhost>:<80> <host>
+# Tunnel en background sans shell
+ssh -fN -L <local_port>:localhost:<remote_port> <host_name>
 
 % ssh, keygen, clés, security, fingerprint
 
-# Générer une clé ed25519 (recommandé, moderne, secure)
+# Générer une clé ed25519 (recommandé)
 ssh-keygen -t ed25519 -C "<email>"
 
-# Afficher la fingerprint / empreinte d'une clé (security check)
-ssh-keygen -lf <path_to_public_key>
+# Afficher la fingerprint d'une clé
+ssh-keygen -lf <pubkey_path>
 
-# Copier sa clé publique sur un serveur / autoriser accès (ssh-copy-id)
-ssh-copy-id <user>@<host>
+# Copier sa clé publique sur un serveur distant
+ssh-copy-id <user_name>@<host_name>
 
 % ssh, agent, keys, security
 
-# Démarrer ssh-agent et charger les clés en mémoire
+# Démarrer ssh-agent et charger les clés
 eval "$(ssh-agent -s)" && ssh-add
 
-# Lister les clés actuellement chargées dans l'agent
+# Lister les clés chargées dans l'agent
 ssh-add -l
 
 % ssh, scp, rsync, transfer, copier, sync, synchroniser
 
-# Copier un fichier local -> distant (transfert simple scp)
-scp <local_file> <user>@<host>:<remote_path>
+# Copier un fichier local → distant (scp)
+scp <local_file> <user_name>@<host_name>:<remote_path>
 
-# Rsync synchronisation complète (archive, progress, compress, delta)
-rsync -avzP <local_path> <user>@<host>:<remote_path>
+# Rsync — archive + progress + compression + delta
+rsync -avzP <local_path> <user_name>@<host_name>:<remote_path>
 
-# Rsync avec exclusion de dossier (exclude node_modules, .git)
-rsync -avzP --exclude='<node_modules>' --exclude='<.git>' <local_path> <user>@<host>:<remote_path>
+# Rsync avec exclusions
+rsync -avzP --exclude='<exclude_pattern>' <local_path> <user_name>@<host_name>:<remote_path>
 
-# Rsync avec suppression des fichiers disparus / mirroir (delete)
-rsync -avzP --delete <local_path> <user>@<host>:<remote_path>
+# Rsync miroir — supprime les fichiers disparus côté source
+rsync -avzP --delete <local_path> <user_name>@<host_name>:<remote_path>
 
 % ssh, config, aide
 
-# Ouvrir / Éditer le config ssh local
+# Éditer le config ssh local
 $EDITOR ~/.ssh/config
 
-# Tester la configuration pour un host (résolution/debug)
-ssh -G <host>
+# Tester la résolution d'un host (debug)
+ssh -G <host_name>

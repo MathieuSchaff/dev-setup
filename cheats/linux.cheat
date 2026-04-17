@@ -1,76 +1,87 @@
-; Linux basics — processes, ports, disk, files, systemd, archives
-; Contexte : WSL2 Ubuntu
+; Linux basics — processes, ports, disk, files, systemd, desktop
+; Contexte dual-boot : Tuxedo OS (natif, Wayland/KDE) OU WSL2 Ubuntu sur Windows
 
 % linux, processes, kill, stop, list, monitor, top, ps, cpu, memory, processus, tuer, terminer
 
-# Tuer processus / Kill process by PID (visual selection)
+# Tuer un processus par PID (sélection visuelle)
 kill -9 <pid>
 
-# Voir détails processus / Show process details (ps)
+# Afficher les détails d'un processus
 ps -fp <pid>
 
-$ pid: ps -eo pid,pcpu,pmem,user,comm --sort=-pcpu | head -30 --- --header-lines 1 --column 1 --preview 'ps -fp {1}'
+$ pid: ps -eo pid,pcpu,pmem,user,comm --sort=-pcpu | head -30 --- --header-lines 1 --column 1 --preview 'ps -fp {1}' --preview-window 'right:60%'
 
 % linux, ports, network, listen, tcp, udp, connectivity, lsof, netstat, réseau, connexion
 
-# Trouver port / Chercher / Find which process uses a port (lsof)
+# Trouver quel processus utilise un port
 sudo lsof -i :<port_number>
 
-$ port_number: sudo lsof -i -P -n | grep LISTEN | awk '{print $9}' | cut -d: -f2 | sort -u --- --preview 'sudo lsof -i :{1}'
+$ port_number: sudo lsof -i -P -n | grep LISTEN | awk '{print $9}' | cut -d: -f2 | sort -u --- --preview 'sudo lsof -i :{1}' --preview-window 'right:60%'
 
 % linux, disk, files, find, search, grep, size, storage, cleanup, chercher, trouver, espace, disque, fichiers
 
-# Chercher + Afficher / Trouver / Find and display file (fd + batcat)
-batcat <file_path>
+# Afficher un fichier avec coloration (fd + bat)
+bat <file_path>
 
-# Chercher pattern / Trouver texte / Search pattern in files (ripgrep)
-rg "<pattern>" <path>
+# Chercher un pattern dans des fichiers (ripgrep)
+rg "<pattern>" <dir_path>
 
-# Taille dossier / Espace disque / Directory size (sorted)
-du -sh <path>/* | sort -h
+# Taille des sous-dossiers, triée
+du -sh <dir_path>/* | sort -h
 
-$ file_path: fdfind -t f . --- --preview 'batcat --color=always --style=numbers --line-range :50 {}'
-$ path: fdfind -t d . --- --preview 'ls -R {} | head -n 20'
+$ file_path: fdfind -t f . --- --preview 'bat --color=always --style=numbers --line-range :50 {}' --preview-window 'right:60%'
+$ dir_path: fdfind -t d . --- --preview 'ls -R {} | head -n 20' --preview-window 'right:60%'
 
 % linux, systemctl, services, daemon, init, start, stop, status, restart, logs, journal, service
 
-# Statut service / Check service status (systemctl)
+# Voir le statut d'un service
 systemctl status <service_name>
 
-# Démarrer service / Start service
+# Démarrer un service
 sudo systemctl start <service_name>
 
-# Arrêter service / Stopper / Stop service
+# Arrêter un service
 sudo systemctl stop <service_name>
 
-# Redémarrer service / Restart service
+# Redémarrer un service
 sudo systemctl restart <service_name>
 
-# Voir logs service / Journal / Follow service logs (journalctl)
+# Suivre les logs d'un service (journalctl)
 journalctl -u <service_name> -f
 
-$ service_name: systemctl list-units --type=service --all --format='table {{.Unit}}\t{{.Active}}\t{{.Sub}}' --- --header-lines 1 --column 1 --preview 'systemctl status {1}'
+$ service_name: systemctl list-units --type=service --all --format='table {{.Unit}}\t{{.Active}}\t{{.Sub}}' --- --header-lines 1 --column 1 --preview 'systemctl status {1}' --preview-window 'right:60%'
 
 % linux, env, variable, shell, environment, print, configuration
 
-# Afficher variable d'env / Show environment variable value
+# Afficher la valeur d'une variable d'environnement
 echo $<env_var>
 
-$ env_var: env | cut -d= -f1 --- --preview 'printenv {1}'
+$ env_var: env | cut -d= -f1 --- --preview 'printenv {1}' --preview-window 'right:60%'
 
-% wsl, windows, integration, explorer, clipboard, network, system, windows
+% linux, desktop, wayland, kde, clipboard, open, xdg, tuxedo
 
-# Ouvrir dossier courant dans Windows / Open folder in Explorer
+# Ouvrir un dossier/fichier/URL avec l'app par défaut
+xdg-open <target>
+
+# Copier vers le presse-papier Wayland
+echo "<text>" | wl-copy
+
+# Coller depuis le presse-papier Wayland
+wl-paste
+
+# Afficher l'utilisation mémoire
+free -h
+
+% wsl, windows, integration, explorer, clipboard, network
+
+# Ouvrir le dossier courant dans Windows Explorer
 explorer.exe .
 
-# IP de l'hôte Windows / Get Windows host IP (for services on host)
+# Obtenir l'IP de l'hôte Windows
 ip route | grep default | awk '{print $3}'
 
-# Copier vers presse-papier Windows / Copy to Windows clipboard
+# Copier vers le presse-papier Windows
 echo "<text>" | clip.exe
 
-# Ouvrir fichier/URL dans Windows / Open with default Windows app
+# Ouvrir un fichier/URL avec l'app Windows par défaut
 wslview <file_or_url>
-
-# Voir utilisation mémoire WSL / Show WSL RAM usage
-free -h --human

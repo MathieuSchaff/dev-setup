@@ -9,9 +9,10 @@ La table des fichiers est dans [`~/dev-setup/CLAUDE.md`](../CLAUDE.md) ; ce doss
 |-------------|-------------------|----------------------------------------------|
 | apps       | `gl apps.md`      | Gestion des paquets & formats (OS)           |
 | navi widget | `Ctrl+N`          | Sélection interactive, insère dans le shell  |
-| navi tmux   | `prefix + Ctrl+g` | Fonctionne dans vim, psql, SSH...            |
+| navi popup  | `Alt+N`           | Popup tmux — fonctionne dans vim, psql, SSH  |
 | navi direct | `navi`            | Interface complète                           |
-| fzf + glow  | `cs`              | fzf sur les cheatsheets + preview glow (loop)  |
+| doc popup   | `Ctrl+E`          | Popup tmux fzf+glow sur les cheatsheets      |
+| doc inline  | `Alt+P`           | Même chose mais inline dans le shell         |
 | glow pager  | `gl <fichier>`    | Rend un `.md` dans le pager                  |
 
 ## Conventions de ce cheatsheet

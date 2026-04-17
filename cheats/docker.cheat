@@ -1,107 +1,107 @@
-; Consolidé depuis denisidoro/navi-tldr-pages (docker-*.md)
 ; Curation : commandes utiles pour dev frontend/fullstack
+; Consolidé depuis denisidoro/navi-tldr-pages (docker-*.md)
 
 % docker, container, lifecycle, start, stop, restart, kill, rm, delete, remove, status, process, démarrer, arrêter, supprimer
 
-# Démarrer / Lancer conteneur (stoppé) / Start stopped container
+# Démarrer un conteneur stoppé
 docker start <container_id>
 
-# Stopper / Arrêter conteneur / Stop running container
+# Arrêter un conteneur qui tourne
 docker stop <container_id>
 
-# Redémarrer / Relancer conteneur / Restart container
+# Redémarrer un conteneur
 docker restart <container_id>
 
-# Tuer / Forcer arrêt / Kill container (SIGKILL)
+# Tuer un conteneur (SIGKILL)
 docker kill <container_id>
 
-# Supprimer / Effacer / Remove / Delete container
+# Supprimer un conteneur
 docker rm <container_id>
 
-# Supprimer / Forcer / Force remove container (even if running)
+# Forcer la suppression (même s'il tourne)
 docker rm -f <container_id>
 
-$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}'
+$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}' --preview-window 'right:60%'
 
 % docker, exec, shell, bash, sh, interactive, console, terminal, command
 
-# Ouvrir shell / Console / Open interactive shell (sh)
+# Ouvrir un shell sh dans un conteneur qui tourne
 docker exec -it <running_container_id> sh
 
-# Ouvrir bash / Console / Open interactive shell (bash)
+# Ouvrir un shell bash dans un conteneur qui tourne
 docker exec -it <running_container_id> bash
 
-$ running_container_id: docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker stats --no-stream {1}'
+$ running_container_id: docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker stats --no-stream {1}' --preview-window 'right:60%'
 
 % docker, logs, output, debug, tail, follow, journal, afficher
 
-# Suivre logs / Temps réel / Follow logs in real-time
+# Suivre les logs en temps réel
 docker logs -f <container_id>
 
-# Afficher logs (N lignes) / Show last N lines of logs
-docker logs --tail <n> <container_id>
+# Afficher les N dernières lignes
+docker logs --tail <lines> <container_id>
 
-$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}'
+$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}' --preview-window 'right:60%'
 
 % docker, images, rmi, delete, remove, layer, history, storage, cleanup, supprimer, effacer
 
-# Supprimer image / Remove / Delete docker image
+# Supprimer une image
 docker rmi <image_id>
 
-# Supprimer image (forcer) / Force remove image
+# Forcer la suppression d'une image
 docker rmi -f <image_id>
 
-# Voir historique / Couches / Show image layer history
+# Voir l'historique des couches d'une image
 docker image history <image_id>
 
-$ image_id: docker images --format 'table {{.ID}}\t{{.Repository}}\t{{.Tag}}\t{{.Size}}' --- --header-lines 1 --column 1 --preview 'docker image inspect {1} | jq ".[0].Config.Labels"'
+$ image_id: docker images --format 'table {{.ID}}\t{{.Repository}}\t{{.Tag}}\t{{.Size}}' --- --header-lines 1 --column 1 --preview 'docker image inspect {1} | jq ".[0].Config.Labels"' --preview-window 'right:60%'
 
 % docker, network, connect, disconnect, inspect, ip, routing, bridge
 
-# Inspecter réseau / Inspect network details
+# Inspecter un réseau
 docker network inspect <network_name>
 
-# Connecter au réseau / Connect container to network
+# Connecter un conteneur à un réseau
 docker network connect <network_name> <container_id>
 
-# Déconnecter du réseau / Disconnect container from network
+# Déconnecter un conteneur d'un réseau
 docker network disconnect <network_name> <container_id>
 
-$ network_name: docker network ls --format 'table {{.Name}}\t{{.Driver}}\t{{.Scope}}' --- --header-lines 1 --column 1 --preview 'docker network inspect {1}'
+$ network_name: docker network ls --format 'table {{.Name}}\t{{.Driver}}\t{{.Scope}}' --- --header-lines 1 --column 1 --preview 'docker network inspect {1}' --preview-window 'right:60%'
 
 % docker, volume, storage, mount, inspect, rm, delete, data
 
-# Inspecter volume / Inspect volume details
+# Inspecter un volume
 docker volume inspect <volume_name>
 
-# Supprimer volume / Remove / Delete volume
+# Supprimer un volume
 docker volume rm <volume_name>
 
-$ volume_name: docker volume ls --format 'table {{.Name}}\t{{.Driver}}' --- --header-lines 1 --column 1 --preview 'docker volume inspect {1}'
+$ volume_name: docker volume ls --format 'table {{.Name}}\t{{.Driver}}' --- --header-lines 1 --column 1 --preview 'docker volume inspect {1}' --preview-window 'right:60%'
 
 % docker, inspect, metadata, ip, details, debug, info
 
-# Inspecter conteneur / Inspect container metadata
+# Inspecter les metadata d'un conteneur
 docker inspect <container_id>
 
-# Obtenir IP / Get container IP address
+# Obtenir l'IP d'un conteneur
 docker inspect --format '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_id>
 
-$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}'
+$ container_id: docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}' --- --header-lines 1 --column 1 --preview 'docker logs --tail 50 {2}' --preview-window 'right:60%'
 
 % docker, maintenance, cleanup, prune, system, space, disk, vider, nettoyer
 
-# Nettoyage total / Purge / System prune (containers, networks, images)
+# Nettoyage système (conteneurs, réseaux, images dangling)
 docker system prune
 
-# Nettoyage total (volumes) / Purge all / System prune with volumes
+# Nettoyage système incluant les volumes
 docker system prune --volumes
 
-# Supprimer containers arrêtés / Remove stopped / Container prune
+# Supprimer les conteneurs arrêtés
 docker container prune
 
-# Supprimer images inutilisées / Remove dangling / Image prune
+# Supprimer les images dangling
 docker image prune
 
-# Supprimer volumes inutilisés / Remove unused / Volume prune
+# Supprimer les volumes inutilisés
 docker volume prune

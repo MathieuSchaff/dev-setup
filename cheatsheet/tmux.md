@@ -42,7 +42,7 @@ Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème 
 | Raccourci        | Effet                              |
 |------------------|------------------------------------|
 | `Ctrl+b s`       | Liste interactive des sessions     |
-| `Alt+s`          | **Popup fzf** — switcher floue entre sessions (sans préfixe, exclut la courante) |
+| `Alt+U`          | **Popup fzf** — switcher floue entre sessions (sans préfixe, exclut la courante) |
 | `Ctrl+b $`       | Renommer la session courante       |
 | `Ctrl+b (` / `)` | Session précédente / suivante      |
 | `Ctrl+b d`       | Détacher                           |
@@ -120,9 +120,10 @@ Config : `~/.tmux.conf` (symlink → `~/dev-setup/config/.tmux.conf`) · thème 
 
 | Raccourci | Effet                                                            |
 |-----------|------------------------------------------------------------------|
-| `Ctrl+g`    | **Popup lazygit** flottant (90×90%, sans préfixe)                |
-| `Alt+N`     | **Popup navi** — fonctionne aussi en SSH, nvim, psql...          |
-| `Alt+s`     | **Popup fzf sessions** — fuzzy-find + `Entrée` pour switcher (40×40%, sans préfixe) |
+| `Ctrl+g`    | **Popup lazygit** flottant (90×90%, sans préfixe)                          |
+| `Ctrl+e`    | **Popup doc** — fzf+glow sur les cheatsheets markdown (90×90%)             |
+| `Alt+N`     | **Popup navi** — fonctionne aussi en SSH, nvim, psql... (90×90%)           |
+| `Alt+U`     | **Popup sessions** — fuzzy-find + `Entrée` pour switcher (40×40%)          |
 
 > Ces raccourcis fonctionnent depuis n'importe quel pane, dans n'importe quelle app.
 > `Ctrl+g` hérite du `pane_current_path` → lazygit ouvre dans le bon repo.

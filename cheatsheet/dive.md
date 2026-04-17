@@ -151,4 +151,4 @@ dive --source docker-archive myapp.tar
 
 Liens :
 - [navi cheat](../cheats/dive.cheat) — `navi` sur `dive` pour les commandes fréquentes
-- [docker.md](./tools.md) — autres outils CLI
+- [tools.md](./tools.md) — autres outils CLI

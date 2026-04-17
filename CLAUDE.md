@@ -64,7 +64,7 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 - `~/.gitconfig` : delta activé comme pager, `side-by-side = true`, `navigate = true`
 
 ## Workflow dotfiles
-Le hook `pre-commit` copie automatiquement les fichiers actifs dans le repo à chaque commit.
+Les dotfiles sont des symlinks (`~/.zshrc → ~/dev-setup/config/.zshrc` etc.) — toute modif dans `~/` est déjà dans le repo. Commit + push.
 ```bash
 cd ~/dev-setup && git commit -m "update" && git push
 ```

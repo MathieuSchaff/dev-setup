@@ -61,8 +61,8 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 
 | Commande | Effet                                       |
 |----------|---------------------------------------------|
-| `Ctrl+N` | navi — cheatsheet interactif (widget shell) |
-| `Ctrl+E` | parcourir cheatsheets markdown (fzf + glow) |
+| `Ctrl+N` | navi — cheatsheet interactif (widget shell, insère dans le prompt) |
+| `Alt+P`  | parcourir cheatsheets markdown inline (fzf + glow)                 |
 
 > Les raccourcis `Ctrl+T` / `Ctrl+R` / `Alt+C` / `Tab` (fzf et fzf-tab) sont dans
 > [tools.md](./tools.md#fzf--fuzzy-finder).
@@ -78,8 +78,10 @@ Raccourcis fzf détaillés dans [tools.md](./tools.md#fzf--fuzzy-finder).
 | `tn <nom>`             | Créer session en arrière-plan                    |
 | `tnew <nom>`           | Créer une session nommée (`tmux new -s`)         |
 | `tmux attach -t <nom>` | Rejoindre une session existante                  |
-| `Ctrl+g`               | Ouvrir lazygit en popup flottant (sans préfixe)  |
-| `Alt+N`                | Ouvrir navi en popup flottant (sans préfixe)     |
+| `Ctrl+g`               | Popup lazygit (sans préfixe tmux)                |
+| `Ctrl+e`               | Popup doc cheatsheets fzf+glow (sans préfixe tmux) |
+| `Alt+N`                | Popup navi (sans préfixe tmux)                   |
+| `Alt+U`                | Popup switcher de sessions fzf (sans préfixe tmux) |
 
 ## Complétions
 

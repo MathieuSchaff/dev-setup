@@ -1,6 +1,6 @@
 # Tools & CLI
 
-Documentation des outils et CLI installés (Tuxedo OS — Linux natif, précédemment WSL2 Ubuntu).
+Documentation des outils et CLI installés (dual boot : Tuxedo OS natif + WSL2 Ubuntu sur Windows, mêmes dotfiles).
 
 ---
 
@@ -233,6 +233,8 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 ## Outils Windows accessibles depuis WSL (`/mnt/c/...`)
 
+> **Uniquement en boot WSL.** Ces chemins n'existent pas sur Tuxedo OS natif.
+
 | Outil | Chemin Windows (via `/mnt/c/`) |
 |-------|-------------------------------|
 | Git (Windows) | `/mnt/c/Program Files/Git/cmd/git.exe` |
@@ -249,12 +251,13 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 
 ---
 
-## Zed — Éditeur (Windows)
+## Zed — Éditeur
 
 > Cheatsheet complet (keymaps, LSP, Biome, Ollama, pièges) → **[cheatsheet/zed.md](./cheatsheet/zed.md)**
 
-- **Config source :** `~/.config/zed/` (Tuxedo OS, symlink vers `~/dev-setup/config/.config/zed/`)
-- **Backup versionné :** `~/dev-setup/config/.config/zed/` (syncé automatiquement via le hook pre-commit, déployé par `scripts/install.sh`)
+- **Config active (Tuxedo OS) :** `~/.config/zed/` → symlink vers `~/dev-setup/config/.config/zed/`
+- **Config active (WSL) :** Zed tourne côté Windows — config dans `C:\Users\schaf\AppData\Roaming\Zed\` (hors dotfiles Linux)
+- **Backup versionné :** `~/dev-setup/config/.config/zed/` (déployé par `scripts/install.sh`)
 - **Stack :** vim_mode + base_keymap VSCode, Catppuccin Mocha, vtsls + Biome pour TS/TSX/JS/JSX, format_on_save, Ollama (Qwen Coder 7B)
 
 ---
@@ -313,14 +316,12 @@ Les binaires sont cherchés dans cet ordre (priorité décroissante) :
 | `~/.config/starship.toml` | `~/dev-setup/config/.config/starship.toml` |
 | `~/.config/ghostty/` | `~/dev-setup/config/.config/ghostty/` |
 
-> Configs Zed et `~/CLAUDE.md` sont copiés (pas symlinkés) via le hook `pre-commit`.
-
 ### Workflow de mise à jour
 
 ```bash
 cd ~/dev-setup
 git commit -m "update"   # les dotfiles sont déjà dans le repo (symlinks)
-git push                  # le pre-commit sync Zed + CLAUDE.md automatiquement
+git push
 ```
 
 ---

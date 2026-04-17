@@ -1,28 +1,28 @@
 % navi, edit, config, setup, customize, cheatsheet, local, éditer, configurer
 
-# Éditer cheatsheet / Modifier / Edit a cheatsheet (visual selection)
+# Éditer un fichier cheat existant
 $EDITOR <cheat_file>
 
-# Éditer config / Modifier / Edit navi configuration
+# Éditer la config navi
 $EDITOR $(navi info config-path)
 
-# Créer cheatsheet / Nouvelle / Create new local cheatsheet
+# Créer un nouveau fichier cheat local
 $EDITOR ~/dev-setup/cheats/<new_name>.cheat
 
-$ cheat_file: fd . ~/dev-setup/cheats/ --- --preview 'bat --color=always {}'
+$ cheat_file: fd . ~/dev-setup/cheats/ --- --preview 'bat --color=always {}' --preview-window 'right:60%'
 
 % navi, search, online, community, repo, browse, import, chercher, trouver, importer
 
-# Chercher / Importer cheatsheets / Browse and import community cheatsheets
+# Parcourir et importer des cheatsheets de la communauté
 navi repo browse
 
-# Ajouter repo / GitHub / Add cheatsheet repository from GitHub
-navi repo add <url>
+# Ajouter un repo de cheatsheets depuis GitHub
+navi repo add <repo_url>
 
 % navi, debug, logs, cache, troubleshoot, réparer, fixer
 
-# Voir logs / Debug / Follow navi logs
+# Suivre les logs navi
 tail -f ~/.config/navi/navi.log
 
-# Rafraîchir cache / Forcer / Force refresh variables (skip cache)
+# Forcer le rafraîchissement du cache
 navi --no-cache

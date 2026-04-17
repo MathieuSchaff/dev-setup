@@ -113,7 +113,7 @@ ctop n'a pas de config YAML — le fichier est écrit par `S` en cours de sessio
 | Chemin cherché (dans l'ordre)    | Notes                                 |
 |----------------------------------|---------------------------------------|
 | `$XDG_CONFIG_HOME/ctop/config`   | Défaut XDG                            |
-| `~/.config/ctop/config`          | Sur WSL/Ubuntu classique              |
+| `~/.config/ctop/config`          | Sur WSL ou Ubuntu/distro classique    |
 | `~/.ctop`                        | Fallback legacy                       |
 
 Persistent au redémarrage : filtres, champ de tri, ordre, colonnes visibles, invert colors.

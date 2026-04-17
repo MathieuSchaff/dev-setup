@@ -4,68 +4,68 @@
 
 % dive, docker, images, explore, layer, size, storage, analyze, optimize, inspect
 
-# Analyser / Explorer / Inspecter image Docker / Analyze local image
+# Explorer une image Docker locale
 dive <image>
 
-$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' --- --preview 'docker image inspect {1} | jq ".[0].Size, .[0].Created, .[0].Config.Cmd"' --preview-window 'right:60%'
 
-# Analyser / Explorer / Inspecter par ID / Analyze image by ID
+# Explorer par ID d'image
 dive <image_id>
 
-$ image_id: docker images --format '{{.ID}} {{.Repository}}:{{.Tag}}' --- --column 1
+$ image_id: docker images --format '{{.ID}}\t{{.Repository}}:{{.Tag}}\t{{.Size}}' --- --column 1 --delimiter $'\t' --preview 'docker image inspect {1} | jq ".[0].Config.Labels, .[0].Created"' --preview-window 'right:60%'
 
-# Build + Analyser / Compiler / Build and analyze image
+# Builder + explorer une image depuis un Dockerfile
 dive build -t <name>:<tag> .
 
-# Build + Analyser (Dockerfile spécifique) / Custom Dockerfile build
-dive build -t <name>:<tag> -f <dockerfile> .
+# Builder + explorer avec un Dockerfile spécifique
+dive build -t <name>:<tag> -f <dockerfile_path> .
 
-# Analyser / Forcer / Ignore errors and analyze anyway
+# Explorer en ignorant les erreurs
 dive --ignore-errors <image>
 
 % dive, podman, container, images, explore
 
-# Analyser via Podman / Explorer / Inspect image via Podman
+# Explorer une image via Podman
 dive --source podman <image>
 
 % dive, archive, tar, storage, offline, export
 
-# Analyser archive TAR / Offline analysis / Analyze docker-archive
-dive --source docker-archive <archive.tar>
+# Explorer une archive TAR (analyse offline)
+dive --source docker-archive <archive_path>
 
-# Exporter + Analyser / Export and analyze TAR in one go
+# Exporter en TAR puis explorer
 docker save <image> -o /tmp/img.tar && dive --source docker-archive /tmp/img.tar
 
-$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' --- --preview 'docker image inspect {1} | jq ".[0].Size, .[0].Created, .[0].Config.Cmd"' --preview-window 'right:60%'
 
 % dive, ci, automate, quality, gate, report, json
 
-# Mode CI / Automatiser / Verify image thresholds (fail if inefficient)
+# Mode CI — vérifier les seuils de l'image (fail si inefficace)
 CI=true dive <image>
 
-# Mode CI (config externe) / CI with rules file
+# Mode CI avec fichier de règles externe
 CI=true dive <image> --ci-config .dive-ci
 
-# Mode CI (seuils inline) / CI with inline thresholds (efficiency, wasted bytes)
+# Mode CI avec seuils inline (efficiency, wasted bytes)
 dive <image> --ci --lowestEfficiency 0.95 --highestWastedBytes 20MB
 
-# Exporter JSON / Générer rapport / Export analysis to JSON (skip TUI)
+# Exporter l'analyse en JSON (skip TUI)
 dive <image> -j dive-report.json
 
-$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>'
+$ image: docker images --format '{{.Repository}}:{{.Tag}}' | grep -v '<none>' --- --preview 'docker image inspect {1} | jq ".[0].Size, .[0].Created, .[0].Config.Cmd"' --preview-window 'right:60%'
 
 % dive, config, settings, edit, customize
 
-# Éditer config / Open config in nvim
+# Éditer la config
 nvim ~/.dive.yaml
 
-# Utiliser config spécifique / Custom config file
-dive --config <path_to_yaml> <image>
+# Utiliser un fichier de config custom
+dive --config <config_path> <image>
 
 % dive, version, help, information
 
-# Voir version / Show installed version
+# Afficher la version installée
 dive --version
 
-# Aide / Help / Usage instructions
+# Afficher l'aide
 dive --help

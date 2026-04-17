@@ -2,7 +2,7 @@
 
 Séquence complète pour reproduire l'environnement sur Linux (Ubuntu/Debian) ou macOS.
 
-> **Environnement actuel :** WSL2 (Ubuntu 22.04) sur Windows — mais le setup fonctionne sur n'importe quel Linux Debian-based ou macOS avec adaptations mineures.
+> **Environnements utilisés (dual boot) :** Tuxedo OS (Ubuntu 24.04 + KDE, natif) et WSL2 Ubuntu sur Windows. Le setup fonctionne sur n'importe quel Linux Debian-based ou macOS avec adaptations mineures.
 
 ---
 
@@ -264,7 +264,7 @@ Le script `scripts/install.sh` :
 |---------|-------|
 | `~/.gitconfig` | delta comme pager, side-by-side, navigate, nvim comme éditeur |
 | `~/.config/lazygit/config.yml` | delta dans lazygit (`--paging=never`), nvim comme éditeur |
-| `~/.zshrc` | tous les alias, fonction `lg` smart exit, `t` tmux, `update-all`... |
+| `~/.zshrc` | tous les alias, fonction `lg` smart exit, `t` tmux, `update`, `update-tools`... |
 | `~/.tmux.conf` | Catppuccin macchiato, `Ctrl+g` popup lazygit, vi copy mode |
 
 ---
@@ -556,13 +556,22 @@ Obsidian : ouvrir `~/Mathieu/vault` comme vault manuellement.
 ## Mise à jour d'une installation existante
 
 ```bash
-update-all   # apt, omz, plugins zsh, rust/cargo, uv, lazygit, fzf
+update             # safe : apt, omz, zsh-plugins, rust, cargo, go, uv, tools
+update --all       # tout, y compris runtimes (node, bun, pnpm, conda)
+update --list      # voir les catégories disponibles
 ```
 
-Commandes séparées (risque de casser des projets) :
+Mettre à jour les CLI hors apt/cargo (dive, lazygit, lazydocker, ctop, neovim, fzf) :
 ```bash
-update-node    # Node via nvm
-update-bun     # Bun
-update-conda   # Conda
-update-nvim    # Neovim
+update-tools            # tous
+update-tools <tool>     # un outil précis
+update-tools --check    # vérifier ce qui est obsolète sans rien changer
+```
+
+Catégories runtime (risque de casser des projets — lancer explicitement) :
+```bash
+update node   # Node via nvm + npm -g
+update bun    # Bun
+update pnpm   # Corepack prepare
+update conda  # Conda base
 ```

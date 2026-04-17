@@ -1,86 +1,74 @@
-; Consolidé depuis denisidoro/navi-tldr-pages (docker-compose.md)
-; Docker Compose v2 (plugin, commande `docker compose`)
+; Docker Compose v2 — plugin, commande `docker compose`
 
 % docker-compose, up, start, run, deploy, launch, démarrer
 
-# Démarrer tous les services / Start all services (detached/background)
+# Démarrer tous les services en arrière-plan
 docker compose up -d
 
-# Démarrer + Rebuild / Start and rebuild images if needed
+# Démarrer et rebuilder les images si besoin
 docker compose up --build
 
-# Démarrer avec fichier spécifique / Start with custom compose file
-docker compose -f <path_to_compose.yml> up -d
+# Démarrer avec un fichier compose spécifique
+docker compose -f <compose_file> up -d
 
-# Démarrer avec nom projet / Start with custom project name
-docker compose -p <project_name> -f <path_to_compose.yml> up -d
+# Démarrer avec un nom de projet personnalisé
+docker compose -p <project_name> -f <compose_file> up -d
 
-# Démarrer service spécifique / Start single service
+# Démarrer un service spécifique
 docker compose up -d <service>
 
 % docker-compose, down, stop, remove, delete, cleanup, destroy, quitter, arrêter, supprimer
 
-# Arrêter / Stopper tous les services / Stop all services (keep containers)
+# Arrêter tous les services (garder les conteneurs)
 docker compose stop
 
-# Supprimer / Down / Stop and remove containers + networks
+# Arrêter et supprimer conteneurs + réseaux
 docker compose down
 
-# Nettoyage complet / Full cleanup / Stop and remove everything (volumes, images)
+# Nettoyage complet — conteneurs, réseaux, volumes, images
 docker compose down --rmi all --volumes
 
-# Redémarrer / Restart all services
+# Redémarrer tous les services
 docker compose restart
 
-# Redémarrer service spécifique / Restart specific service
+# Redémarrer un service spécifique
 docker compose restart <service>
 
 % docker-compose, logs, output, debug, tail, journal, afficher
 
-# Afficher logs / Show logs (all services)
+# Afficher les logs (tous services)
 docker compose logs
 
-# Suivre logs / Follow logs (all services)
+# Suivre les logs en temps réel (tous services)
 docker compose logs -f
 
-# Suivre logs service / Follow logs for specific service
+# Suivre les logs d'un service spécifique
 docker compose logs -f <service>
 
-# Logs (N lignes) / Show last N lines of logs
-docker compose logs --tail=<n>
+# Afficher les N dernières lignes de logs
+docker compose logs --tail=<lines>
 
 % docker-compose, ps, exec, run, shell, bash, status, process, lister
 
-# Lister conteneurs / List containers (compose project)
+# Lister les conteneurs du projet compose
 docker compose ps
 
-# Exécuter commande / Run command in service
+# Exécuter une commande dans un service
 docker compose exec <service> <command>
 
-# Ouvrir shell / Bash / Interactive shell in service
+# Ouvrir un shell interactif dans un service
 docker compose exec <service> sh
 
-# Lancer commande ponctuelle / Run one-off command (new container)
+# Lancer une commande ponctuelle dans un conteneur éphémère
 docker compose run --rm <service> <command>
 
 % docker-compose, build, pull, fetch, compile, image
 
-# Builder / Compiler / Build all services
+# Builder tous les services
 docker compose build
 
-# Builder sans cache / Rebuild service (no-cache)
+# Rebuilder un service sans cache
 docker compose build --no-cache <service>
 
-# Récupérer images / Pull / Fetch all images
+# Tirer toutes les images
 docker compose pull
-
-% lazydocker, tui, dashboard, monitor, docker, explore
-
-# Ouvrir Lazydocker / Docker TUI dashboard
-lazydocker
-
-# Lazydocker (compose spécifique) / Open with custom compose file
-lazydocker -f <path_to_compose.yml>
-
-# Voir config Lazydocker / Show default config
-lazydocker --config

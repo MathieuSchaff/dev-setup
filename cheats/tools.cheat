@@ -1,147 +1,96 @@
+; CLI d'exploration — eza, bat, ripgrep, fd, zoxide, glow, tmux, bottom
+; Scripts dev-setup (update/bootstrap/install) → voir dev-setup.cheat
+
 % eza, ls, lister, voir, fichiers, folders
 
-# Lister les fichiers (vue longue, icônes, statut git) / list files
+# Lister (vue longue, icônes, statut git)
 eza -l --icons --git
 
-# Lister tous les fichiers (incluant les cachés / dotfiles) / list all
+# Lister tout y compris dotfiles / cachés
 eza -la --icons --git
 
-# Arborescence / Arbre / Tree (limité à N niveaux de profondeur)
+# Arborescence limitée à N niveaux
 eza --tree --icons -L <depth>
 
-# Trier les fichiers par date de modification / trier par date
+# Trier par date de modification
 eza -l --icons --sort=modified
 
-# Dossiers uniquement / Lister répertoires
+# Lister uniquement les dossiers
 eza -l -D
 
 % bat, cat, afficher, lire, voir, syntax, highlighter
 
-# Afficher un fichier avec coloration / syntax highlighting (batcat)
-batcat <file>
+# Afficher un fichier avec coloration syntaxique
+bat <file_path>
 
-# Afficher un fichier sans décorations / texte brut (plain)
-batcat --plain <file>
+# Afficher sans décorations (texte brut)
+bat --plain <file_path>
 
-# Lister les thèmes de coloration disponibles pour bat
-batcat --list-themes
+# Lister les thèmes de coloration disponibles
+bat --list-themes
 
-$ file: fdfind -t f --- --preview 'batcat --color=always {}' --preview-window 'right:60%'
+$ file_path: fdfind -t f --- --preview 'bat --color=always {}' --preview-window 'right:60%'
 
 % ripgrep, rg, search, chercher, trouver, texte, grep
 
-# Chercher / Trouver du texte dans les fichiers (récursif / search text)
+# Chercher un pattern (récursif)
 rg "<pattern>"
 
-# Chercher / Trouver du texte uniquement dans un type de fichier (js, py, md...)
-rg "<pattern>" -t <type>
+# Chercher uniquement dans un type de fichier
+rg "<pattern>" -t <file_type>
 
-$ type: echo -e "js\nts\npy\ngo\nrs\nmd\njson\nyaml\ntoml" | fzf
+$ file_type: echo -e "js\nts\npy\ngo\nrs\nmd\njson\nyaml\ntoml" | fzf
 
-# Chercher / Trouver uniquement les noms de fichiers contenant un texte
+# Lister uniquement les noms de fichiers contenant le pattern
 rg "<pattern>" -l
 
-% fdfind, find, chercher, trouver, fichiers, folders, path
+% fdfind, fd, find, chercher, trouver, fichiers, folders, path
 
-# Chercher / Trouver un fichier par son nom (fdfind / find file)
+# Chercher un fichier par nom
 fdfind <pattern>
 
-# Chercher / Trouver uniquement les fichiers (pas de dossiers)
+# Chercher uniquement les fichiers (pas les dossiers)
 fdfind -t f <pattern>
 
-# Chercher / Trouver par extension de fichier (ex: js, ts, md)
+# Chercher par extension
 fdfind -e <ext>
 
 $ ext: echo -e "ts\njs\npy\ngo\nrs\nmd\njson\ntoml\nyaml" | fzf
 
-% zoxide, z, navigation, sauter, sauter vers, jump, cd
+% zoxide, z, navigation, sauter, jump, cd
 
-# Sauter vers / Naviguer vers un dossier fréquent ou récent (zoxide)
+# Sauter vers un dossier fréquent ou récent
 z <dir>
 
-$ dir: zoxide query -l --- --preview 'eza --tree -L 2 {}' --preview-window 'right:50%'
+$ dir: zoxide query -l --- --preview 'eza --tree -L 2 {}' --preview-window 'right:60%'
 
-# Mode interactif pour sauter vers un dossier (zi / fzf)
+# Mode interactif (fzf)
 zi
 
 % tmux, sessions, multiplexer, background, terminal
 
-# Créer / Lancer une nouvelle session nommée tmux
+# Créer une session nommée
 tmux new -s <session_name>
 
-# Rejoindre / Attacher une session existante (attach session)
-tmux attach -t <session>
+# Attacher une session existante
+tmux attach -t <session_name>
 
-$ session: tmux ls --- --column 1 --delimiter ':' --preview 'tmux list-windows -t {1}'
+$ session_name: tmux ls --- --column 1 --delimiter ':' --preview 'tmux list-windows -t {1}' --preview-window 'right:60%'
 
-# Lister les sessions tmux en cours
+# Lister les sessions en cours
 tmux ls
 
-% update, upgrade, maintenance, system, mettre à jour, tout mettre à jour
-
-# Update all safe (apt, omz, rust, cargo, go, uv, tools) / Tout mettre à jour
-~/dev-setup/scripts/update.sh
-
-# Update everything including runtimes (node, bun, pnpm, conda) / Full update complet
-~/dev-setup/scripts/update.sh --all
-
-# Update a specific category / Mettre à jour une catégorie (apt, cargo, node, bun...)
-~/dev-setup/scripts/update.sh <category>
-
-# List available update categories / Voir les catégories disponibles
-~/dev-setup/scripts/update.sh --list
-
-$ category: echo -e "apt\nomz\nzsh-plugins\nrust\ncargo\ngo\nuv\ntools\nnode\nbun\npnpm\nconda" | fzf
-
-% update-tools, cli, binaries, binaires, dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz, outdated
-
-# Update all manually installed CLIs (dive, lazygit, lazydocker, ctop, neovim, fzf, tmux, omz)
-~/dev-setup/scripts/update-tools.sh
-
-# Update a specific tool / Mettre à jour un outil précis
-~/dev-setup/scripts/update-tools.sh <tool>
-
-# Check what's outdated without changing anything / Vérifier ce qui est obsolète
-~/dev-setup/scripts/update-tools.sh --check
-
-# List tools managed by update-tools / Lister les outils gérés
-~/dev-setup/scripts/update-tools.sh --list
-
-$ tool: echo -e "dive\nlazygit\nlazydocker\nctop\nneovim\nfzf" | fzf
-
-% setup, bootstrap, install, deploy, déployer, new machine, nouvelle machine, dotfiles, configs, symlinks
-
-# Bootstrap: install all tools on a fresh machine (apt, rust, node, bun, fzf, neovim...)
-~/dev-setup/bootstrap.sh
-
-# Bootstrap all tools without prompts (includes optional: go, uv, miniconda)
-~/dev-setup/bootstrap.sh --all
-
-# Deploy configs only (symlinks: .zshrc, .gitconfig, .tmux.conf, nvim, lazygit...)
-~/dev-setup/install.sh
-
-# Full setup: install tools + deploy configs / Setup complet nouvelle machine
-~/dev-setup/setup.sh
-
-# Full setup without prompts (all tools + configs, no questions asked)
-~/dev-setup/setup.sh --all
-
-% glow, markdown, doc, guide, help, aide, notes, lire, afficher, cheatsheet
+% glow, markdown, doc, guide, aide, notes, lire, cheatsheet
 
 # Parcourir les cheatsheets markdown (aussi via Ctrl+E)
 glow -p ~/dev-setup/cheatsheet/<file_name>
 
-$ file_name: fdfind -e md --base-directory ~/dev-setup/cheatsheet --- --preview 'glow -s dark -w 80 ~/dev-setup/cheatsheet/{}'
+$ file_name: fdfind -e md --base-directory ~/dev-setup/cheatsheet --- --preview 'glow -s dark -w 80 ~/dev-setup/cheatsheet/{}' --preview-window 'right:60%'
 
-# Afficher un fichier Markdown dans le terminal (sans pager / sans défilement)
-glow <file>
-
-% delta, git, diff, color, compare
-
-# Voir le diff git avec coloration delta (compare changes)
-git diff
+# Rendre un Markdown dans le terminal sans pager
+glow <file_path>
 
 % bottom, btm, system, monitor, cpu, ram, ressources
 
-# Lancer le moniteur système interactif (top/htop moderne)
+# Lancer le moniteur système interactif
 btm

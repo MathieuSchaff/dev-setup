@@ -3,151 +3,140 @@
 
 % bun, init, create, project, setup, initialiser
 
-# Initialiser / Créer / Setup / New project (interactif)
+# Initialiser un nouveau projet (interactif)
 bun init
 
-# Initialiser / Créer / Setup avec défauts / Default values (no prompts)
+# Initialiser avec les défauts (sans prompt)
 bun init -y
 
-# Créer / Bootstrap / Setup depuis template / Official template
+# Bootstrap depuis un template officiel
 bun create <template> <project_name>
 
 $ template: echo -e "react\nnext\nnext-app\nvite\nvite-react\nelysia\nhono" | fzf
 
 % bun, install, add, remove, dependencies, package, management, deps, supprimer, ajouter, effacer, cleanup
 
-# Installer / Download / Fetch les dépendances (from package.json)
+# Installer les dépendances depuis package.json
 bun install
 
-# Installer / Alias court / Short alias (install)
+# Alias court pour install
 bun i
 
-# Installer / CI / Reproducible build / Frozen lockfile (respect lockfile)
+# Build reproductible — respecter le lockfile (CI)
 bun install --frozen-lockfile
 
-# Ajouter / Installer / Add / Install dependency
+# Ajouter une dépendance
 bun add <package>
 
-# Ajouter / Dev / Save dev dependency
+# Ajouter une dev dependency
 bun add -d <package>
 
-# Ajouter / Peer / Peer dependency
+# Ajouter une peer dependency
 bun add --peer <package>
 
-# Ajouter / Fixer / Pin / Exact version (no caret)
+# Fixer la version exacte (pas de caret)
 bun add --exact <package>
 
-# Ajouter globalement / Global install / System-wide dependency
+# Installation globale
 bun add -g <package>
 
-# Supprimer / Retirer / Effacer / Remove / Delete / Uninstall dependency
+# Supprimer une dépendance
 bun remove <package>
 
-# Mettre à jour / Update / Upgrade dependencies
+# Mettre à jour toutes les dépendances
 bun update
 
-# Mettre à jour / Update / Upgrade specific dependency
+# Mettre à jour une dépendance spécifique
 bun update <package>
 
 % bun, run, scripts, execute, lancer, runner
 
-# Lancer / Exécuter / Run / Execute npm script
+# Exécuter un script npm
 bun run <script_name>
 
-# Exécuter / Lancer / Watch / Hot reload TS/JS file
+# Hot reload sur un fichier TS/JS
 bun --hot <file_path>
 
-# Exécuter / Lancer / Watch / Reload on change
+# Watch sur un fichier TS/JS
 bun --watch <file_path>
 
-# Exécuter / Lancer / Bunx / Run command (npx style)
+# Lancer un binaire (style npx)
 bunx <package_name> <args>
 
-$ script_name: jq -r '.scripts | to_entries[] | "\(.key)\t\(.value)"' package.json --- --column 1 --delimiter $'\t' --preview 'echo {2}'
-$ file_path: fdfind -t f -e ts -e js -e tsx -e jsx --- --preview 'batcat --color=always {}'
-
+$ script_name: jq -r '.scripts | to_entries[] | "\(.key)\t\(.value)"' package.json --- --column 1 --delimiter $'\t' --preview 'echo {2}' --preview-window 'right:60%'
+$ file_path: fdfind -t f -e ts -e js -e tsx -e jsx --- --preview 'bat --color=always {}' --preview-window 'right:60%'
+$ package_name: jq -r '.dependencies + .devDependencies | keys[]' package.json --- --preview 'bun pm view {1} description' --preview-window 'right:60%'
 
 % bun, test, runner, quality, verify, tester, vérifier
 
-# Lancer / Exécuter / Run all tests / Verify
+# Lancer tous les tests
 bun test
 
-# Lancer / Filtrer / Run specific tests (file/pattern)
+# Lancer les tests d'un fichier ou matching un pattern
 bun test <pattern>
 
-# Lancer / Watch / Run tests in watch mode
+# Tests en watch mode
 bun test --watch
 
-# Lancer / Coverage / Run tests with code coverage
+# Tests avec coverage
 bun test --coverage
 
-# Lancer / Timeout / Run tests with custom timeout
-bun test --timeout <ms>
+# Tests avec timeout custom (ms)
+bun test --timeout <timeout_ms>
 
-# Mettre à jour snapshots / Update / Refresh snapshots
+# Mettre à jour les snapshots
 bun test --update-snapshots
 
-# Filtrer / Chercher / Filter tests by name (regex)
+# Filtrer les tests par nom (regex)
 bun test -t "<pattern>"
 
 % bun, build, bundler, compile, bundle, output, dist
 
-# Builder / Compiler / Bundle / Build entrypoint to directory
-bun build <entry> --outdir <dist>
+# Builder un entrypoint vers un dossier
+bun build <entry_file> --outdir <dist_dir>
 
-# Builder / Navigateur / Browser target build
-bun build <entry> --outdir <dist> --target browser
+# Build cible navigateur
+bun build <entry_file> --outdir <dist_dir> --target browser
 
-# Builder / Node / Node.js target build
-bun build <entry> --outdir <dist> --target node
+# Build cible Node.js
+bun build <entry_file> --outdir <dist_dir> --target node
 
-# Builder / Minifier / Minify / Optimize bundle
-bun build <entry> --outdir <dist> --minify
+# Build minifié
+bun build <entry_file> --outdir <dist_dir> --minify
 
-# Builder / Debug / Build with sourcemaps
-bun build <entry> --outdir <dist> --sourcemap
+# Build avec sourcemaps
+bun build <entry_file> --outdir <dist_dir> --sourcemap
 
-# Compiler / Binaire / Compile standalone binary / Executable
-bun build <entry> --compile --outfile <binary>
+# Compiler en binaire standalone
+bun build <entry_file> --compile --outfile <binary_path>
 
 % bun, pm, package, manager, cache, storage, list, nettoyage, cleanup
 
-# Lister / Chercher / List installed packages (tree)
+# Lister les packages installés (tree)
 bun pm ls
 
-# Lister / List packages (flat mode)
+# Lister tous les packages (flat)
 bun pm ls --all
 
-# Afficher cache / Show cache path / Storage
+# Afficher le chemin du cache
 bun pm cache
 
-# Vider / Nettoyer / Purge / Clear / Clean cache
+# Vider le cache
 bun pm cache rm
 
-# Voir / Vérifier / Show hashes / Lockfile integrity
+# Vérifier l'intégrité du lockfile
 bun pm hash
 
 % bun, upgrade, update, system, version
 
-# Mettre à jour / Upgrade / Update bun CLI
+# Mettre à jour le CLI bun
 bun upgrade
 
-# Mettre à jour / Canary / Switch to canary / beta version
+# Passer sur la canary / beta
 bun upgrade --canary
 
-# Mettre à jour / Stable / Switch to stable version
+# Revenir sur la version stable
 bun upgrade --stable
 
-# Voir version / Show / Check installed version
+# Afficher la version installée
 bun --version
-
-% bun, run, scripts, execute, lancer, runner
-
-# Lancer / Exécuter / Run / Execute bun script
-bun run <script_name>
-
-# Exécuter / Lancer / Bun x / Run binary command (npx style)
-bunx <package_name> <args>
-
-$ script_name: jq -r '.scripts | to_entries[] | "\(.key)\t\(.value)"' package.json --- --column 1 --delimiter $'\t' --preview 'echo {2}'
-$ package_name: jq -r '.dependencies + .devDependencies | keys[]' package.json --- --preview 'bun pm view {1} description'

@@ -2,7 +2,7 @@
 
 Éditeur additionnel (Tuxedo OS), mode vim activé avec base_keymap VSCode.
 Config source : `~/.config/zed/` (symlink vers `~/dev-setup/config/.config/zed/`).
-Backup versionné : `~/dev-setup/config/.config/zed/` (syncé via hook `pre-commit`, déployé via `scripts/install.sh`).
+Backup versionné : `~/dev-setup/config/.config/zed/` (déployé via `scripts/install.sh`).
 
 ## Sommaire
 
@@ -199,8 +199,8 @@ node_modules, dist, .turbo, .next, .vscode, .storybook, .husky,
 | Edit predictions  | Qwen, **désactivées** dans l'UI              |
 | `disable_ai`      | `false`                                      |
 
-> Ollama tourne côté Windows (`C:\Users\schaf\AppData\Local\Programs\Ollama\ollama.exe`).
-> Zed s'y connecte en HTTP local.
+> **Tuxedo OS** : Ollama natif (`/usr/local/bin/ollama`, service systemd user).
+> **WSL** : Ollama tourne côté Windows (`C:\Users\schaf\AppData\Local\Programs\Ollama\ollama.exe`) ; Zed s'y connecte via `http://localhost:11434` (WSL fait le passthrough).
 
 ---
 
@@ -232,8 +232,7 @@ node_modules, dist, .turbo, .next, .vscode, .storybook, .husky,
 
 Emplacement actif : `~/.config/zed/` (symlink vers `~/dev-setup/config/.config/zed/`)
 Backup versionné : `~/dev-setup/config/.config/zed/`
-Sync : hook `pre-commit` copie les configs dans le repo.
-Déploiement via `scripts/install.sh`.
+Déploiement via `scripts/install.sh` (symlinks).
 
 ---
 
@@ -259,8 +258,3 @@ Touche AZERTY française, ne marche pas sur clavier QWERTY.
 ### `space` leader en visual
 
 Ne fonctionne que si le mode visual est actif — sinon utiliser les bindings NORMAL.
-
-### Pre-commit hook WSL-only
-
-Le sync Zed ne marche **que sur WSL** (hardcodé `/mnt/c/Users/schaf/...`).
-Sur une autre machine, éditer le hook ou l'ignorer.

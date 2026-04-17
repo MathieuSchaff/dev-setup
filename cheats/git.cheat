@@ -1,110 +1,110 @@
 % git, branch, checkout, switch, change, navigation, flow, basculer, branche, déplacer
 
-# Basculer / Changer de branche / Switch to existing branch
+# Basculer sur une branche existante
 git checkout <branch_name>
 
-# Basculer / Changer de branche (switch) / Switch to existing branch
+# Basculer sur une branche (syntaxe moderne)
 git switch <branch_name>
 
-# Supprimer branche / Effacer locale / Delete / Remove local branch
+# Supprimer une branche locale (si mergée)
 git branch -d <branch_name>
 
-# Fusionner / Merger branche / Merge branch into current
+# Merger une branche dans la courante
 git merge <branch_name>
 
-# Rebaser / Réorganiser / Rebase current branch on another
+# Rebaser la branche courante sur une autre
 git rebase <branch_name>
 
-$ branch_name: git branch --format='%(refname:short)' --- --preview 'git log --oneline --graph --color=always -n 10 {1}'
+$ branch_name: git branch --format='%(refname:short)' --- --preview 'git log --oneline --graph --color=always -n 10 {1}' --preview-window 'right:60%'
 
 % git, branch, remote, push, delete, sync, synchroniser, distant
 
-# Supprimer branche distante / Delete remote branch (origin)
+# Supprimer une branche distante (origin)
 git push origin --delete <branch_remote>
 
-# Créer + Basculer / New branch from remote / Track remote branch
+# Créer une branche locale qui track une branche distante
 git switch -c <branch_new> origin/<branch_remote>
 
-$ branch_remote: git branch -r | sed 's/origin\///' | grep -v 'HEAD' --- --preview 'git log --oneline --graph --color=always -n 10 origin/{1}'
+$ branch_remote: git branch -r --format='%(refname:short)' | sed 's|^origin/||' | grep -v '^HEAD$' --- --preview 'git log --oneline --graph --color=always -n 10 origin/{1}' --preview-window 'right:60%'
 
 % git, commit, show, hash, log, history, inspect, cherry-pick, reset, undo, annuler, historique
 
-# Voir contenu commit / Inspecter / Show commit details
+# Voir le contenu d'un commit
 git show <commit_hash>
 
-# Cherry-pick / Récupérer commit / Apply specific commit
+# Appliquer un commit spécifique sur la branche courante
 git cherry-pick <commit_hash>
 
-# Reset soft / Annuler commits (garder index) / Soft reset (keep staged changes)
+# Reset soft — annuler les commits mais garder l'index
 git reset --soft <commit_hash>
 
-# Reset mixed / Annuler commits (garder fichiers) / Mixed reset (keep unstaged changes)
+# Reset mixed — annuler les commits et l'index mais garder les fichiers
 git reset <commit_hash>
 
 $ commit_hash: git log --oneline --color=always --- --column 1 --preview 'git show --color=always --stat {1}' --preview-window 'right:60%'
 
 % git, diff, file, add, restore, stage, unstage, undo, change, compare, modifier, annuler
 
-# Diff fichier / Comparer / Show differences for specific file
+# Voir le diff d'un fichier précis
 git diff -- <tracked_file>
 
-# Annuler changements / Restaurer / Undo unstaged changes (restore file)
+# Annuler les changements non stagés sur un fichier
 git restore <tracked_file>
 
-# Unstage / Sortir de l'index / Unstage file (move to unstaged)
+# Unstage un fichier (sortir de l'index)
 git restore --staged <tracked_file>
 
-# Ajouter / Stager / Add file to index (stage)
+# Stager un fichier
 git add <tracked_file>
 
-$ tracked_file: git status --short | awk '{print $NF}' --- --preview 'git diff --color=always -- {} | head -n 100'
+$ tracked_file: git status --short | awk '{print $NF}' --- --preview 'git diff --color=always -- {} | head -n 100' --preview-window 'right:60%'
 
 % git, stash, save, temporary, pop, apply, store, mettre de côté, brouillon
 
-# Appliquer stash / Récupérer / Apply stash (keep in list)
+# Appliquer un stash sans le retirer de la liste
 git stash apply <stash_id>
 
-# Appliquer + Supprimer / Pop stash (apply and remove from list)
+# Appliquer et retirer un stash
 git stash pop <stash_id>
 
-# Voir contenu stash / Inspecter / Show stash content (patch)
+# Voir le contenu d'un stash (patch)
 git stash show -p <stash_id>
 
-# Supprimer stash / Effacer / Drop / Delete stash
+# Supprimer un stash
 git stash drop <stash_id>
 
-$ stash_id: git stash list --- --column 1 --delimiter ':' --preview 'git stash show --patch --color=always {1}' --preview-window 'right:65%'
+$ stash_id: git stash list --- --column 1 --delimiter ':' --preview 'git stash show --patch --color=always {1}' --preview-window 'right:60%'
 
 % git, log, search, find, grep, history, message, code, chercher, trouver
 
-# Chercher par message / Trouver / Find commit by message (grep)
+# Chercher un commit par message
 git log --oneline --grep="<pattern>"
 
-# Chercher par contenu / Trouver / Find commit by code change (-S pattern)
+# Chercher un commit par changement de code
 git log -S "<pattern>"
 
 % git, worktree, parallel, branch, path, multi, environnement
 
-# Créer worktree / New worktree for existing branch
-git worktree add <path> <branch_name>
+# Créer un worktree pour une branche existante
+git worktree add <worktree_path> <branch_name>
 
-# Supprimer worktree / Retirer / Remove worktree (keep branch)
-git worktree remove <path>
+# Supprimer un worktree (garde la branche)
+git worktree remove <worktree_path>
 
-$ path: git worktree list --porcelain | awk '/^worktree /{print $2}' --- --preview 'ls -la {}'
+$ worktree_path: git worktree list --porcelain | awk '/^worktree /{print $2}' --- --preview 'ls -la {}' --preview-window 'right:60%'
 
 % git, fixup, autosquash, history, cleanup, clean, maintenance
 
-# Fixup / Préparer correction / Create fixup commit for specific hash
+# Créer un commit fixup ciblant un commit précis
 git commit --fixup <commit_hash>
 
-# Autosquash / Nettoyer commits / Interactive rebase with autosquash
+# Rebase interactif avec autosquash
 git rebase -i --autosquash <base_branch>
 
-# Nettoyer branches fusionnées / Delete all merged local branches
+# Supprimer toutes les branches locales mergées
 git branch --merged | grep -v '^\*' | xargs -n 1 git branch -d
 
-# Log visuel compact / Compact visual log tree (last 20)
+# Log visuel compact (20 derniers)
 git log --oneline --graph --decorate --all -n 20
 
-$ base_branch: git branch --format='%(refname:short)' --- --preview 'git log --oneline --graph --color=always -n 10 {1}'
+$ base_branch: git branch --format='%(refname:short)' --- --preview 'git log --oneline --graph --color=always -n 10 {1}' --preview-window 'right:60%'
