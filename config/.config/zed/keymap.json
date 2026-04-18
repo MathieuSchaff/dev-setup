@@ -51,7 +51,11 @@
             "space e": "workspace::ToggleRightDock",
             "space o": "project_panel::ToggleFocus",
             // Recherche
-            "shift-,": "file_finder::Toggle",
+            "?": "file_finder::Toggle",
+            // AZERTY: shift-; would otherwise trigger vim : (QWERTY assumption)
+            "shift-;": null,
+            // AZERTY: § (= shift-! key) disabled to keep file_finder on ? only
+            "§": null,
             "space f f": "file_finder::Toggle",
             "space f w": "pane::DeploySearch",
             // Git
