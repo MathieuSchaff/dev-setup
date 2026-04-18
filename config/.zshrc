@@ -130,8 +130,10 @@ export NVM_DIR="$HOME/.nvm"
 alias mdp='glow -p'
 cs() {
   local file
-  while file=$(fd . ~/dev-setup/cheatsheet -e md | fzf --preview "glow -s dark -w 80 {}") && [[ -n "$file" ]]; do
-    glow -p "$file"
+  while file=$(fdfind -e md --base-directory ~/dev-setup/cheatsheet \
+    | fzf --preview 'glow -s dark -w 80 ~/dev-setup/cheatsheet/{}') \
+    && [[ -n "$file" ]]; do
+    glow -p ~/dev-setup/cheatsheet/"$file"
   done
 }
 
