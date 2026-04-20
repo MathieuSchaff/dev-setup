@@ -51,6 +51,8 @@
     //  Panneaux
     // ──────────────────────────────────────────────────────────────
     "project_panel": {
+        "indent_size": 15.0,
+        "entry_spacing": "comfortable",
         "dock": "right"
     },
 
@@ -238,9 +240,7 @@
         "**/.settings",
         // above is default from Zed
         "**/out",
-        "**/dist",
         "**/.husky",
-        "**/.turbo",
         "**/.vscode-test",
         "**/.vscode",
         "**/.next",
@@ -248,10 +248,7 @@
         "**/.tap",
         "**/.nyc_output",
         "**/report",
-        "**/node_modules",
-        "**/dist/**",
-        "**/*.d.ts.map",
-        "**/*.tsbuildinfo"
+        "**/*.d.ts.map"
     ],
     "directory_relationships": {
         "**/dist/**": "hidden",

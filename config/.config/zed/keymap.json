@@ -7,12 +7,27 @@
         "bindings": {
             "shift-s": "vim::PushAddSurrounds",
             "space c": "editor::ToggleComments",
-            "ctrl-j": "terminal_panel::Toggle",
             "ctrl-a": "workspace::ToggleLeftDock",
             "ctrl-,": "project_symbols::Toggle",
             "ctrl-;": "pane::DeploySearch",
+            "ctrl-q": "buffer_search::DeployReplace",
+            "ctrl-h": "pane::ActivatePreviousItem",
+            "ctrl-l": "pane::ActivateNextItem",
+            "ctrl-j": "workspace::ActivatePaneLeft",
+            "ctrl-k": "workspace::ActivatePaneRight",
             "ctrl-n": "editor::GoToDiagnostic",
-            "ctrl-p": "editor::GoToPreviousDiagnostic"
+            "ctrl-p": "editor::GoToPreviousDiagnostic",
+            // Resize panes (Direct keys)
+            "é": "vim::ResizePaneLeft",
+            "è": "vim::ResizePaneRight",
+            "ç": "vim::ResizePaneUp",
+            "à": "vim::ResizePaneDown",
+            // Reset and Rewrap
+            "ctrl-t": "vim::ResetPaneSizes",
+            "g q": "vim::Rewrap",
+            "alt-f": "vim::Rewrap",
+            // Global Toggles
+            "²": "terminal_panel::Toggle"
         }
     },
     // ============================================================
@@ -21,10 +36,14 @@
     {
         "context": "vim_mode == insert",
         "bindings": {
-            "ctrl-j": "terminal_panel::Toggle",
             "ctrl-a": "workspace::ToggleLeftDock",
             "ctrl-,": "project_symbols::Toggle",
-            "ctrl-;": "pane::DeploySearch"
+            "ctrl-;": "pane::DeploySearch",
+            "ctrl-q": "buffer_search::DeployReplace",
+            "ctrl-h": "pane::ActivatePreviousItem",
+            "ctrl-l": "pane::ActivateNextItem",
+            "ctrl-j": "workspace::ActivatePaneLeft",
+            "ctrl-k": "workspace::ActivatePaneRight"
         }
     },
     // ============================================================
@@ -39,12 +58,19 @@
             "g n": "vim::NextMethodStart",
             "g p": "vim::PreviousMethodStart",
             // Navigation diagnostics
+            "ctrl-a": "workspace::ToggleLeftDock",
+            "ctrl-,": "project_symbols::Toggle",
+            "ctrl-;": "pane::DeploySearch",
+            "ctrl-q": "buffer_search::DeployReplace",
+            "ctrl-h": "pane::ActivatePreviousItem",
+            "ctrl-l": "pane::ActivateNextItem",
+            "ctrl-j": "workspace::ActivatePaneLeft",
+            "ctrl-k": "workspace::ActivatePaneRight",
             "ctrl-n": "editor::GoToDiagnostic",
             "ctrl-p": "editor::GoToPreviousDiagnostic",
             // LSP
             "g i": "editor::GoToImplementation",
             "space l r": "editor::Rename",
-            "space l a": "editor::ToggleCodeActions",
             "space l f": "editor::Format",
             "&": "editor::ToggleCodeActions",
             // File tree
@@ -54,10 +80,8 @@
             "?": "file_finder::Toggle",
             // AZERTY: shift-; would otherwise trigger vim : (QWERTY assumption)
             "shift-;": null,
-            // AZERTY: § (= shift-! key) disabled to keep file_finder on ? only
-            "§": null,
-            "space f f": "file_finder::Toggle",
-            "space f w": "pane::DeploySearch",
+            // AZERTY: § (= shift-! key) — toggle between split panes (cycle)
+            "§": "workspace::ActivateNextPane",
             // Git
             "space g t": "git_panel::ToggleFocus",
             // Diagnostics panel
@@ -69,11 +93,17 @@
             "space t h": "pane::SplitDown",
             "space t v": "pane::SplitRight",
             "ù": "pane::SplitRight",
-            // Global
-            "ctrl-j": "terminal_panel::Toggle",
-            "ctrl-a": "workspace::ToggleLeftDock",
-            "ctrl-,": "project_symbols::Toggle",
-            "ctrl-;": "pane::DeploySearch"
+            // Resize panes (Direct keys)
+            "é": "vim::ResizePaneLeft",
+            "è": "vim::ResizePaneRight",
+            "ç": "vim::ResizePaneUp",
+            "à": "vim::ResizePaneDown",
+            // Reset and Rewrap
+            "ctrl-t": "vim::ResetPaneSizes",
+            "g q": "vim::Rewrap",
+            "alt-f": "vim::Rewrap",
+            // Global Toggles
+            "²": "terminal_panel::Toggle"
         }
     },
     // ============================================================
@@ -82,14 +112,21 @@
     {
         "context": "Workspace",
         "bindings": {
-            "alt-h": "pane::ActivatePreviousItem",
-            "alt-l": "pane::ActivateNextItem",
-            "alt-j": "workspace::ActivatePaneLeft",
-            "alt-k": "workspace::ActivatePaneRight",
-            "ctrl-j": "terminal_panel::Toggle",
+            // Tab nav (prev/next item) — ⚠ ctrl-h conflicts with Zed default search&replace, remap later
+            "ctrl-h": "pane::ActivatePreviousItem",
+            "ctrl-l": "pane::ActivateNextItem",
+            // Pane nav (left/right)
+            "ctrl-j": "workspace::ActivatePaneLeft",
+            "ctrl-k": "workspace::ActivatePaneRight",
             "ctrl-a": "workspace::ToggleLeftDock",
             "ctrl-,": "project_symbols::Toggle",
-            "ctrl-;": "pane::DeploySearch"
+            "ctrl-;": "pane::DeploySearch",
+            "ctrl-q": "buffer_search::DeployReplace",
+            // Resize panes (Legacy combos)
+            "ctrl-shift-left": "vim::ResizePaneLeft",
+            "ctrl-shift-right": "vim::ResizePaneRight",
+            "ctrl-shift-up": "vim::ResizePaneUp",
+            "ctrl-shift-down": "vim::ResizePaneDown"
         }
     },
     // ============================================================

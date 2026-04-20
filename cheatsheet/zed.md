@@ -63,8 +63,8 @@ Leader = `space`.
 | Binding             | Action                              |
 |---------------------|-------------------------------------|
 | `?` (= `Shift+,`)   | **File finder** (AZERTY-natif)      |
-| `space f f`         | File finder (alias chord)           |
-| `space f w`         | Search in project (rg-like)         |
+| `ctrl-;`            | Project search (`pane::DeploySearch`) |
+| `ctrl-q`            | Search & replace in buffer          |
 | `g i`               | Go to implementation (LSP)          |
 | `g n` / `g p`       | Méthode suivante / précédente       |
 | `ctrl-n` / `ctrl-p` | Diagnostic suivant / précédent      |
@@ -74,10 +74,9 @@ Leader = `space`.
 | Binding     | Action                      |
 |-------------|-----------------------------|
 | `space l r` | **Rename** symbole          |
-| `space l a` | Code actions (menu)         |
 | `space l f` | **Format** le buffer        |
 | `space l d` | Ouvrir le panel Diagnostics |
-| `&`         | Code actions (raccourci)    |
+| `&`         | Code actions                |
 
 ### Fichiers / panels
 
@@ -87,14 +86,20 @@ Leader = `space`.
 | `space o` | Focus sur le project panel        |
 | `space x` | Fermer l'item courant (buffer)    |
 | `space w` | Sauvegarder                       |
+| `²`       | Toggle terminal panel             |
 
 ### Splits / panes
 
-| Binding     | Action                                    |
-|-------------|-------------------------------------------|
-| `space t h` | Split **down** (horizontal, pane en bas)  |
-| `space t v` | Split **right** (vertical, pane à droite) |
-| `ù`         | Split right — raccourci AZERTY            |
+| Binding              | Action                                    |
+|----------------------|-------------------------------------------|
+| `space t h`          | Split **down** (horizontal, pane en bas)  |
+| `space t v`          | Split **right** (vertical, pane à droite) |
+| `ù`                  | Split right — raccourci AZERTY            |
+| `é` / `è`            | Resize pane left / right                  |
+| `ç` / `à`            | Resize pane up / down                     |
+| `ctrl-t`             | Reset pane sizes                          |
+| `ctrl-shift-↑↓←→`   | Resize panes (arrows)                     |
+| `g q` / `alt-f`      | Rewrap text                               |
 
 ### Git / commentaires
 
@@ -108,9 +113,8 @@ Leader = `space`.
 | Binding   | Raison du blocage                                                       |
 |-----------|-------------------------------------------------------------------------|
 | `shift-;` | Évite le vim `:` parasite (Zed assume QWERTY où `Shift+;` = `:`)        |
-| `§`       | Clarifie que `Shift+!` n'ouvre pas file_finder (pas de fallback caché)  |
 
-> ⚠️ Sur AZERTY, `Shift+;` produit `.` (= **vim repeat last change**). Le `null` pourrait le tuer. À tester : `c w TEST <Esc>` puis `.` sur un autre mot.
+> Sur AZERTY, `Shift+;` produit `.` (= **vim repeat last change**). Testé 2026-04-18 : `.` reste fonctionnel ✅
 
 ---
 
@@ -131,24 +135,30 @@ Actives en NORMAL, VISUAL, INSERT et dans Workspace :
 
 | Binding  | Action                               |
 |----------|--------------------------------------|
-| `ctrl-j` | **Toggle terminal panel**            |
 | `ctrl-a` | Toggle left dock                     |
 | `ctrl-,` | Project symbols                      |
-| `ctrl-;` | Deploy search *(déclaré)* — voir piège ci-dessous |
+| `ctrl-;` | Project search (`pane::DeploySearch`) |
+| `ctrl-q` | Search & replace                     |
+| `ctrl-h` | Tab précédent                        |
+| `ctrl-l` | Tab suivant                          |
+| `ctrl-j` | Pane gauche                          |
+| `ctrl-k` | Pane droit                           |
 
 ---
 
 ## Navigation inter-panes / tabs (Workspace)
 
-| Binding | Action                       |
-|---------|------------------------------|
-| `alt-h` | Tab précédent (dans le pane) |
-| `alt-l` | Tab suivant (dans le pane)   |
-| `alt-j` | Pane à gauche                |
-| `alt-k` | Pane à droite                |
+| Binding   | Action                       |
+|-----------|------------------------------|
+| `ctrl-h`  | Tab précédent (dans le pane) |
+| `ctrl-l`  | Tab suivant (dans le pane)   |
+| `ctrl-j`  | Pane à gauche                |
+| `ctrl-k`  | Pane à droite                |
+| `§`       | Cycle vers le pane suivant   |
 
-> **Pas intuitif** : `alt-j/k` navigue entre **panes** (gauche/droite),
-> `alt-h/l` entre **tabs** (dans le pane courant).
+> **Pas intuitif** : `ctrl-j/k` navigue entre **panes** (gauche/droite),
+> `ctrl-h/l` entre **tabs** (dans le pane courant).
+> `§` (`Shift+!` AZERTY) = `workspace::ActivateNextPane` — avec 2 panes = toggle déterministe.
 
 ---
 
@@ -173,7 +183,7 @@ Pas dans keymap.json mais **actifs** via vim mode — pas besoin de rebinder :
 | `Ctrl+o` | Jump back (position précédente)  |
 | `Ctrl+i` | Jump forward                     |
 | `m a` / `'a` | Poser mark `a` / y retourner |
-| `.`    | **Repeat last change** (= `Shift+;` AZERTY — à tester) |
+| `.`    | **Repeat last change** (= `Shift+;` AZERTY — confirmé ✅) |
 
 ### Diagnostics
 | Touche | Action               |
@@ -324,8 +334,8 @@ Touche AZERTY française, ne marche pas sur clavier QWERTY.
 ### `space` leader en visual
 Ne fonctionne que si le mode visual est actif — sinon utiliser les bindings NORMAL.
 
-### `Ctrl+;` ≠ ce qui est déclaré
-Le keymap dit `Ctrl+;` → `pane::DeploySearch`, mais en pratique `Ctrl+;` toggle les **inlay hints TypeScript** (types inline grisés). Origine pas confirmée : KDE intercept, binding caché, ou frappe différente. Investigation avec `wev` (Wayland) si motivé.
+### `Ctrl+;` vs inlay hints
+`Ctrl+;` = `pane::DeploySearch`. Sur AZERTY, `Ctrl+;` produit `Ctrl+:` qui est le binding Zed pour toggle inlay hints. Si les deux s'activent, c'est un conflit de niveau Zed (deux keymaps répondent). Workaround : utiliser `?` pour file finder, `ctrl-,` pour symbols.
 
 ### Copier un message d'erreur depuis le hover — impossible
 Zed 2026 n'expose **aucune action** `editor::CopyDiagnostic*`. Workarounds :
@@ -333,8 +343,8 @@ Zed 2026 n'expose **aucune action** `editor::CopyDiagnostic*`. Workarounds :
 2. Hover + `Ctrl+a` `Ctrl+c` (focus clavier du popup incertain)
 3. Feature request upstream
 
-### `shift-;: null` risque de tuer vim `.`
-Sur AZERTY, `Shift+;` produit `.` (repeat last change). Notre `null` visait le `:` QWERTY mais peut casser `.`. Tester : `c w TEST <Esc>` → autre mot → `.`. Si 2e mot devient `TEST` → OK. Sinon retirer le null.
+### `shift-;: null` et vim `.`
+`Shift+;` AZERTY produit `.` (repeat last change). Le `null` vise le `:` QWERTY. Testé 2026-04-18 : `.` reste fonctionnel ✅ — le null ne casse pas repeat last change.
 
 ### Edit predictions actives mais invisibles
 `edit_predictions.provider: ollama` génère en continu, mais `show_edit_predictions: false`. Cost CPU/GPU sans gain visuel → soit afficher, soit retirer l'edit_predictions.
