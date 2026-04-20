@@ -15,23 +15,6 @@ source $ZSH/oh-my-zsh.sh
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# fzf-tab configuration
-zstyle ':completion:*:git-checkout:*' sort false
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-zstyle ':fzf-tab:*' switch-group '<' '>'
-# open completion in tmux popup when inside tmux
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' popup-pad 30 8
-# Catppuccin Macchiato pour fzf-tab (le popup tmux n'hérite pas de FZF_DEFAULT_OPTS)
-zstyle ':fzf-tab:*' fzf-flags \
-  --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
-  --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
-  --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796 \
-  --color=border:#494d64
-
 # User configuration
 
 # Set personal aliases
@@ -116,12 +99,6 @@ tn(){
 }
 alias tnew='tmux new -s'
 
-# fuzzy cd — fd + fzf avec preview arborescence
-zdf() {
-  local dir
-  dir=$(fd -t d | fzf --preview 'eza --tree --color=always --icons --level=2 {}') && z "$dir"
-}
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
@@ -136,37 +113,6 @@ cs() {
     glow -p ~/dev-setup/cheatsheet/"$file"
   done
 }
-
-# fzf — thème Catppuccin Macchiato, preview
-export FZF_DEFAULT_OPTS='
-  --height 40% --layout=reverse --border
-  --bind "ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up,ctrl-/:change-preview-window(hidden|)"
-  --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796
-  --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6
-  --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796
-  --color=border:#494d64,header:#ed8796'
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-# Ctrl+T — chercher fichier avec preview bat
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS='
-  --walker-skip .git,node_modules,target,.venv
-  --preview "bat -n --color=always --line-range :500 {}"
-  --bind "ctrl-/:change-preview-window(down|hidden|)"'
-# Clipboard command (xclip for X11/WSLg, wl-copy for Wayland)
-if command -v xclip &>/dev/null; then
-    CLIP_CMD="xclip -selection clipboard"
-elif command -v wl-copy &>/dev/null; then
-    CLIP_CMD="wl-copy"
-else
-    CLIP_CMD=""
-fi
-# Ctrl+R — historique avec Ctrl+Y pour copier dans clipboard
-export FZF_CTRL_R_OPTS="
-  --bind \"ctrl-y:execute-silent(echo -n {2..} | ${CLIP_CMD:-cat >/dev/null})+abort\"
-  --color header:italic
-  --header \"Ctrl+Y = copier dans clipboard\""
-# Alt+C désactivé (remplacé par Ctrl+F / zdf)
-export FZF_ALT_C_COMMAND=''
 
 # navi — widget shell sur Ctrl+N
 eval "$(navi widget zsh)"
@@ -195,19 +141,7 @@ setopt HIST_FIND_NO_DUPS
 setopt SHARE_HISTORY
 
 eval "$(zoxide init zsh)"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Ctrl+F — fuzzy cd avec preview (remplace Alt+C)
-zdf-widget() {
-  local dir
-  dir=$(fd -t d | fzf --preview 'eza --tree --color=always --icons --level=2 {}')
-  if [[ -n "$dir" ]]; then
-    z "$dir"
-    zle reset-prompt
-  fi
-}
-zle -N zdf-widget
-bindkey '^F' zdf-widget
+[ -f "$HOME/dev-setup/config/.fzf.zsh" ] && source "$HOME/dev-setup/config/.fzf.zsh"
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
