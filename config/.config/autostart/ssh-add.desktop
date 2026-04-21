@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ssh-add
+Comment=Load ssh key into the agent at KDE login (ksshaskpass prompts, KWallet stores the passphrase)
+Exec=ssh-add /home/schaff/.ssh/id_rsa
+X-KDE-AutostartScript=true
+OnlyShowIn=KDE;
+Terminal=false

@@ -34,6 +34,15 @@ Tout est dans `~/dev-setup/` — c'est le repo de référence pour la config.
 | `~/dev-setup/config/.config/ghostty/config`     | Config Ghostty (Catppuccin Macchiato, JetBrainsMono Nerd Font) |
 | `~/dev-setup/config/.dive.yaml`          | Config dive de référence                     |
 | `~/dev-setup/config/.config/starship.toml` | Config Starship (prompt Catppuccin macchiato, texte coloré sans bg) |
+| `~/dev-setup/config/.zshenv`             | Source `cargo/env` (avant zshrc)             |
+| `~/dev-setup/config/.inputrc`            | Bindings readline (pgup/pgdown = history search) |
+| `~/dev-setup/config/.config/user-dirs.dirs` | XDG user dirs → `~/Mathieu/` (docs, media/{photos,videos,musique}) |
+| `~/dev-setup/config/.config/htop/htoprc` | Config htop (colonnes, tri, couleurs)        |
+| `~/dev-setup/config/.config/gh/config.yml` | Config GitHub CLI (sans `hosts.yml` = token) |
+| `~/dev-setup/config/.config/systemd/user/ssh-agent.service` | Unit systemd user ssh-agent (socket `$XDG_RUNTIME_DIR/ssh-agent.socket`) |
+| `~/dev-setup/config/.config/autostart/ssh-add.desktop`      | Autostart KDE : `ssh-add id_rsa` via ksshaskpass+KWallet |
+| `~/dev-setup/config/.config/kdeglobals`  | Config KDE globale (colors, WM, icons, scheme `CatppuccinFrappePeach`) |
+| `~/dev-setup/config/.local/share/color-schemes/CatppuccinFrappePeach.colors` | Color scheme KDE — inactive titlebar = active (pas de grisé au defocus) |
 
 > Les fichiers "actifs" sont dans `~/.gitconfig`, `~/.zshrc`, etc. (sous `~/` via symlinks créés par `scripts/install.sh`).  
 > `~/dev-setup/` sert de backup/référence versionné.  

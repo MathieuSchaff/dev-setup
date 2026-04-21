@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d_%H%M%S)"
 CHANGED=0
 
@@ -71,7 +71,9 @@ CFG="$DOTFILES_DIR/config"
 
 # Dotfiles de base
 backup_and_link "$CFG/.zshrc"                       "$HOME/.zshrc"
+backup_and_link "$CFG/.zshenv"                      "$HOME/.zshenv"
 backup_and_link "$CFG/.bashrc"                      "$HOME/.bashrc"
+backup_and_link "$CFG/.inputrc"                     "$HOME/.inputrc"
 backup_and_link "$CFG/.gitconfig"                   "$HOME/.gitconfig"
 backup_and_link "$CFG/.tmux.conf"                   "$HOME/.tmux.conf"
 backup_and_link "$CFG/.vimrc"                       "$HOME/.vimrc"
@@ -87,6 +89,13 @@ backup_and_link "$CFG/.config/glow"                "$HOME/.config/glow"
 backup_and_link "$CFG/.config/starship.toml"       "$HOME/.config/starship.toml"
 backup_and_link "$CFG/.config/ghostty"             "$HOME/.config/ghostty"
 backup_and_link "$CFG/.config/zed"                 "$HOME/.config/zed"
+backup_and_link "$CFG/.config/user-dirs.dirs"      "$HOME/.config/user-dirs.dirs"
+backup_and_link "$CFG/.config/kdeglobals"          "$HOME/.config/kdeglobals"
+backup_and_link "$CFG/.config/htop/htoprc"         "$HOME/.config/htop/htoprc"
+backup_and_link "$CFG/.config/gh/config.yml"       "$HOME/.config/gh/config.yml"
+backup_and_link "$CFG/.config/systemd/user/ssh-agent.service"  "$HOME/.config/systemd/user/ssh-agent.service"
+backup_and_link "$CFG/.config/autostart/ssh-add.desktop"       "$HOME/.config/autostart/ssh-add.desktop"
+backup_and_link "$CFG/.local/share/color-schemes/CatppuccinFrappePeach.colors" "$HOME/.local/share/color-schemes/CatppuccinFrappePeach.colors"
 
 # ── Local / Secrets ───────────────────────────────────────────────────────────
 # Création automatique de fichiers locaux vides s'ils n'existent pas.

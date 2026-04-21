@@ -1,0 +1,158 @@
+[ColorEffects:Disabled]
+ChangeSelectionColor=
+Color=48,52,70
+ColorAmount=0.125
+ColorEffect=3
+ContrastAmount=0.1
+ContrastEffect=0
+Enable=
+IntensityAmount=-1
+IntensityEffect=0
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=false
+Color=48,52,70
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0
+ContrastEffect=0
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=239,159,118
+BackgroundNormal=65, 69, 89
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=206,47,19
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:Complementary]
+BackgroundAlternate=35, 38, 52
+BackgroundNormal=41, 44, 60
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=165, 173, 206
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:Header]
+BackgroundAlternate=35, 38, 52
+BackgroundNormal=41, 44, 60
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=165, 173, 206
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:Selection]
+BackgroundAlternate=239,159,118
+BackgroundNormal=239,159,118
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=41, 44, 60
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=35, 38, 52
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:Tooltip]
+BackgroundAlternate=27,25,35
+BackgroundNormal=48, 52, 70
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=206,47,19
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:View]
+BackgroundAlternate=41, 44, 60
+BackgroundNormal=48, 52, 70
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=206,47,19
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[Colors:Window]
+BackgroundAlternate=35, 38, 52
+BackgroundNormal=41, 44, 60
+DecorationFocus=239,159,118
+DecorationHover=65, 69, 89
+ForegroundActive=239, 159, 118
+ForegroundInactive=206,47,19
+ForegroundLink=239,159,118
+ForegroundNegative=231, 130, 132
+ForegroundNeutral=229, 200, 144
+ForegroundNormal=198, 208, 245
+ForegroundPositive=166, 209, 137
+ForegroundVisited=202, 158, 230
+
+[General]
+BrowserApplication=google-chrome.desktop
+ColorScheme=CatppuccinFrappePeach
+ColorSchemeHash=9977e74a21858ef6f186b2dd1a01687ff8676d60
+fixed=Hack,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+font=Noto Sans,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[Icons]
+Theme=Papirus
+
+[KDE]
+AnimationDurationFactor=0.35355339059327373
+LookAndFeelPackage=Catppuccin-Frappe-Peach
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=true
+Decoration position=2
+Show Full Path=false
+Show Inline Previews=true
+Show Preview=false
+Show Speedbar=true
+Show hidden files=false
+Sort by=Name
+Sort directories first=true
+Sort hidden files last=false
+Sort reversed=false
+Speedbar Width=140
+View Style=DetailTree
+
+[WM]
+activeBackground=48,52,70
+activeBlend=198,208,245
+activeForeground=198,208,245
+inactiveBackground=48,52,70
+inactiveBlend=198,208,245
+inactiveForeground=198,208,245
