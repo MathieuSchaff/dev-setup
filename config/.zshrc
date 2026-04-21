@@ -76,20 +76,16 @@ _update_tools() {
 }
 compdef _update_tools update-tools
 
-# tmux — sessions doc/dev/tests au démarrage, sinon attach
+# tmux — sessions dev/tests au démarrage, sinon attach
+# cs s'ouvre via Ctrl+E (popup tmux global, toutes sessions — voir .tmux.conf:108)
 t() {
-  if tmux list-sessions &>/dev/null; then
-    tmux has-session -t doc   2>/dev/null || { tmux new-session -d -s doc -c ~/dev-setup/cheatsheet; tmux send-keys -t doc 'cs' Enter; }
-    tmux has-session -t dev   2>/dev/null || tmux new-session -d -s dev
-    tmux has-session -t tests 2>/dev/null || tmux new-session -d -s tests
-    tmux attach
-  else
-    tmux new-session -d -s doc -c ~/dev-setup/cheatsheet
-    tmux send-keys -t doc 'cs' Enter
+  if ! tmux list-sessions &>/dev/null; then
     tmux new-session -d -s dev
-    tmux new-session -d -s tests
-    tmux attach -t dev
   fi
+  tmux has-session -t dev   2>/dev/null || tmux new-session -d -s dev
+  tmux has-session -t tests 2>/dev/null || tmux new-session -d -s docker 
+  tmux has-session -t tests 2>/dev/null || tmux new-session -d -s tests
+  tmux attach -t dev
 }
 
 # Créer une session nommée en arrière-plan
@@ -118,7 +114,8 @@ cs() {
 eval "$(navi widget zsh)"
 bindkey '^N' _navi_widget
 
-# Ctrl+E — parcourir les cheatsheets markdown avec glow (loop, Esc pour quitter)
+# Alt+P — parcourir les cheatsheets markdown avec glow (loop, Esc pour quitter)
+# (Ctrl+E est pris au niveau tmux : popup cs, voir .tmux.conf:108)
 cheat-browse-widget() {
   local file
   while file=$(fdfind -e md --base-directory ~/dev-setup/cheatsheet \
@@ -166,6 +163,27 @@ export PATH="$PATH:/mnt/c/Program Files/GitHub CLI"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# fnb / fns — pick + run a script from package.json via fzf (needs jq)
+fnb() {
+  [[ ! -f package.json ]] && { echo "no package.json here"; return 1; }
+  local script
+  script=$(jq -r '.scripts // {} | keys[]' package.json | sort | fzf --prompt='bun run > ') \
+    && bun run "$script"
+}
+fns() {
+  [[ ! -f package.json ]] && { echo "no package.json here"; return 1; }
+  local script
+  script=$(jq -r '.scripts // {} | keys[]' package.json | sort | fzf --prompt='npm run > ') \
+    && npm run "$script"
+}
+
+# fman — fuzzy man-page browser with bat preview
+fman() {
+  man -k . | fzf -q "$1" --prompt='man > ' \
+    --preview 'echo {} | tr -d "()" | awk "{printf \"%s \", \$2} {print \$1}" | xargs -r man | col -bx | bat -l man -p --color always' |
+  tr -d '()' | awk '{printf "%s ", $2} {print $1}' | xargs -r man
+}
 
 # conda
 if [ -d "$HOME/miniconda3" ]; then

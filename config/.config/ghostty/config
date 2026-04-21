@@ -5,7 +5,7 @@ linux-cgroup = never
 # Apparence
 theme = Catppuccin Macchiato
 font-family = JetBrainsMono Nerd Font
-font-size = 12
+font-size = 13
 window-padding-x = 12
 window-padding-y = 10
 background-opacity = 0.97
