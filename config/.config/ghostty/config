@@ -15,7 +15,9 @@ cursor-style-blink = false
 
 # Comportement
 bell-features = no-system,no-audio,no-attention,no-title,no-border
-copy-on-select = clipboard
+# copy-on-select = clipboard
+# Disabled: let tmux handle mouse selection, avoids double-click focus delay
+copy-on-select = false
 mouse-hide-while-typing = true
 confirm-close-surface = false
 scrollback-limit = 100000
