@@ -120,8 +120,7 @@ ForegroundVisited=202, 158, 230
 
 [General]
 BrowserApplication=google-chrome.desktop
-ColorScheme=CatppuccinFrappePeach
-ColorSchemeHash=9977e74a21858ef6f186b2dd1a01687ff8676d60
+ColorSchemeHash=8d18bfd8fb474c61fc3805affa2552fa30e17f2e
 fixed=Hack,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 font=Noto Sans,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
@@ -147,7 +146,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=140
-View Style=DetailTree
+View Style=Simple
 
 [WM]
 activeBackground=48,52,70
